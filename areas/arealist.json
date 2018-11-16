@@ -1,0 +1,13 @@
+[
+   {
+      "name": "The City",
+      "author": "Will",
+      "filename": "city.json",
+      "r_low": 0,
+      "r_hi": 10,
+      "o_low": 0,
+      "o_hi": 20,
+      "m_low": 0,
+      "m_hi": 10
+   }
+]

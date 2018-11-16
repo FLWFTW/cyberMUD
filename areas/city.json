@@ -1,0 +1,231 @@
+{
+   "rooms": [
+      {
+         "name": "The entrance to a derelict Gravbus Station",
+         "description": "The terminal is grungy and unkempt. Worn, vandalized benches line the walls to your east and west. An antique payphone sits in a grimy booth by the entrance to your south. The terminal continues to the north with a ticketing kiosk, more seating areas, a few vending machines, and an exit to the buses. A door on the southern wall leads to the immigrations facility, but it is set to allow only one way traffic into the Gravbus station.",
+         "vnum": 1,
+         "exits": [ { "to_vnum": 2, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name": "north", "farside_name": "south" } ]
+      },
+      {
+         "name": "The Gravbus ticketing kiosk",
+         "description": "A large holoscreen has been mounted to the wall to the north projecting a pleasant looking AI attendant in a clean, happy looking terminal scene. Whoever programmed the kiosk has definitely not been to this Gravbus station. East of here are a few vending machines. West of here are more broken benches and the exit to the Gravbus boarding area.",
+         "vnum": 2,
+         "exits": [ { "to_vnum": 3, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name": "east", "farside_name": "west" },
+                    { "to_vnum": 1, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name":"south", "farside_name":"north" },
+                    { "to_vnum": 4, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name":"west", "farside_name":"east" }
+                  ]
+      },
+      {
+         "name": "By the vending machines and water fountain",
+         "description": "A few old-time coin operated vending machines are lined up against the wall to the east, most are empty, all of them have been kicked, punched, shaken, and otherwise abused by wastoids trying to get their sugar fix. A water fountain is mounted to the wall adjacent to the vending machines. It's filled with spit and phlegm and other substances. West of here is the ticketing kiosk, a few Gravbus(TM) buses can be seen through the windows to the north.",
+         "vnum": 3,
+         "exits": [{ "to_vnum": 2, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name":"west", "farside_name":"east" }]
+      },
+      {
+         "name": "Seating area and exit to Gravbus boarding area",
+         "description": "There are several rows of uncomfortable looking benches. Unidentifiable stains cover the seats, graffiti has been carved into the handles, and bits of trash lay underneath most seats. Gravbus buses can be seen through the windows north of here. A glass push door to the north exits to the boarding area. A door to the south, labeled \"EMERGENCY\" is propped open, it looks like it leads out of the Gravbus station.",
+         "vnum": 4,
+         "exits": [ { "to_vnum": 2, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name": "east", "farside_name": "west" },
+                    { "to_vnum": 5, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name": "south", "farside_name": "north" }
+
+                  ]
+      },
+      {
+         "name": "A dim alley behind the Gravbus Terminal",
+         "description": "The alley is littered with garbage and stinks of piss and god knows what else. The waiting area for the Gravbus terminal sits through a door to the north. The alley continues off to the west. A few dumpsters are lined up to the east, covered in graffiti and full of trash.",
+         "vnum": 5,
+         "exits": [ { "to_vnum": 4, "lock_level": 0, "exit_state": 0, "lock_state": 0, "name": "north", "farside_name": "south" }
+                  ]
+      }
+
+   ],
+   "objects":[
+   {
+      "vnum": 1,
+      "name": "gun pistol 10mm handgun",
+      "sdesc": "10mm handgun",
+      "ldesc": "A 10mm handgun has been set on the ground",
+      "wear_pos": "none",
+      "type": "pistol"
+   },
+   {
+      "vnum": 2,
+      "name": "aviators shades sunglasses",
+      "sdesc": "pair of aviators",
+      "ldesc": "a pair of mirror-polished aviators has been set on the ground",
+      "wear_pos":"eyes" ,
+      "type": "clothing"
+   },
+   {
+      "vnum": 3,
+      "name": "pickle rick tshirt",
+      "sdesc": "Pickle Rick t-shirt",
+      "ldesc": "a t-shirt with a cartoon pickle shouting \"PICKLE RICK\" sits crumpled on the ground",
+      "wear_pos":"body" ,
+      "type": "clothing"
+   },
+   {
+      "vnum": 4,
+      "name": "baggy blue jeans",
+      "sdesc": "pair of baggy jeans",
+      "ldesc": "a pair of baggy blue jeans lay piled on the ground",
+      "wear_pos":"legs" ,
+      "type": "clothing"
+   },
+   {
+      "vnum": 5,
+      "name": "flipflop sandals",
+      "sdesc": "pair of flip-flops",
+      "ldesc": "a pair of flip flops have been left on the ground",
+      "wear_pos":"feet" ,
+      "type": "clothing"
+   },
+   {
+      "vnum": 6,
+      "name": "black battered ballcap",
+      "sdesc": "battered black ballcap",
+      "ldesc": "a battered black ballcap has been left on the ground",
+      "wear_pos": "head" ,
+      "type": "clothing"
+   },
+   {
+      "vnum": 7,
+      "name": "rifle infantry carbine M66 m66",
+      "sdesc": "M66 Infantry Carbine",
+      "ldesc": "An M66 Infantry Carbine sits on the ground",
+      "wear_pos": "slung" ,
+      "type": "rifle"
+   },
+   {
+      "vnum": 8,
+      "name": "brown leather belt",
+      "sdesc": "brown leather belt",
+      "ldesc": "A brown leather belt lies on the ground",
+      "wear_pos":"waist" ,
+      "type": "clothing"
+   },
+   {
+      "vnum" : 9,
+      "name" : "small backpack satchel rucksack",
+      "sdesc": "small leather satchel",
+      "ldesc": "a small leather satchel has been left here",
+      "wear_pos": "shoulders",
+      "type": "clothing",
+      "volume": 2500,
+      "capacity": 31250
+   },
+   {
+      "vnum" : 10,
+      "name" : "battered steel locker",
+      "sdesc": "battered steel locker",
+      "ldesc": "a battered steel locker sits here, tilted slightly on uneven legs",
+      "wear_pos": "none",
+      "type": "furniture",
+      "volume": 2500,
+      "capacity": 31250
+   },
+   {
+      "vnum" : 11,
+      "name" : "kevlar body armor bodyarmor armour bodyarmour",
+      "sdesc": "kevlar bodyarmor",
+      "ldesc": "some kevlar bodyarmor has been set on the ground",
+      "wear_pos": "body",
+      "type": "armor",
+      "volume": 9177
+   },
+   {
+      "vnum" : 12,
+      "name" : "MP5 smg submachinegun gun machine",
+      "sdesc": "9mm MP5 SMG",
+      "ldesc": "an MP5 9 millimeter submachinegun has been left here",
+      "wear_pos": "slung",
+      "type": "smg",
+      "volume": 8900
+   },
+   {
+      "vnum" : 13,
+      "name" : "STEN submachine gun smg machine",
+      "sdesc": "9mm STEN SMG",
+      "ldesc": "an 9 millimeter STEN submachine gun has been left here",
+      "wear_pos": "slung",
+      "type": "smg",
+      "volume": 8900
+   },
+   {
+      "vnum" : 14,
+      "name" : "socks olive green",
+      "sdesc": "pair of olive green boot socks",
+      "ldesc": "a pair of olive green boot socks have been folded up and discarded here",
+      "wear_pos": "feet",
+      "type": "clothing",
+      "volume": 0
+   },
+   {
+      "vnum" : 15,
+      "name" : "combat boots",
+      "sdesc": "pair of scuffed black combat boots",
+      "ldesc": "a pair of well worn black combat boots sit here",
+      "wear_pos": "feet",
+      "type": "armor",
+      "volume": 0
+   },
+   {
+      "vnum" : 16,
+      "name" : "pistol holster",
+      "sdesc": "black kydex pistol holster",
+      "ldesc": "a black kydex pistol holster has been left here",
+      "wear_pos": "waist",
+      "type": "holster",
+      "volume": 0
+   },
+   {
+      "vnum" : 17,
+      "name" : "leather sheath",
+      "sdesc": "brown leather sheath",
+      "ldesc": "a brown leather sheath",
+      "wear_pos": "waist",
+      "type": "sheath",
+      "volume": 0
+   },
+   {
+      "vnum" : 18,
+      "name" : "combat knife",
+      "sdesc": "cruel looking combat knife",
+      "ldesc": "a cruel looking combat knife, its sharp edge glimmering, has been abandoned here",
+      "wear_pos": "none",
+      "type": "blade",
+      "volume": 0
+   },
+   {
+      "vnum" : 19,
+      "name" : "oni mask",
+      "sdesc": "bright red Oni mask",
+      "ldesc": "a bright red Oni mask sits abandoned here, collecting dust",
+      "wear_pos": "face",
+      "type": "armor",
+      "volume": 0
+   }
+   ],
+   "mobiles":[
+   {
+      "vnum": 1,
+      "name": "shimmering AI attendant",
+      "sdesc": "AI attendant",
+      "ldesc": "An AI attendant is projected in front of the kiosk.",
+      "race": "hologram",
+      "citizenship": "None",
+      "association": "GravBus Industries",
+      "eyecolor": "blue",
+      "height": 163,
+      "weight": 0,
+      "btc": 0,
+      "brains":10,
+      "brawn":0,
+      "coordination":0,
+      "cool":10,
+      "stamina":0,
+      "senses":10,
+      "luck":0
+   }
+   ]
+}
