@@ -558,7 +558,6 @@ void cmd_mspawn( D_MOBILE *dMob, char *arg )
 
 void cmd_score( D_MOBILE *dMob, char *arg )
 {
-   /*
    char buf[MAX_BUFFER];
    arg[0] = '\0';//just so we don't get a warning about 'arg' not being used...
 
@@ -595,11 +594,11 @@ void cmd_score( D_MOBILE *dMob, char *arg )
          dMob->brawn, dMob->race, dMob->senses, dMob->heightcm /100, (dMob->heightcm % 100)/10, dMob->stamina,
          dMob->weightkg, dMob->coordination, dMob->eyecolor, dMob->cool, "94F3DD21", dMob->luck,
          dMob->citizenship, dMob->signal, dMob->association, dMob->cur_bandwidth, dMob->btc, dMob->max_bandwidth,
-         dMob->cur_hp, dMob->max_hp, dMob->encumberance, dMob->sight, dMob->head, dMob->body, dMob->larm, dMob->rarm,
-         dMob->lleg, dMob->rleg );
+         dMob->cur_hp, dMob->max_hp, dMob->encumberance, dMob->body[BODY_EYES]->health, dMob->body[BODY_HEAD]->health,
+         dMob->body[BODY_TORSO]->health, dMob->body[BODY_LARM]->health, dMob->body[BODY_RARM]->health,
+         dMob->body[BODY_LLEG]->health, dMob->body[BODY_RLEG]->health );
 
    text_to_buffer( dMob->socket, buf );
-   */
    return;
 }
 

@@ -1,0 +1,4 @@
+#Ignore object files
+*.o
+#ignore the binary
+cbm

@@ -1,0 +1,137 @@
+{
+   "association": "BitCorp",
+   "body": {
+      "eyes": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "face": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "groin": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "head": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "left arm": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "left foot": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "left hand": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "left leg": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "neck": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "right arm": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "right foot": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "right hand": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "right leg": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      },
+      "torso": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "health": 100,
+         "wound_trauma": 0
+      }
+   },
+   "brains": 5,
+   "brawn": 6,
+   "btc": 0.0,
+   "citizenship": "Federation",
+   "cool": 6,
+   "coordination": 7,
+   "cur_bandwidth": 0,
+   "cur_hp": 100,
+   "encumberance": 0,
+   "equipment": {
+      "arms": {},
+      "body": {},
+      "eyes": {},
+      "face": {},
+      "feet": {},
+      "hands": {},
+      "head": {},
+      "legs": {},
+      "neck": {},
+      "shoulders": {},
+      "slung": {},
+      "waist": {}
+   },
+   "eyecolor": "Brown",
+   "gender": "male",
+   "guid": "btV25fIB5XRatKM0zJKV5MW6heO5KhaWL5YQlGs",
+   "height": 182,
+   "level": 4,
+   "luck": 5,
+   "max_bandwidth": 0,
+   "max_hp": 100,
+   "name": "Raze",
+   "position": 5,
+   "position_string": "standing",
+   "prompt": "#>",
+   "race": "Human",
+   "room": 1,
+   "senses": 7,
+   "signal": 0,
+   "skills": {
+      "combat": 0,
+      "engineering": 0,
+      "medicine": 0,
+      "personality": 0,
+      "subterfuge": 0
+   },
+   "stamina": 4,
+   "weight": 87
+}
