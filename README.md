@@ -1,5 +1,6 @@
 # cyberMUD
 ### Yet another MUD client, influenced by the Cyberpunk genre
+#### Uses a custom MUD client, see https://github.com/FLWFTW/cyberMUD.client
 
 Currently have:
   * Player accounts, saved and loaded from JSON files
