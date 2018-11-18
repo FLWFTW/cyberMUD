@@ -52,6 +52,15 @@ void load_area_file( D_AREA *area )
             AttachToList( obj, object_protos );
          }
       }
+      else if( !strcmp( key, "resets" ) )
+      {
+         D_RESET *reset;
+         json_array_foreach( value, index, array )
+         {
+            reset = json_to_reset( array );
+            AttachToList( reset, area->resets );
+         }
+      }
    }
    json_decref( json );
    return;

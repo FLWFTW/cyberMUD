@@ -320,6 +320,20 @@ json_t *object_to_json( D_OBJECT *obj )
    return json;
 }
 
+D_RESET *json_to_reset( json_t *json )
+{
+   D_RESET *reset = NULL;
+   const char *key;
+   json_t *value;
+
+   reset = calloc( 1, sizeof( D_RESET ) );
+
+   json_object_foreach( json, key, value )
+   {
+   }
+   return reset;
+}
+
 SKILLS *json_to_skills( json_t *json )
 {
    SKILLS *skills;

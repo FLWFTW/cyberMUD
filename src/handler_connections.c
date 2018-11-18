@@ -14,7 +14,7 @@ static void state_get_account( D_SOCKET *dsock, char *arg )
 {
    if( !strcasecmp( arg, "new" ) )
    {
-      text_to_buffer( dsock, "Please enter an e-mail address to create an account: " );
+      text_to_buffer( dsock, "Please enter an account name to create an account: " );
       dsock->state = STATE_NEW_ACCOUNT;
       return;
    }
@@ -52,8 +52,14 @@ static void state_press_enter (D_SOCKET *dsock, char *arg )
 static void state_new_account( D_SOCKET *dsock, char *arg )
 {
    FILE *fp;
+   char filename[MAX_STRING_LENGTH];
 
-   if( ( fp = fopen( arg, "r" ) ) != NULL )
+   for( size_t i = 0; i < strlen( arg ); i++ )
+      arg[i] = tolower( arg[i] );
+
+   snprintf( filename, MAX_STRING_LENGTH, "../accounts/%c/%s.json", toupper(arg[0]), arg );
+
+   if( ( fp = fopen( filename, "r" ) ) != NULL )
    {
       text_to_buffer( dsock, "\r\nThat account name is unavailable.\r\n" );
       fclose( fp );
@@ -63,6 +69,7 @@ static void state_new_account( D_SOCKET *dsock, char *arg )
    dsock->account = new_account();
    dsock->account->name = strdup( arg );
    text_to_buffer( dsock, "Creating account \"%s\"...\r\nCreate a secure password: ", arg );
+   text_to_buffer(dsock, (char *) dont_echo); 
    dsock->state = STATE_NEW_PASSWORD;
 
 }
@@ -238,8 +245,12 @@ static void state_chargen_name( D_SOCKET *dsock, char *arg )
       dsock->state = STATE_MAIN_MENU;
       return;
    }
+   for( size_t i = 0; i < strlen( arg ); i++ )
+   {
+      arg[i] = tolower( arg[i] );
+   }
+   arg[0] = toupper( arg[0] ); //Properly format their name
    
-   arg[0] = toupper(arg[0]);
    if( !check_name( arg ) )
    {
       text_to_buffer( dsock, "Input \"%s\" not accepted. Specify personnel name for registration. Input \"Cancel\" to end registration.\r\n", arg );
@@ -668,6 +679,7 @@ static void state_verify_password( D_SOCKET *dsock, char *arg )
    if( !bcrypt_checkpw( arg, dsock->account->password ) )
    {
       text_to_buffer( dsock, "Passwords match. Account created.\r\n" );
+   text_to_buffer(dsock, (char *) do_echo); 
       text_to_buffer( dsock, mainMenu );
       dsock->state = STATE_MAIN_MENU;
       return;

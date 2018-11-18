@@ -354,13 +354,19 @@ void cmd_look( D_MOBILE *dMob, char *arg )
          if( m->equipment[i]->worn[1] != NULL )
          {
             obj = m->equipment[i]->worn[1];
-            text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
+            if( obj->wear_pos == WEAR_SLUNG )
+               text_to_mobile_j( dMob, "text", "    %s %s, %s", AORAN( obj->sdesc ), obj->sdesc, wear_pos[obj->wear_pos] );
+            else
+               text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
             count++;
          }
          else if( m->equipment[i]->worn[0] != NULL )
          {
             obj = m->equipment[i]->worn[0];
-            text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
+            if( obj->wear_pos == WEAR_SLUNG )
+               text_to_mobile_j( dMob, "text", "    %s %s, %s", AORAN( obj->sdesc ), obj->sdesc, wear_pos[obj->wear_pos] );
+            else
+               text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
             count++;
          }
       }

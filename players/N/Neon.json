@@ -28,7 +28,7 @@
       "left arm": {
          "blunt_trauma": 0,
          "burn_trauma": 0,
-         "health": 70,
+         "health": 100,
          "wound_trauma": 0
       },
       "left foot": {
@@ -46,7 +46,7 @@
       "left leg": {
          "blunt_trauma": 0,
          "burn_trauma": 0,
-         "health": 30,
+         "health": 100,
          "wound_trauma": 0
       },
       "neck": {
@@ -82,15 +82,15 @@
       "torso": {
          "blunt_trauma": 0,
          "burn_trauma": 0,
-         "health": 74,
+         "health": 100,
          "wound_trauma": 0
       }
    },
    "brains": 5,
-   "brawn": 6,
+   "brawn": 5,
    "btc": 0.0,
    "citizenship": "Federation",
-   "cool": 6,
+   "cool": 7,
    "coordination": 7,
    "cur_bandwidth": 0,
    "cur_hp": 100,
@@ -100,7 +100,7 @@
       "body": {
          "worn0": {
             "capacity": 0,
-            "guid": "z74k6k6fTUFumyNoIxJrnyQ4Hd02J2Yia2DhmJx",
+            "guid": "waV6oADHxpOzVdMnn6OoKVQPIDwCvzF1KB88cMQ",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -114,49 +114,32 @@
             "vnum": 3,
             "volume": 0,
             "wear_pos": "body"
-         },
-         "worn1": {
-            "capacity": 0,
-            "guid": "fEcJ0Lxot58VsGLwoZxrIzp0KrE1Noz32MN2xkq",
-            "ivar1": 0,
-            "ivar2": 0,
-            "ivar3": 0,
-            "ivar4": 0,
-            "ivar5": 0,
-            "ivar6": 0,
-            "ldesc": "some kevlar bodyarmor has been set on the ground",
-            "name": "kevlar body armor bodyarmor armour bodyarmour",
-            "sdesc": "kevlar bodyarmor",
-            "type": "armor",
-            "vnum": 11,
-            "volume": 9177,
-            "wear_pos": "body"
          }
       },
-      "eyes": {
+      "eyes": {},
+      "face": {
          "worn0": {
             "capacity": 0,
-            "guid": "RkZfc76A358LZfL8yNpBrTj29KlJPOoG9nWlv2V",
+            "guid": "IlShyFXCDq0ZmV6gNibJn0HT0SaD9VFRhx9Pd7s",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
             "ivar4": 0,
             "ivar5": 0,
             "ivar6": 0,
-            "ldesc": "a pair of mirror-polished aviators has been set on the ground",
-            "name": "aviators shades sunglasses",
-            "sdesc": "pair of aviators",
-            "type": "clothing",
-            "vnum": 2,
+            "ldesc": "a bright red Oni mask sits abandoned here, collecting dust",
+            "name": "oni mask",
+            "sdesc": "bright red Oni mask",
+            "type": "armor",
+            "vnum": 19,
             "volume": 0,
-            "wear_pos": "eyes"
+            "wear_pos": "face"
          }
       },
-      "face": {},
       "feet": {
          "worn0": {
             "capacity": 0,
-            "guid": "xqYz5nGVQCnGc9NGeOTg5d079U9EEqZbRXLXkrS",
+            "guid": "JbFj6T6tgchEWdvMW8iyDSeFDPOL1ACLMh4Sabm",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -173,7 +156,7 @@
          },
          "worn1": {
             "capacity": 0,
-            "guid": "b3gRfpFWEuPUz2VHbPRQthPE9Mp67QZiUf9aFP6",
+            "guid": "rnE6kRB6NKomogB4TqSFstidfzi7KtubR8ib0Th",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -190,29 +173,11 @@
          }
       },
       "hands": {},
-      "head": {
-         "worn0": {
-            "capacity": 0,
-            "guid": "WMIJiE95MRknR8QoVYyHU709j1g2EtIAgqjz4tF",
-            "ivar1": 0,
-            "ivar2": 0,
-            "ivar3": 0,
-            "ivar4": 0,
-            "ivar5": 0,
-            "ivar6": 0,
-            "ldesc": "a battered black ballcap has been left on the ground",
-            "name": "black battered ballcap",
-            "sdesc": "battered black ballcap",
-            "type": "clothing",
-            "vnum": 6,
-            "volume": 0,
-            "wear_pos": "head"
-         }
-      },
+      "head": {},
       "legs": {
          "worn0": {
             "capacity": 0,
-            "guid": "LBa0zQeOMaD2Ep6PsWsQzL7t50d2gjJ1VT2vKgk",
+            "guid": "qEkB85n8E7SAdFwjWL72vods9jq0E7s5MMGUR32",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -233,18 +198,18 @@
       "slung": {
          "worn0": {
             "capacity": 0,
-            "guid": "jjVeTY9AaYs0rKQ6TDvZKmY2gecqU1wdlssfrBQ",
+            "guid": "vql35OSZwhbmrQGMn8q6BX6R9NjosxKYX513TT2",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
             "ivar4": 0,
             "ivar5": 0,
             "ivar6": 0,
-            "ldesc": "an 9 millimeter STEN submachine gun has been left here",
-            "name": "STEN submachine gun smg machine",
-            "sdesc": "9mm STEN SMG",
+            "ldesc": "an MP5 9 millimeter submachinegun has been left here",
+            "name": "MP5 smg submachinegun gun machine",
+            "sdesc": "9mm MP5 SMG",
             "type": "smg",
-            "vnum": 13,
+            "vnum": 12,
             "volume": 8900,
             "wear_pos": "slung"
          }
@@ -255,7 +220,7 @@
             "contents": [
                {
                   "capacity": 0,
-                  "guid": "rzxwZ31qjYwCIZtwv672h31toyCBludN3Lk2Omt",
+                  "guid": "pbdMC4spsBPycNF4XtnmVU6TSbVV5OYv0bhCgK2",
                   "ivar1": 0,
                   "ivar2": 0,
                   "ivar3": 0,
@@ -271,7 +236,7 @@
                   "wear_pos": "none"
                }
             ],
-            "guid": "1pyWSfIoEHV5qvurgW5iKtRNvDBxaVYclx8dNRC",
+            "guid": "OEGa2XM7RcZxFsPTIpbP9FklxsDIsx0gbGreEdl",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -291,7 +256,7 @@
             "contents": [
                {
                   "capacity": 0,
-                  "guid": "h0BODmnJvvsfYGdeWWPguL3b3QCnDihUjTJXf6H",
+                  "guid": "RxsRUnXabfmUCmCwnvH1ECHwTeFIsMakkDbf18p",
                   "ivar1": 0,
                   "ivar2": 0,
                   "ivar3": 0,
@@ -307,7 +272,7 @@
                   "wear_pos": "none"
                }
             ],
-            "guid": "8kZK3ZezulHxCKy687JKtdXggIAjxWNGhNrkMFU",
+            "guid": "dnM808KwwfdxTQepJt5sWSDgdhrsiASvYEDZNov",
             "ivar1": 0,
             "ivar2": 0,
             "ivar3": 0,
@@ -324,21 +289,21 @@
          }
       }
    },
-   "eyecolor": "Brown",
-   "gender": "male",
-   "guid": "jDJRxA6Wkz2MwVqM8HeB0OtwN7aMVyifc16JCdG",
-   "height": 182,
+   "eyecolor": "Grey",
+   "gender": "female",
+   "guid": "btV25fIB5XRatKM0zJKV5MW6heO5KhaWL5YQlGs",
+   "height": 162,
    "level": 4,
    "luck": 5,
    "max_bandwidth": 0,
    "max_hp": 100,
-   "name": "Raze",
+   "name": "Neon",
    "position": 5,
    "position_string": "standing",
    "prompt": "#>",
-   "race": "Human",
-   "room": 2,
-   "senses": 7,
+   "race": "Synthetic",
+   "room": 1,
+   "senses": 6,
    "signal": 0,
    "skills": {
       "combat": 0,
@@ -347,6 +312,6 @@
       "personality": 0,
       "subterfuge": 0
    },
-   "stamina": 4,
-   "weight": 87
+   "stamina": 5,
+   "weight": 60
 }

@@ -117,18 +117,27 @@ typedef struct  event_data    EVENT_DATA;
 typedef struct  skills        SKILLS;
 typedef struct  dBodypart     D_BODYPART;
 typedef struct  dEquipment    D_EQUIPMENT;
+typedef struct  dReset        D_RESET;
 
 /* the actual structures */
+
+struct dReset
+{
+   int type;
+   int vnum;
+
+};
+
 struct dRoom
 {
-   D_AREA *area;
-   unsigned int vnum;
-   char   *name;
-   char   *description;
-   LIST   *mobiles;
-   LIST   *objects;
-   
-   LIST   *exits; 
+   D_AREA           * area;
+   unsigned int       vnum;
+   char             * name;
+   char             * description;
+
+   LIST             * mobiles;
+   LIST             * objects;
+   LIST             * exits; 
 };
 
 struct dExit
@@ -180,6 +189,7 @@ struct dArea
    LIST *rooms;
    LIST *mobiles;
    LIST *objects;
+   LIST *resets;
 
    unsigned int r_low;
    unsigned int r_hi;
@@ -419,6 +429,7 @@ void  handle_new_connections  ( D_S *dsock, char *arg );
  * handler_json.c
  */
 D_ACCOUNT *json_to_account( json_t *json );
+D_RESET   *json_to_reset( json_t *json );
 
 /*
  * interpret.c
