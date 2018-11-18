@@ -1,8 +1,22 @@
 # cyberMUD
-### Yet another MUD client, influenced by the Cyberpunk genre
-#### Uses a custom MUD client, see https://github.com/FLWFTW/cyberMUD.client
+MUD Server, based off of [SocketMUD](https://web.archive.org/web/20090903191321/http://www.socketmud.dk:80/), design influenced by the [Cyberpunk genre](https://en.wikipedia.org/wiki/Cyberpunk) and its [derivatives](https://en.wikipedia.org/wiki/Cyberpunk_derivatives).
 
-Currently have:
+### Client
+Uses a custom web client, project located at https://github.com/FLWFTW/cyberMUD.client
+
+### Influences
+* [Cyberpunk 2020](https://en.wikipedia.org/wiki/Cyberpunk_2020)
+* [Cyberpunk 2077](https://en.wikipedia.org/wiki/Cyberpunk_2077)
+* [Altered Carbon](https://en.wikipedia.org/wiki/Altered_Carbon)
+* [Terminator](https://en.wikipedia.org/wiki/Terminator_(franchise))
+* [Robocop](https://en.wikipedia.org/wiki/RoboCop_(franchise))
+* [Tank Girl](https://en.wikipedia.org/wiki/Tank_Girl)
+* [Blade Runner](https://en.wikipedia.org/wiki/Blade_Runner_(franchise))
+* [Fallout](https://en.wikipedia.org/wiki/Fallout_(series))
+* [Wasteland](https://en.wikipedia.org/wiki/Wasteland_(video_game))
+
+### Features
+
   * Player accounts, saved and loaded from JSON files
   * Player files, saved and loaded from JSON files
   * Areas saved and loaded from JSON files
@@ -25,17 +39,13 @@ Currently have:
           * Health/Max health
           * Money (Currently labeled bitcoins, but will probably come up with a more unique name)
           * And more
+          
+### Goals
+Create a modern, SMAUG-like MUD server with a modern license and modern game design in a Cyberpunk setting. Create an immersive experience using scripting to create dynamic room descriptions and NPC interactions, and a web-based client to further increase player immersion in the game.
 
-TODO:
-- [ ] Combat System
-- [ ] Skill System (partially implemented)
+### Roadmap
+See [ROADMAP.md](https://github.com/FLWFTW/cyberMUD/blob/master/ROADMAP.md)
 
-* Skill bases
-* Combat
-* Engineering
-* Subterfuge
-* Medicine
-* Misc (Need a better name, thinking "personality", not sure, but skill tree will include things like speech, gambling, driving, and other skills that don't fall into the above branches)
-* As you become adept at skills you unlock additional skills in the skill tree. I'm thinking a mix between the system in Skyrim and stock SMAUG, where you become better at skills as you use them. Perhaps you can only learn a skill after completing a quest from a guild or faction, and then only if you have the skill unlocked.
-      
-- [ ] Hacking system, really need to put some brain power into this one. Want something that's fun and useful, be able to lock or unlock doors in a facility, activate/deactivate security systems, or reprogram them to target other people. Lock out reinforcements if you're in the middle of combat, etc.
+### License
+Licensed under the GNU General Public License v3.0, see [LICENSE](https://github.com/FLWFTW/cyberMUD/blob/master/LICENSE) for more information.
+
