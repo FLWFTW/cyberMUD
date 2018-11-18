@@ -65,7 +65,7 @@ void cmd_enter( D_MOBILE *dMob, char *arg )
    echo_around( dMob, "%s leaves through the %s\r\n", MOBNAME(dMob), exit->name );//Need to check for non n/s/e/w exits, wouldn't make sense to see "Blah leaves door"
    DetachFromList( dMob, dMob->room->mobiles );
    dMob->room = exit->to_room;
-   AttachToList( dMob, dMob->room->mobiles );
+   AppendToList( dMob, dMob->room->mobiles );
    echo_around( dMob, "%s enters from the %s\r\n", MOBNAME(dMob), exit->farside_name );
    cmd_look( dMob, "" );
 }
