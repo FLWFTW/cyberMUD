@@ -55,7 +55,6 @@ CELL *AllocCell()
 void AppendToList( void *pContent, LIST *pList )
 {
    CELL *pCell = NULL;
-   int found = 0;
 
    for (pCell = pList->_pFirstCell; pCell != NULL; pCell = pCell->_pNextCell)
    {
@@ -64,18 +63,13 @@ void AppendToList( void *pContent, LIST *pList )
 
       if (pCell->_pContent == pContent)
       {
-         found = 1;
-         break;
+         //Do not attach if its already in the list
+         return;
       }
    }
 
-   /* do not attach to list if already here */
-   if (found)
-      return;
-
    pCell = AllocCell();
    pCell->_pContent = pContent;
-   pCell->_pNextCell = NULL;
    pCell->_pPrevCell = pList->_pLastCell;
    if( pList->_pLastCell )
    {

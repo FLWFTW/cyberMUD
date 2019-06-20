@@ -23,6 +23,11 @@
 #include <jansson.h>
 #include <bcrypt.h>
 
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+#include "handler_lua.h"
+
 /************************
  * Standard definitions *
  ************************/
@@ -120,14 +125,6 @@ typedef struct  dEquipment    D_EQUIPMENT;
 typedef struct  dReset        D_RESET;
 
 /* the actual structures */
-
-struct dReset
-{
-   int type;
-   int vnum;
-
-};
-
 struct dRoom
 {
    D_AREA           * area;
@@ -138,6 +135,15 @@ struct dRoom
    LIST             * mobiles;
    LIST             * objects;
    LIST             * exits; 
+   LIST             * scripts;
+};
+
+struct dReset
+{
+   enum reset_type_t  type;
+   json_t             data;
+   void             * what;
+   int                location; //room vnum
 };
 
 struct dExit
@@ -149,7 +155,7 @@ struct dExit
    unsigned int       to_vnum;
 
    unsigned int       door_level; //Ranging from a hollow wood bedroom door (0) to a reinforced steel/kevlar blast vault whatever door (10)
-   unsigned int       lock_level; //Ranging from the littl push-button lock on a bathroom door (0) to something you would find on a bank safe (10)a
+   unsigned int       lock_level; //Ranging from the littl push-button lock on a bathroom door (0) to something you would find on a bank safe (10)
    enum lock_type_t   lock_type;  //Pin-tumbler, combo/dial, electric pin, fingerprint, remote
    
    enum lock_state_t   lock;
@@ -161,6 +167,7 @@ struct dObject
    D_ROOM          * in_room;
    D_OBJECT        * in_object;
    D_MOBILE        * carried_by;
+   D_RESET         * reset;
 
    unsigned int      vnum;
    char            * name;
@@ -185,11 +192,8 @@ struct dArea
    char *name;
    char *author;
    char *filename;
-
-   LIST *rooms;
-   LIST *mobiles;
-   LIST *objects;
-   LIST *resets;
+   char *reset_script;
+   time_t last_reset;
 
    unsigned int r_low;
    unsigned int r_hi;
@@ -197,6 +201,11 @@ struct dArea
    unsigned int m_hi;
    unsigned int o_low;
    unsigned int o_hi;
+
+   LIST *rooms;
+   LIST *mobiles;
+   LIST *objects;
+   LIST *resets;
 };
 
 struct dAccount
@@ -253,89 +262,95 @@ struct dEquipment
 
 struct dMobile
 {
-   D_SOCKET      * socket;
-   D_ROOM        * room;
-   LIST          * events;
-   char          * name;
-   char          * password;
-   char          * prompt;
-   sh_int          level;
-   enum gender_t   gender;
-   unsigned int    vnum;
-   enum position_t position;
-   SKILLS        * skills;
+   D_SOCKET         * socket;
+   D_ROOM           * room;
+   D_RESET          * reset;
+   LIST             * events;
+   char             * name;
+   char             * password;
+   char             * prompt;
+   sh_int             level;
+   enum gender_t      gender;
+   unsigned int       vnum;
+   enum position_t    position;
+   SKILLS           * skills;
 
-   int             cur_hp;
-   int             max_hp;
+   int                cur_hp;
+   int                max_hp;
 
-   char          * sdesc;
-   char          * ldesc;
-   char          * guid;
+   char             * sdesc;
+   char             * ldesc;
+   char             * guid;
 
-   unsigned int    brains;
-   unsigned int    brawn;
-   unsigned int    senses;
-   unsigned int    stamina;
-   unsigned int    coordination;
-   unsigned int    cool;
-   unsigned int    luck;
+   unsigned int       brains;
+   unsigned int       brawn;
+   unsigned int       senses;
+   unsigned int       stamina;
+   unsigned int       coordination;
+   unsigned int       cool;
+   unsigned int       luck;
  
-   char          * race;
-   unsigned int    heightcm;
-   unsigned int    weightkg;
-   char          * eyecolor;
-   float           btc;
-   unsigned int    signal;
-   unsigned int    cur_bandwidth;
-   unsigned int    max_bandwidth;
-   unsigned int    encumberance;
+   char             * race;
+   char             * eyecolor;
+   char             * eyeshape;
+   char             * haircolor;
+   char             * hairstyle;
+   char             * skincolor;
+   char             * build;
+   char             * height;
+   unsigned int       age;
+   float              btc;
+   unsigned int       signal;
+   unsigned int       cur_bandwidth;
+   unsigned int       max_bandwidth;
+   unsigned int       encumberance;
 
-   D_BODYPART    * body[MAX_BODY];
+   D_BODYPART       * body[MAX_BODY];
  
-   D_OFFER       * offer_left;
-   D_OFFER       * offer_right;
+   D_OFFER          * offer_left;
+   D_OFFER          * offer_right;
 
-   D_OBJECT      * hold_right;
-   D_OBJECT      * hold_left;
+   D_OBJECT         * hold_right;
+   D_OBJECT         * hold_left;
  
-   D_EQUIPMENT   * equipment[WEAR_NONE];
+   D_EQUIPMENT      * equipment[WEAR_NONE];
  
-   char          * citizenship;
-   char          * association;
+   char             * citizenship;
+   char             * association;
 };
 
 struct help_data
 {
-  time_t          load_time;
-  char          * keyword;
-  char          * text;
+  time_t              load_time;
+  char              * keyword;
+  char              * text;
 };
 
 struct lookup_data
 {
-  D_SOCKET       * dsock;   /* the socket we wish to do a hostlookup on */
-  char           * buf;     /* the buffer it should be stored in        */
+  D_SOCKET          * dsock;   /* the socket we wish to do a hostlookup on */
+  char              * buf;     /* the buffer it should be stored in        */
 };
 
 struct typCmd
 {
-  char      * cmd_name;
-  void     (* cmd_funct)(D_MOBILE *dMOb, char *arg);
-  sh_int      level;
+  char              * cmd_name;
+  void             (* cmd_funct)(D_MOBILE *dMOb, char *arg);
+  sh_int              level;
 };
 
 struct dOffer
 {
-   D_OBJECT *what;
-   D_MOBILE *to;
-   time_t when;
+   D_OBJECT         * what;
+   D_MOBILE         * to;
+   time_t             when;
 };
 
 typedef struct buffer_type
 {
-  char   * data;        /* The data                      */
-  int      len;         /* The current len of the buffer */
-  int      size;        /* The allocated size of data    */
+  char              * data;        /* The data                      */
+  int                 len;         /* The current len of the buffer */
+  int                 size;        /* The allocated size of data    */
 } BUFFER;
 
 /* here we include external structure headers */
@@ -434,7 +449,7 @@ D_RESET   *json_to_reset( json_t *json );
 /*
  * interpret.c
  */
-void  handle_cmd_input        ( D_S *dsock, char *arg );
+void  handle_cmd_input        ( D_MOBILE *dMob, char *arg );
 
 /*
  * io.c
@@ -481,6 +496,7 @@ void object_to_object         ( D_OBJECT *object, D_OBJECT *container );
 void object_from_object       ( D_OBJECT *object, D_OBJECT *container );
 void object_from_room         ( D_OBJECT *object, D_ROOM *room );
 void object_from_mobile       ( D_OBJECT *object, D_MOBILE *dMob );
+bool equip_object             ( D_MOBILE *dMob, D_OBJECT *obj );
 D_OBJECT *get_object_list     ( const char *name, LIST *list );
 D_OBJECT *spawn_object        ( unsigned int vnum );
 D_OBJECT *new_object          ();
@@ -513,6 +529,7 @@ D_MOBILE *new_mobile          ();
 D_ROOM *get_room_by_vnum      ( unsigned int vnum );
 D_MOBILE *spawn_mobile        ( unsigned int vnum );
 D_MOBILE *get_mobile_list     ( const char *name, LIST *list );
+D_ROOM *mob_to_room           ( D_MOBILE *dMob, D_ROOM *to );
 char *proper                  ( const char *word );
 void sentence_case            ( char *sentence );
 void show_mob_obj_list        ( D_MOBILE *dMob, LIST *list, size_t indent );
@@ -524,6 +541,7 @@ bool is_name                  ( char *name, char *namelist );
  * action_safe.c
  */
 void  cmd_lock                ( D_M *dMob, char *arg );
+void  cmd_force               ( D_M *dMob, char *arg );
 void  cmd_unlock              ( D_M *dMob, char *arg );
 void  cmd_examine             ( D_M *dMob, char *arg );
 void  cmd_draw                ( D_M *dMob, char *arg );
@@ -564,6 +582,7 @@ void  cmd_wear                ( D_M *dMob, char *arg );
 void  cmd_equipment           ( D_M *dMob, char *arg );
 void  cmd_ostat               ( D_M *dMob, char *arg );
 void  cmd_olist               ( D_M *dMob, char *arg );
+void  cmd_mlist               ( D_M *dMob, char *arg );
 void  cmd_enter               ( D_M *dMob, char *arg );
 void  cmd_open                ( D_M *dMob, char *arg );
 void  cmd_close               ( D_M *dMob, char *arg );
@@ -612,6 +631,7 @@ D_ROOM *json_to_room( json_t *json );
 D_OBJECT *json_to_object( json_t *json );
 D_MOBILE *json_to_mobile( json_t *json );
 json_t *exit_to_json( D_EXIT *exit );
+json_t *mobile_to_json( D_MOBILE *dMob, bool equipment );
 json_t *player_to_json( D_MOBILE *dMob, bool equipment );
 json_t *object_to_json( D_OBJECT *dObj );
 json_t *object_to_json_cli( D_OBJECT *obj );

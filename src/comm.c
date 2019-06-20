@@ -95,6 +95,8 @@ void text_to_buffer( D_SOCKET *dsock, const char *txt2, ... )
    static char output[8 * MAX_BUFFER];
    char buf[MAX_BUFFER];
    va_list args;
+   if( !dsock ) //In case we end up pointing at a mobile or something
+      return;
 
    va_start( args, txt2 );
    vsnprintf( buf, MAX_BUFFER, txt2, args );
@@ -151,7 +153,8 @@ void text_to_mobile( D_MOBILE *dMob, const char *txt2, ... )
    va_start( args, txt2 );
    vsnprintf( buf, MAX_BUFFER, txt2, args );
    va_end( args );
-   buf[0] = toupper( buf[0] ); //sentences always begin with a capital letter...
+   //buf[0] = toupper( buf[0] ); //sentences always begin with a capital letter...
+   //except when they dont.... --Will
 
    if( dMob->socket )
    {

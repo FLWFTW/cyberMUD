@@ -400,8 +400,9 @@ D_MOBILE *json_to_mobile( json_t *json )
 
    json_object_foreach( json, key, value )
    {
-      if( !strcmp( key, "name" ) )
+      if( !strcmp( key, "name" ) || !strcmp( key, "pcname" ) ) //name is a reserved word in javascript
       {
+         if( dMob->name != NULL ) free( dMob->name );
          dMob->name = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "guid" ) )
@@ -430,11 +431,47 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "race" ) )
       {
+         if( dMob->race[0] != '\0') free( dMob->race );
          dMob->race = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "eyecolor" ) )
       {
+         if( dMob->eyecolor[0] != '\0') free( dMob->eyecolor );
          dMob->eyecolor = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "haircolor" ) )
+      {
+         if( dMob->haircolor[0] != '\0') free( dMob->haircolor );
+         dMob->haircolor = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "eyeshape" ) )
+      {
+         if( dMob->eyeshape[0] != '\0') free( dMob->eyeshape );
+         dMob->eyeshape = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "hairstyle" ) )
+      {
+         if( dMob->hairstyle[0] != '\0') free( dMob->hairstyle );
+         dMob->hairstyle = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "skincolor" ) )
+      {
+         if( dMob->skincolor[0] != '\0') free( dMob->skincolor );
+         dMob->skincolor = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "build" ) )
+      {
+         if( dMob->build[0] != '\0') free( dMob->build );
+         dMob->build = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "height" ) )
+      {
+         if( dMob->height[0] != '\0') free( dMob->height );
+         dMob->height = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "age" ) )
+      {
+         dMob->age = json_integer_value( value );
       }
       else if( !strcmp( key, "level" ) )
       {
@@ -515,14 +552,6 @@ D_MOBILE *json_to_mobile( json_t *json )
       {
          load_body( dMob, value );
       }
-      else if( !strcmp( key, "weight" ) )
-      {
-         dMob->weightkg = json_integer_value( value );
-      }
-      else if( !strcmp( key, "height" ) )
-      {
-         dMob->heightcm = json_integer_value( value );
-      }
       else if( !strcmp( key, "btc" ) )
       {
          dMob->btc = json_real_value( value );
@@ -590,7 +619,7 @@ json_t *skills_to_json( SKILLS *skills )
    return json;
 }
 
-json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
+json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )
 {
    json_t *json = json_object();
    
@@ -598,7 +627,6 @@ json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
    json_object_set_new( json, "race", json_string( dMob->race ) );
    json_object_set_new( json, "citizenship", json_string( dMob->citizenship ) );
    json_object_set_new( json, "association", json_string( dMob->association ) );
-   json_object_set_new( json, "eyecolor", json_string( dMob->eyecolor ) );
    json_object_set_new( json, "prompt", json_string( dMob->prompt ) );
    json_object_set_new( json, "level", json_integer( dMob->level ) );
    json_object_set_new( json, "skills", skills_to_json( dMob->skills ) );
@@ -620,14 +648,19 @@ json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
    json_object_set_new( json, "cool", json_integer( dMob->cool ) );
    json_object_set_new( json, "cur_hp", json_integer( dMob->cur_hp ) );
    json_object_set_new( json, "max_hp", json_integer( dMob->max_hp ) );
-   json_object_set_new( json, "height", json_integer( dMob->heightcm ) );
-   json_object_set_new( json, "weight", json_integer( dMob->weightkg ) );
+   json_object_set_new( json, "height", json_string( dMob->height ) );
+   json_object_set_new( json, "build", json_string( dMob->build ) );
+   json_object_set_new( json, "eyecolor", json_string( dMob->eyecolor ) );
+   json_object_set_new( json, "eyeshape", json_string( dMob->eyeshape ) );
+   json_object_set_new( json, "haircolor", json_string( dMob->haircolor ) );
+   json_object_set_new( json, "hairstyle", json_string( dMob->hairstyle ) );
+   json_object_set_new( json, "skincolor", json_string( dMob->skincolor ) );
+   json_object_set_new( json, "age", json_integer( dMob->age ) );
    json_object_set_new( json, "signal", json_integer( dMob->signal ) );
    json_object_set_new( json, "cur_bandwidth", json_integer( dMob->cur_bandwidth ) );
    json_object_set_new( json, "max_bandwidth", json_integer( dMob->max_bandwidth ) );
    json_object_set_new( json, "btc", json_real( dMob->btc ) );
    json_object_set_new( json, "encumberance", json_integer( dMob->encumberance ) );
-   json_object_set_new( json, "room", json_integer( dMob->room->vnum ) );
 
    json_t *body = json_object();
    for( size_t i = BODY_HEAD; i < MAX_BODY; i++ )
@@ -665,6 +698,15 @@ json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
       json_object_set_new( json, "equipment", equipment);
 
    }
+   return json;
+}
+json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
+{
+   json_t *json = mobile_to_json( dMob, showEquipment );
+
+   //Put PC specific save code in here.
+   json_object_set_new( json, "room", json_integer( dMob->room->vnum ) );
+
    return json;
 }
 

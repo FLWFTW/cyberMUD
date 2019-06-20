@@ -93,6 +93,8 @@ void load_areas()
             area->author = strdup( json_string_value( value ) );
          else if( !strcmp( key, "filename" ) )
             area->filename = strdup( json_string_value( value ) );
+         else if( !strcmp( key, "reset_script" ) )
+            area->reset_script = strdup( json_string_value( value ) );
          else if( !strcmp( key, "o_low" ) )
             area->o_low = json_integer_value( value );
          else if( !strcmp( key, "o_hi" ) )

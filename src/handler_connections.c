@@ -82,7 +82,7 @@ static void state_main_menu( D_SOCKET *dsock, char *arg )
    {
       default:
       {
-         text_to_buffer( dsock, "Please make a valid selection (1-6).\r\n" );
+         text_to_buffer( dsock, "Please make a valid selection (1-5, 0).\r\n" );
          text_to_buffer( dsock, mainMenu );
          break;
       }
@@ -124,6 +124,7 @@ static void state_main_menu( D_SOCKET *dsock, char *arg )
       }
       case 4:
       {
+         /*
          text_to_buffer( dsock, "----[ PERSONNEL REGISTRATION ]----\r\n" );
          text_to_buffer( dsock, " An unshaven immigrations control officer slowly reads to you from a paper,\r\n\r\n"
                                 "     \"The Ministry of Personnel Affairs requires biographical information\r\n"
@@ -137,7 +138,9 @@ static void state_main_menu( D_SOCKET *dsock, char *arg )
                                 " gonna live long enough for anyone to know the difference, anyways, so get\r\n"
                                 " typing. I've got better shit to do.\"\r\n\r\n"
                                 " Enter your name, or 'cancel' to end registration.\r\n\r\nName: ");
-         dsock->state = STATE_CHARGEN_NAME;
+                                */
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"chargen_menu\"}}%c", (char)2, (char)3 );
+         dsock->state = STATE_CHARGEN;
          break;
       }
       case 5:
@@ -231,6 +234,128 @@ static void state_choose_char( D_SOCKET *dsock, char *arg )
    return;
 }
 
+static void state_chargen( D_SOCKET *dsock, char *arg )
+{
+   log_string( "state_chargen" );
+
+   char cmd[MAX_STRING_LENGTH];
+
+   arg = one_arg( arg, cmd );
+
+   if( !strcmp( cmd, "checkname" ) )
+   {
+      for( size_t i = 0; i < strlen( arg ); i++ )
+      {
+         arg[i] = tolower( arg[i] );
+      }
+      arg[0] = toupper( arg[0] ); //Properly format their name
+      if( check_name( arg ) )
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"valid_name\"}}%c", (char)2, (char)3 );
+      else
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_name\"}}%c", (char)2, (char)3 );
+   }
+   else if( !strcmp( cmd, "cancel" ) )
+   {
+      dsock->state = STATE_MAIN_MENU;
+      text_to_socket( dsock, mainMenu );
+      text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"Hide_all_windows\"}}%c", (char)2, (char)3 );
+      return;
+   }
+   //submit followed by a json string with the character's data. 
+   //We check to see if everything is kosher on the server side too.
+   else if( !strcmp( cmd, "submit" ) )
+   {
+      json_t *json = json_loads( arg, 0, NULL );
+      if( json == NULL )
+      {
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_chargen\"}}%c", (char)2, (char)3 );
+         log_string( "Chargen error: Invalid JSON submitted (%s)", arg );
+         return;
+      }
+      D_MOBILE *dMob = json_to_mobile( json );
+      if( dMob == NULL )
+      {
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_chargen\"}}%c", (char)2, (char)3 );
+         log_string( "Chargen error: Unable to parse JSON into valid character", arg );
+         return;
+      }
+
+      if( dMob->brains < 1       || dMob->brains > 10
+       || dMob->brawn <  1       || dMob->brawn  > 10
+       || dMob->senses < 1       || dMob->senses > 10
+       || dMob->stamina < 1      || dMob->stamina > 10
+       || dMob->coordination < 1 || dMob->coordination > 10
+       || dMob->cool < 1         || dMob->cool > 10
+       || dMob->luck < 1         || dMob->luck > 10 )
+      {
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_chargen_stats\"}}%c", (char)2, (char)3 );
+         log_string( "Chargen error: stats out of range." );
+         free_mobile( dMob );
+         return;
+      }
+
+      if( dMob->brains + dMob->brawn + dMob->senses + dMob->stamina + dMob->coordination + dMob->cool + dMob->luck != 40 )
+      {
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_chargen_stats\"}}%c", (char)2, (char)3 );
+         log_string( "Chargen error: stats incomplete." );
+         free_mobile( dMob );
+         return;
+      }
+
+      for( size_t i = 0; i < strlen( arg ); i++ )
+      {
+         arg[i] = tolower( arg[i] );
+      }
+      arg[0] = toupper( arg[0] ); //Properly format their name
+      if( !check_name( dMob->name ) )
+      {
+         text_to_socket( dsock, "%c{\"type\":\"ui_command\", \"data\":{\"text\":\"invalid_name %s\"}}%c", (char)2, dMob->name, (char)3 );
+         log_string( "Chargen error: bad name." );
+         free_mobile( dMob );
+         return;
+      }
+
+      //Looks like we're good to go!
+      dsock->player = dMob;
+      dMob->socket = dsock;
+      dsock->player->level    =   LEVEL_GOD;
+      dsock->player->cur_hp   = 100;
+      dsock->player->max_hp   = 100;
+      dsock->player->btc      = 0;
+      dsock->player->position = POS_STANDING;
+
+      dsock->player->cur_bandwidth = 0;
+      dsock->player->max_bandwidth = 0;
+      dsock->player->encumberance  = 0;
+      dsock->player->hold_left = NULL;
+      dsock->player->hold_right = NULL;
+
+      dsock->player->citizenship = strdup( "Federation" );
+      dsock->player->association = strdup( "BitCorp" );
+      dsock->player->prompt      = strdup( "#>" );
+
+      dsock->player->socket = dsock;
+      AttachToList(dsock->player, dmobile_list);
+      AppendToList( strdup( dsock->player->name ), dsock->account->characters );
+      save_account( dsock->account );
+      dsock->player->room = get_room_by_vnum( FIRST_ROOM );
+      AppendToList( dsock->player, dsock->player->room->mobiles );
+      echo_around( dsock->player, "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
+      log_string("New Player: %s has finished chargen.", dsock->player->name);
+      log_string("Player: %s has entered the game.", dsock->player->name);
+      save_player( dsock->player );
+      text_to_mobile_j( dsock->player, "ui_command", "show_all_windows" );
+      text_to_buffer( dsock, " The immigrations control officer sighs, \"Finally finished? The city is"
+                             " through the door on your right.\"\r\n\r\n"
+                             " A bright LCD screen flashes the following message: \r\n\r\n" );
+      text_to_buffer( dsock, "%s\r\n\r\n", motd );
+      dsock->state = STATE_PLAYING;
+      cmd_look( dsock->player, "" );
+      return;
+   }
+
+}
+
 static void state_chargen_name( D_SOCKET *dsock, char *arg )
 {
    if( dsock->player && dsock->player->name )
@@ -242,6 +367,8 @@ static void state_chargen_name( D_SOCKET *dsock, char *arg )
    if( !strcasecmp( arg, "cancel" ) )
    {
       text_to_buffer( dsock, mainMenu );
+      free_mobile( dsock->player );
+      dsock->player = NULL;
       dsock->state = STATE_MAIN_MENU;
       return;
    }
@@ -306,11 +433,13 @@ static void state_chargen_gender( D_SOCKET *dsock, char *arg )
          if( strcasecmp( arg, "cancel" ) ) break; //they didn't specifically type 'cancel'
          text_to_buffer( dsock, mainMenu );
          dsock->state = STATE_MAIN_MENU;
+         free_mobile( dsock->player );
+         dsock->player = NULL;
          return;
       }
    }
    text_to_buffer( dsock, "\r\nSpecify race. Additional information regarding each race can be obtained by typing help <race>\r\n" );
-   text_to_buffer( dsock, "Type 'cancel' to end registration.\r\n\r\n\tHuman\tSynthetic\tPosthuman\r\n\r\nRace: " );
+   text_to_buffer( dsock, "Type 'cancel' to end registration.\r\n\r\n\tHuman\tSynthetic\r\n\r\nRace: " );
    dsock->state = STATE_CHARGEN_RACE;
    return;
 }
@@ -325,19 +454,17 @@ static void state_chargen_race( D_SOCKET *dsock, char *arg )
    {
       dsock->player->race = strdup( "Synthetic" );
    }
-   else if( is_prefix( arg, "posthuman" ) )
-   {
-      dsock->player->race = strdup( "Posthuman" );
-   }
    else if( !strcasecmp( arg, "cancel" ) )
    {
+      free_mobile( dsock->player );
       text_to_buffer( dsock, mainMenu );
       dsock->state = STATE_MAIN_MENU;
+      dsock->player = NULL;
       return;
    }
    else
    {
-      text_to_buffer( dsock, "Invalid input. Valid races are Human, Synthetic and Posthuman. 'Cancel' to end registration.\r\nRace: " );
+      text_to_buffer( dsock, "Invalid input. Valid races are Human or Synthetic. 'Cancel' to end registration.\r\nRace: " );
       return;
    }
 
@@ -359,6 +486,7 @@ static void state_chargen_race( D_SOCKET *dsock, char *arg )
 
 static void state_chargen_height( D_SOCKET *dsock, char *arg )
 {
+   /*
    unsigned int height;
    if( sscanf( arg, "%uin", &height ) == 1
        || sscanf( arg, "%u in", &height ) == 1 )
@@ -376,6 +504,13 @@ static void state_chargen_height( D_SOCKET *dsock, char *arg )
                              "centimeters. Where NN is a positive number.\r\nHeight: " );
       return;
    }
+
+   if( dsock->player->heightcm < 150 || dsock->player->heightcm > 245 )
+   {
+      text_to_buffer( dsock, "Height must be between 135 cm (4'11\") and 245 cm (8'0\").\r\n" );
+      return;
+   }
+   */
     dsock->state = STATE_CHARGEN_WEIGHT;
     text_to_buffer( dsock, "Input registrant weight. Specify pounds or kilograms via 'lb' or 'kg' postfix.\r\n" );
     text_to_buffer( dsock, "Weight: " );
@@ -384,6 +519,7 @@ static void state_chargen_height( D_SOCKET *dsock, char *arg )
 
 static void state_chargen_weight( D_SOCKET *dsock, char *arg )
 {
+   /*
    unsigned int weight;
    if( sscanf( arg, "%ulb", &weight ) == 1
        || sscanf( arg, "%u lb", &weight ) == 1 
@@ -405,6 +541,12 @@ static void state_chargen_weight( D_SOCKET *dsock, char *arg )
                              "kilograms. Where NN is a positive number.\r\nHeight: " );
       return;
    }
+   if( dsock->player->weightkg < 45 || dsock->player->weightkg > 180 )
+   {
+      text_to_buffer( dsock, "Weight must be between 30 kg (95 lbs) and 180 kg (400 lbs)\r\n" );
+      return;
+   }
+   */
     dsock->state = STATE_CHARGEN_EYECOLOR;
     text_to_buffer( dsock, "\r\nInput registrant eye color (Black, brown, hazel, green, blue, grey, gold )r\n" );
     text_to_buffer( dsock, "Eye color: " );
@@ -473,7 +615,6 @@ static void state_chargen_eyecolor( D_SOCKET *dsock, char *arg )
    dsock->player->association = strdup( "BitCorp" );
    dsock->player->prompt      = strdup( "#>" );
 
-   log_string("Player: %s has entered the game.", dsock->player->name);
    dsock->player->socket = dsock;
    AttachToList(dsock->player, dmobile_list);
    AppendToList( strdup( dsock->player->name ), dsock->account->characters );
@@ -481,6 +622,8 @@ static void state_chargen_eyecolor( D_SOCKET *dsock, char *arg )
    dsock->player->room = get_room_by_vnum( FIRST_ROOM );
    AppendToList( dsock->player, dsock->player->room->mobiles );
    echo_around( dsock->player, "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
+   log_string("New Player: %s has finished chargen.", dsock->player->name);
+   log_string("Player: %s has entered the game.", dsock->player->name);
    save_player( dsock->player );
    text_to_mobile_j( dsock->player, "ui_command", "show_all_windows" );
    //init_events_player(dsock->player);
@@ -512,6 +655,17 @@ static void state_chargen_stats( D_SOCKET *dsock, char *arg )
           return;
        }
        text_to_buffer( dsock, "Physical characteristics recorded.\r\n" );
+    }
+    else if( toupper( arg[0] ) == 'C' )
+    {
+       if( !strcasecmp( arg, "cancel" ) )
+       {
+       }
+       else
+       {
+          text_to_buffer( dsock, "Spell out 'cancel' to cancel character creation.\r\n" );
+       }
+       return;
     }
     else if( arg[0] == '-' )
     {
@@ -717,6 +871,9 @@ void handle_new_connections( D_SOCKET *dsock, char *arg )
          break;
       case STATE_CHOOSE_CHAR:
          state_choose_char( dsock, arg );
+         break;
+      case STATE_CHARGEN:
+         state_chargen( dsock, arg );
          break;
       case STATE_CHARGEN_NAME:
          state_chargen_name( dsock, arg );

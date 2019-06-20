@@ -22,16 +22,17 @@
 #include "mud.h"
 
 /* global variables */
-fd_set     fSet;                  /* the socket list for polling       */
-STACK    * dsock_free = NULL;     /* the socket free list              */
-LIST     * dsock_list = NULL;     /* the linked list of active sockets */
-STACK    * dmobile_free = NULL;   /* the mobile free list              */
-LIST     * dmobile_list = NULL;   /* the mobile list of active mobiles */
-LIST     * droom_list = NULL;     /* linked list of loaded rooms       */
-LIST     * darea_list = NULL;     /* linked list of loaded rooms       */
-LIST     * dobject_list = NULL;   /* linked list of loaded objects     */
-LIST     * object_protos = NULL;
-LIST     * mobile_protos = NULL;
+fd_set      fSet;                  /* the socket list for polling       */
+STACK     * dsock_free = NULL;     /* the socket free list              */
+LIST      * dsock_list = NULL;     /* the linked list of active sockets */
+STACK     * dmobile_free = NULL;   /* the mobile free list              */
+LIST      * dmobile_list = NULL;   /* the mobile list of active mobiles */
+LIST      * droom_list = NULL;     /* linked list of loaded rooms       */
+LIST      * darea_list = NULL;     /* linked list of loaded rooms       */
+LIST      * dobject_list = NULL;   /* linked list of loaded objects     */
+LIST      * object_protos = NULL;
+LIST      * mobile_protos = NULL;
+lua_State * globalLuaState;
 
 /* mccp support */
 const unsigned char compress_will   [] = { IAC, WILL, TELOPT_COMPRESS,  '\0' };
@@ -71,6 +72,8 @@ int main(int argc, char **argv)
   object_protos =  AllocList();
   mobile_protos =  AllocList();
 
+  globalLuaState = init_lua();
+
   froom = new_room();
   froom->name = strdup( "/dev/null/ $");
   froom->description = strdup( "You shouldn't be here. Yet you are." );
@@ -106,6 +109,7 @@ int main(int argc, char **argv)
   GameLoop(control);
 
   log_string("MUD is shutting down...");
+  close_lua( globalLuaState );
   /* close down the socket */
   close(control);
   log_string( "Socket closed" );
@@ -201,6 +205,7 @@ void GameLoop(int icontrol)
            case STATE_NEW_NAME:
            case STATE_NEW_PASSWORD:
            case STATE_VERIFY_PASSWORD:
+           case STATE_CHARGEN:
            case STATE_CHARGEN_RACE:
            case STATE_CHARGEN_STATS:
            case STATE_CHARGEN_HEIGHT:
@@ -210,7 +215,9 @@ void GameLoop(int icontrol)
               handle_new_connections(dsock, dsock->next_command);
               break;
           case STATE_PLAYING:
-              handle_cmd_input(dsock, dsock->next_command);
+              if( dsock->player == NULL )
+                 break;
+              handle_cmd_input(dsock->player, dsock->next_command);
               break;
         }
 

@@ -62,10 +62,10 @@ void cmd_enter( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "error", "It's closed." );
       return;
    }
+
+
    echo_around( dMob, "%s leaves through the %s\r\n", MOBNAME(dMob), exit->name );//Need to check for non n/s/e/w exits, wouldn't make sense to see "Blah leaves door"
-   DetachFromList( dMob, dMob->room->mobiles );
-   dMob->room = exit->to_room;
-   AppendToList( dMob, dMob->room->mobiles );
+   mob_to_room( dMob, exit->to_room );
    echo_around( dMob, "%s enters from the %s\r\n", MOBNAME(dMob), exit->farside_name );
    cmd_look( dMob, "" );
 }
@@ -236,7 +236,7 @@ static void show_room_to_player( D_MOBILE *dMob )
    {
       if( mobiles == dMob )
          continue;
-      json_array_append_new( jmobiles, player_to_json( mobiles, FALSE ) );
+      json_array_append_new( jmobiles, mobile_to_json( mobiles, FALSE ) );
    }
    DetachIterator( &Iter );
    json_object_set_new( data, "mobiles", jmobiles );
@@ -342,8 +342,8 @@ void cmd_look( D_MOBILE *dMob, char *arg )
 
    if( m )
    {
-      snprintf( buf, MAX_STRING_LENGTH, "You look at %s.\r\n%s %s a %s %s. %s %s %icm tall and weighs %ikg. %s %s %s eyes.\r\n",
-            MOBNAME(m), SUBJECTIVE(m), GENDERTERN( m, "is", "is", "are" ), GENDER(m), m->race, SUBJECTIVE(m), GENDERTERN( m, "is", "is", "are" ), m->heightcm, m->weightkg, SUBJECTIVE(m),
+      snprintf( buf, MAX_STRING_LENGTH, "You look at %s.\r\n%s %s a %s %s. %s %s %s and %s. %s %s %s eyes.\r\n",
+            MOBNAME(m), SUBJECTIVE(m), GENDERTERN( m, "is", "is", "are" ), GENDER(m), m->race, SUBJECTIVE(m), GENDERTERN( m, "is", "is", "are" ), m->height, m->build, SUBJECTIVE(m),
             GENDERTERN( m, "has", "has", "have" ), m->eyecolor );
       sentence_case(buf);
       text_to_mobile_j( dMob, "text", "%s", buf );
@@ -541,7 +541,9 @@ void cmd_compress(D_MOBILE *dMob, char *arg)
 
 void cmd_save(D_MOBILE *dMob, char *arg)
 {
-  save_player(dMob);
+   //You might be wondering why there is no specific save code in here. The MUD auto-saves
+   //every player every time they input a command, so it would be redundant to save it a second
+   //time within the save command.
   text_to_mobile(dMob, "Saved.\n\r");
 }
 
@@ -562,6 +564,33 @@ void cmd_mspawn( D_MOBILE *dMob, char *arg )
    return;
 }
 
+void cmd_mlist( D_MOBILE *dMob, char *arg )
+{
+   ITERATOR Iter;
+   json_t *json = json_object();
+   json_t *list = json_array();
+   D_MOBILE *m;
+
+   AttachIterator( &Iter, mobile_protos );
+   while( ( m = NextInList( &Iter ) ) != NULL )
+   {
+      json_t *jm = json_object();
+      json_object_set_new( jm, "vnum", json_integer( m->vnum ) );
+      json_object_set_new( jm, "name", json_string( m->name ) );
+      json_array_append_new( list, jm );
+   }
+   DetachIterator( &Iter );
+
+   json_object_set_new( json, "type", json_string( "mlist" ) );
+   json_object_set_new( json, "data", list );
+
+   char *dump = json_dumps( json, 0 );
+   send_json_m( dMob, "%s", dump );
+   free( dump );
+   json_decref( json );
+   return;
+}
+
 void cmd_score( D_MOBILE *dMob, char *arg )
 {
    char buf[MAX_BUFFER];
@@ -574,8 +603,8 @@ void cmd_score( D_MOBILE *dMob, char *arg )
          "&W| | Name:       %14s |  | Brain:                     %3u |        |&0\r\n"
          "&W| | Sex:             %9s |  | Brawn:                     %3u |        |&0\r\n"
          "&W| | Race:     %16s |  | Senses:                    %3u |        |&0\r\n"
-         "&W| | Height (m)             %u.%u |  | Stamina:                   %3u |        |&0\r\n"
-         "&W| | Weight (kg)            %3u |  | Coordination:              %3u |        |&0\r\n"
+         "&W| | Height:         %10s |  | Stamina:                   %3u |        |&0\r\n"
+         "&W| | Build:          %10s |  | Coordination:              %3u |        |&0\r\n"
          "&W| | Eye Color:           %5s |  | Cool:                      %3u |        |&0\r\n"
          "&W| | Serial No.:       %8s |  | Luck:                      %3u |        |&0\r\n"
          "&W| '----------------------------'  '--------------------------------'        |&0\r\n"
@@ -597,8 +626,8 @@ void cmd_score( D_MOBILE *dMob, char *arg )
          "&W| '----------------------------'         identicorp (c) 2088                |&0\r\n"
          "&W'---------------------------------------------------------------------------'&0\r\n",
          dMob->name, dMob->brains, dMob->gender == FEMALE ? "Female" : dMob->gender == MALE ? "Male" : "Nonbinary",
-         dMob->brawn, dMob->race, dMob->senses, dMob->heightcm /100, (dMob->heightcm % 100)/10, dMob->stamina,
-         dMob->weightkg, dMob->coordination, dMob->eyecolor, dMob->cool, "94F3DD21", dMob->luck,
+         dMob->brawn, dMob->race, dMob->senses, dMob->height, dMob->stamina,
+         dMob->build, dMob->coordination, dMob->eyecolor, dMob->cool, "94F3DD21", dMob->luck,
          dMob->citizenship, dMob->signal, dMob->association, dMob->cur_bandwidth, dMob->btc, dMob->max_bandwidth,
          dMob->cur_hp, dMob->max_hp, dMob->encumberance, dMob->body[BODY_EYES]->health, dMob->body[BODY_HEAD]->health,
          dMob->body[BODY_TORSO]->health, dMob->body[BODY_LARM]->health, dMob->body[BODY_RARM]->health,
@@ -626,6 +655,12 @@ void cmd_goto( D_MOBILE *dMob, char *arg )
    ITERATOR Iter;
    D_ROOM *room;
    int vnum = atoi( arg );
+   if( vnum < 1 )
+   {
+      text_to_mobile_j( dMob, "error", "Room #%i does not exist.\r\n", vnum );
+      return;
+   }
+
 
    AttachIterator( &Iter, droom_list );
    while( ( room = (D_ROOM *) NextInList( &Iter ) ) != NULL )
@@ -863,3 +898,28 @@ void cmd_unlock( D_MOBILE *dMob, char *arg )
    text_to_mobile_j( dMob, "error", "You can't find that here." );
    return;
 }
+
+void cmd_force( D_MOBILE *dMob, char *arg )
+{
+   D_MOBILE *who;
+
+   char name[MAX_STRING_LENGTH];
+
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Force _who_ to do _what_?" );
+      return;
+   }
+   arg = one_arg( arg, name );
+   
+   if( ( who = get_mobile_list( name, dMob->room->mobiles ) ) == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find anyone who looks like that." );
+      return;
+   }
+
+   handle_cmd_input( who, arg );
+   return;
+}
+
+

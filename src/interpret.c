@@ -7,18 +7,21 @@
 /* include main header file */
 #include "mud.h"
 
-void handle_cmd_input(D_SOCKET *dsock, char *arg)
+void handle_cmd_input(D_MOBILE *dMob, char *arg)
 {
-  D_MOBILE *dMob;
   char command[MAX_BUFFER];
   bool found_cmd = FALSE;
-  int i;
+  size_t i;
 
-  if ((dMob = dsock->player) == NULL)
-    return;
    if( dMob->socket && dMob->socket->state == STATE_PLAYING )
       save_player( dMob );//save after every command, but only if they're currently playing
   arg = one_arg(arg, command);
+
+  for( i = 0; i < strlen( arg ); i++ )
+  {
+     if( arg[i] < 32 ) //control characters
+        arg[i] = ' ';
+  }//Prevent people from sneaking in control characters
 
   for (i = 0; tabCmd[i].cmd_name[0] != '\0' && !found_cmd; i++)
   {
@@ -32,7 +35,7 @@ void handle_cmd_input(D_SOCKET *dsock, char *arg)
   }
 
   if (!found_cmd)
-    text_to_mobile(dMob, "No such command.\n\r");
+    text_to_mobile_j(dMob, "error", "Huh?\n\r");
 }
 
 /*
@@ -58,6 +61,7 @@ const struct typCmd tabCmd [] =
   { "enter",         cmd_enter,      LEVEL_GUEST  },
   { "equipment",     cmd_equipment,  LEVEL_GUEST  },
   { "examine",       cmd_examine,    LEVEL_GUEST  },
+  { "force",         cmd_force,      LEVEL_ADMIN  },
   { "get",           cmd_get,        LEVEL_GUEST  },
   { "give",          cmd_give,       LEVEL_GUEST  },
   { "goto",          cmd_goto,       LEVEL_GOD    },
@@ -68,6 +72,7 @@ const struct typCmd tabCmd [] =
   { "lock",          cmd_lock,       LEVEL_GUEST  },
   { "look",          cmd_look,       LEVEL_GUEST  },
   { "linkdead",      cmd_linkdead,   LEVEL_ADMIN  },
+  { "mlist",         cmd_mlist,      LEVEL_ADMIN  },
   { "mspawn",        cmd_mspawn,     LEVEL_GOD    },
   { "n",             cmd_north,      LEVEL_GUEST  },
   { "north",         cmd_north,      LEVEL_GUEST  },

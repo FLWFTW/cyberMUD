@@ -52,6 +52,7 @@ bool event_mobile_save(EVENT_DATA *event)
   event = alloc_event();
   event->fun = &event_mobile_save;
   event->type = EVENT_MOBILE_SAVE;
+  log_string( "saved all mobiles" );
   add_event_mobile(event, dMob, 2 * 60 * PULSES_PER_SECOND);
 
   return FALSE;

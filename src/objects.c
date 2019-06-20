@@ -160,12 +160,46 @@ void object_to_mobile( D_OBJECT *object, D_MOBILE *dMob )
       return;
    object->in_room = NULL;
    object->in_object = NULL;
-   object->carried_by = NULL;
+   object->carried_by = dMob;
    if( dMob->hold_right == NULL )
       dMob->hold_right = object;
    else
       dMob->hold_left = object;
    return;
+}
+
+bool equip_object( D_MOBILE *dMob, D_OBJECT *obj )
+{
+   if( dMob->equipment[obj->wear_pos]->worn[1] == NULL )
+   {
+      //They are wearing nothing in that wear location
+      if( dMob->equipment[obj->wear_pos]->worn[0] == NULL )
+      {
+         dMob->equipment[obj->wear_pos]->worn[0] = obj;
+         if( dMob->hold_right == obj )
+            dMob->hold_right = NULL;
+         else if( dMob->hold_left == obj )
+            dMob->hold_left = NULL;
+         return TRUE;
+      }
+
+      //They have an item in their base layer, ensure they're not double stacking armor
+      if( dMob->equipment[obj->wear_pos]->worn[0] != NULL && ( dMob->equipment[obj->wear_pos]->worn[0]->type != ITEM_ARMOR || obj->type != ITEM_ARMOR ) )
+      {
+         if( obj->wear_pos == WEAR_SLUNG )//or slinging more than one weapon at a time
+         {
+            return FALSE;
+         }
+         dMob->equipment[obj->wear_pos]->worn[1] = obj;
+         if( dMob->hold_right == obj )
+            dMob->hold_right = NULL;
+         else if( dMob->hold_left == obj )
+            dMob->hold_left = NULL;
+         return TRUE;
+      }
+      return FALSE;
+   }
+   return FALSE;
 }
 
 void object_from_object( D_OBJECT *object, D_OBJECT *container )

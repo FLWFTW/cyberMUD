@@ -42,7 +42,7 @@ bool check_name(const char *name)
 
 D_AREA *new_area()
 {
-   D_AREA *area = malloc( sizeof( D_AREA ) );
+   D_AREA *area = calloc( 1, sizeof( D_AREA ) );
    area->name = NULL;
    area->author = NULL;
    area->filename = NULL;
@@ -58,12 +58,14 @@ D_AREA *new_area()
    area->o_low = 0;
    area->o_hi  = 0;
 
+   area->last_reset = time(NULL);
+
    return area;
 }
 
 D_EXIT *new_exit()
 {
-   D_EXIT *exit = malloc( sizeof( D_EXIT ) );
+   D_EXIT *exit = calloc( 1, sizeof( D_EXIT ) );
 
    exit->name = NULL;
    exit->farside_name = NULL;
@@ -79,7 +81,7 @@ D_EXIT *new_exit()
 
 D_ROOM *new_room()
 {
-   D_ROOM *room = malloc( sizeof( D_ROOM ) );
+   D_ROOM *room = calloc( 1, sizeof( D_ROOM ) );
    room->name = NULL;
    room->description = NULL;
    room->mobiles = AllocList();
@@ -166,9 +168,13 @@ D_MOBILE *spawn_mobile( unsigned int vnum )
    mob->race = strdup( proto->race ? proto->race : "Human" );
    mob->citizenship = strdup( proto->citizenship ? proto->citizenship : "None" );
    mob->association = strdup( proto->association ? proto->association : "None" );
-   mob->eyecolor = strdup( proto->eyecolor ? proto->eyecolor : "Brown" );
-   mob->heightcm = proto->heightcm;
-   mob->weightkg = proto->weightkg;
+   mob->eyecolor = strdup( proto->eyecolor ? proto->eyecolor : "brown" );
+   mob->skincolor = strdup( proto->skincolor ? proto->skincolor : "white" );
+   mob->eyeshape = strdup( proto->eyeshape ? proto->eyeshape : "round" );
+   mob->hairstyle = strdup( proto->hairstyle ? proto->hairstyle : "short" );
+   mob->haircolor = strdup( proto->haircolor ? proto->haircolor : "brown" );
+   mob->build = strdup( proto->build ? proto->build : "thin" );
+   mob->height = strdup( proto->height ? proto->height : "average" );
    mob->btc = proto->btc;
    mob->brains = proto->brains;
    mob->brawn = proto->brawn;
@@ -246,9 +252,9 @@ void free_room( D_ROOM *room )
 D_MOBILE *new_mobile()
 {
    D_MOBILE *mob = NULL;
-   if( ( mob = malloc( sizeof( D_MOBILE ) ) ) == NULL )
+   if( ( mob = calloc( 1, sizeof( D_MOBILE ) ) ) == NULL )
    {
-      bug( "Error: (System) Unable to allocate memory for new account." );
+      bug( "Error: (System) Unable to allocate memory for new mobile." );
       abort();
       return NULL;
    }
@@ -256,38 +262,33 @@ D_MOBILE *new_mobile()
    clear_mobile( mob );
    return mob;
 }
+
 void clear_mobile(D_MOBILE *dMob)
 {
    memset(dMob, 0, sizeof(*dMob));
 
    dMob->name         =  NULL;
    dMob->password     =  NULL;
-   dMob->race         =  NULL;
    dMob->citizenship  =  NULL;
    dMob->association  =  NULL;
-   dMob->eyecolor     =  NULL;
    dMob->prompt       =  NULL;
    dMob->sdesc        =  NULL;
    dMob->ldesc        =  NULL;
 
+   dMob->race         =  strdup("human");
+   dMob->eyecolor     =  strdup("brown");
+   dMob->haircolor    =  strdup("brown");
+   dMob->eyeshape     =  strdup("round");
+   dMob->hairstyle    =  strdup("short");
+   dMob->skincolor    =  strdup("pale");
+   dMob->build        =  strdup("slender");
+   dMob->height       =  strdup("average");
+   dMob->age          =  18;
+
    dMob->hold_right   =  NULL;
    dMob->hold_left    =  NULL;
-/*
-   dMob->wear_head    =  NULL;
-   dMob->wear_eyes    =  NULL;
-   dMob->wear_face    =  NULL;
-   dMob->wear_body    =  NULL;
-   dMob->wear_legs    =  NULL;
-   dMob->wear_feet    =  NULL;
-   dMob->wear_shoulders   =  NULL;
-   dMob->wear_slung   =  NULL;
-   dMob->wear_neck    =  NULL;
-   dMob->wear_waist   =  NULL;
-   dMob->wear_hands   =  NULL;
-*/
    dMob->level        =  LEVEL_PLAYER;
    dMob->events       =  AllocList();
- //  dMob->equipment    =  AllocList();
    dMob->offer_right  =  calloc( 1, sizeof( D_OFFER ) );
    dMob->offer_left   =  calloc( 1, sizeof( D_OFFER ) );
    dMob->guid         =  gen_guid();
@@ -308,8 +309,6 @@ void clear_mobile(D_MOBILE *dMob)
       dMob->body[pos]->burn_trauma  = TRAUMA_NONE;
    }
   
-   dMob->heightcm     =  178; //5'10 and 170lbs
-   dMob->weightkg     =  77;
    dMob->btc          =  0;
    dMob->brains       =  6;
    dMob->brawn        =  6;
@@ -327,7 +326,7 @@ void clear_mobile(D_MOBILE *dMob)
 D_ACCOUNT *new_account()
 {
    D_ACCOUNT *account = NULL;
-   if( ( account = malloc( sizeof( D_ACCOUNT ) ) ) == NULL )
+   if( ( account = calloc( 1, sizeof( D_ACCOUNT ) ) ) == NULL )
    {
       bug( "ERROR: (System) Unable to allocate memory for new account." );
       abort();
@@ -630,6 +629,19 @@ D_ROOM *get_room_by_vnum( unsigned int vnum )
    return room;
 }
 
+D_ROOM *mob_to_room( D_MOBILE *dMob, D_ROOM *to )
+{
+   D_ROOM *from = dMob->room;
+   if( to == NULL )
+      return NULL;
+   
+   if( from ) DetachFromList( dMob, from->mobiles );
+   dMob->room = to;
+   AppendToList( dMob, to->mobiles );
+
+   return to;
+}
+
 size_t total_volume( D_OBJECT *obj )
 {
    if( !obj )
@@ -695,4 +707,22 @@ void check_rooms()
 
 void check_areas()
 {
+   ITERATOR Iter;
+   D_AREA *pArea;
+
+   AttachIterator( &Iter, darea_list );
+   while( (pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      time_t t = time(NULL);
+      if( difftime( t, pArea->last_reset ) > 120 )
+      {
+         log_string( "Running reset script for area %s.", pArea->name );
+         pArea->last_reset = t;
+         if( luaL_dostring( globalLuaState, pArea->reset_script ) == 1 )
+         {
+            log_string( "Error running reset script for area %s.\n%s\n", pArea->name, pArea->reset_script );
+         }
+      }
+   }
+   DetachIterator( &Iter );
 }
