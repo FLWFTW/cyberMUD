@@ -97,7 +97,9 @@ const struct typCmd tabCmd [] =
   { "sw",            cmd_southwest,  LEVEL_GUEST  },
   { "say",           cmd_say,        LEVEL_GUEST  },
   { "save",          cmd_save,       LEVEL_GUEST  },
+  { "slay",          cmd_slay,       LEVEL_GOD    },
   { "stow",          cmd_stow,       LEVEL_GUEST  },
+  { "shutdow",       cmd_shutdow,    LEVEL_GOD    },
   { "shutdown",      cmd_shutdown,   LEVEL_GOD    },
   { "qui",           cmd_qui,        LEVEL_GUEST  },
   { "quit",          cmd_quit,       LEVEL_GUEST  },
@@ -109,6 +111,7 @@ const struct typCmd tabCmd [] =
   { "wear",          cmd_wear,       LEVEL_GUEST  },
   { "who",           cmd_who,        LEVEL_GUEST  },
   { "score",         cmd_score,      LEVEL_GUEST  },
+  { "time",          cmd_time,       LEVEL_GUEST  },
 
   /* end of table */
   { "", 0 }

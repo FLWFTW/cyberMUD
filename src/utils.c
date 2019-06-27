@@ -50,6 +50,7 @@ D_AREA *new_area()
    area->objects = AllocList();
    area->mobiles = AllocList();
    area->rooms   = AllocList();
+   area->resets  = AllocList();
 
    area->r_low = 0;
    area->r_hi  = 0;
@@ -91,6 +92,24 @@ D_ROOM *new_room()
    AttachToList( room, droom_list );
 
    return room;
+}
+
+D_RESET *new_reset()
+{
+   D_RESET *reset = calloc( 1, sizeof( D_RESET ) );
+   reset->location = 1;
+   reset->what     = NULL;
+   reset->data     = json_object();
+   reset->type     = MAX_RESET;
+
+   return reset;
+}
+
+void free_reset( D_RESET *reset )
+{
+   json_object_clear( reset->data );
+   json_decref( reset->data );
+   free( reset->what );
 }
 
 void rand_str(char *dest, size_t length) 
@@ -418,6 +437,11 @@ void free_mobile(D_MOBILE *dMob)
   DetachIterator(&Iter);
   FreeList(dMob->events);
 
+  if( dMob->reset )
+  {
+     dMob->reset->what = NULL;
+  }
+
   /* free allocated memory */
   free( dMob->name );
   free( dMob->password );
@@ -642,6 +666,19 @@ D_ROOM *mob_to_room( D_MOBILE *dMob, D_ROOM *to )
    return to;
 }
 
+D_ROOM *obj_to_room( D_OBJECT *dObj, D_ROOM *to )
+{
+   if( to == NULL )
+      return NULL;
+
+   if( dObj->in_room )
+      DetachFromList( dObj, dObj->in_room->objects );
+   dObj->in_room = to;
+   AppendToList( dObj, to->objects );
+
+   return to;
+}
+
 size_t total_volume( D_OBJECT *obj )
 {
    if( !obj )
@@ -705,7 +742,7 @@ void check_rooms()
 {
 }
 
-void check_areas()
+void check_areas( bool force_reset )
 {
    ITERATOR Iter;
    D_AREA *pArea;
@@ -714,7 +751,7 @@ void check_areas()
    while( (pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
    {
       time_t t = time(NULL);
-      if( difftime( t, pArea->last_reset ) > 120 )
+      if( ( difftime( t, pArea->last_reset ) > 120  ) || force_reset == TRUE )
       {
          log_string( "Running reset script for area %s.", pArea->name );
          pArea->last_reset = t;
@@ -722,7 +759,10 @@ void check_areas()
          {
             log_string( "Error running reset script for area %s.\n%s\n", pArea->name, pArea->reset_script );
          }
+         run_resets( pArea->resets );
       }
    }
    DetachIterator( &Iter );
 }
+
+

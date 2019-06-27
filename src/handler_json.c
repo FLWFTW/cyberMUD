@@ -271,6 +271,7 @@ json_t *object_to_json_cli( D_OBJECT *obj )
 
    return json;
 }
+
 json_t *object_to_json( D_OBJECT *obj )
 {
    json_t *json = json_object();
@@ -330,6 +331,18 @@ D_RESET *json_to_reset( json_t *json )
 
    json_object_foreach( json, key, value )
    {
+      if( !strcmp( key, "type" ) )
+      {
+         reset->type = json_integer_value( value );
+      }
+      else if( !strcmp( key, "data" ) )
+      {
+         reset->data = json_deep_copy( value );
+      }
+      else if( !strcmp( key, "location" ) )
+      {
+         reset->location = json_integer_value( value );
+      }
    }
    return reset;
 }

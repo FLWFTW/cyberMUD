@@ -141,9 +141,9 @@ struct dRoom
 struct dReset
 {
    enum reset_type_t  type;
-   json_t             data;
-   void             * what;
    int                location; //room vnum
+   json_t           * data;
+   void             * what; //pointer to what is reset, if NULL then the reset needs to be fired again.
 };
 
 struct dExit
@@ -167,7 +167,6 @@ struct dObject
    D_ROOM          * in_room;
    D_OBJECT        * in_object;
    D_MOBILE        * carried_by;
-   D_RESET         * reset;
 
    unsigned int      vnum;
    char            * name;
@@ -194,6 +193,7 @@ struct dArea
    char *filename;
    char *reset_script;
    time_t last_reset;
+   unsigned int reset_interval;
 
    unsigned int r_low;
    unsigned int r_hi;
@@ -382,6 +382,7 @@ extern  char        *   greeting;         /* the welcome greeting               
 extern  char        *   motd;             /* the MOTD help file                 */
 extern  int             control;          /* boot control socket thingy         */
 extern  time_t          current_time;     /* let's cut down on calls to time()  */
+extern  time_t          boot_time;         /* What time the MUD booted up        */
 
 /*************************** 
  * End of Global Variables *
@@ -522,20 +523,23 @@ D_ACCOUNT *new_account        ();
 void free_mobile              (D_MOBILE *dMob);
 void free_mobile_proto        (D_MOBILE *dMob);
 void free_room                ( D_ROOM *room );
+void free_reset               ( D_RESET *reset );
 D_EXIT *new_exit              ();
 D_ROOM *new_room              ();
 D_AREA *new_area              ();
 D_MOBILE *new_mobile          ();
+D_RESET *new_reset            ();
 D_ROOM *get_room_by_vnum      ( unsigned int vnum );
 D_MOBILE *spawn_mobile        ( unsigned int vnum );
 D_MOBILE *get_mobile_list     ( const char *name, LIST *list );
 D_ROOM *mob_to_room           ( D_MOBILE *dMob, D_ROOM *to );
+D_ROOM *obj_to_room           ( D_OBJECT *dObj, D_ROOM *to );
 char *proper                  ( const char *word );
 void sentence_case            ( char *sentence );
 void show_mob_obj_list        ( D_MOBILE *dMob, LIST *list, size_t indent );
 void check_mobiles            ();
 void check_rooms              ();
-void check_areas              ();
+void check_areas              ( bool force_reset );
 bool is_name                  ( char *name, char *namelist );
 /*
  * action_safe.c
@@ -558,11 +562,13 @@ void  cmd_score               ( D_M *dMob, char *arg );
 void  cmd_quit                ( D_M *dMob, char *arg );
 void  cmd_qui                 ( D_M *dMob, char *arg );
 void  cmd_shutdown            ( D_M *dMob, char *arg );
+void  cmd_shutdow             ( D_M *dMob, char *arg );
 void  cmd_commands            ( D_M *dMob, char *arg );
 void  cmd_who                 ( D_M *dMob, char *arg );
 void  cmd_help                ( D_M *dMob, char *arg );
 void  cmd_compress            ( D_M *dMob, char *arg );
 void  cmd_save                ( D_M *dMob, char *arg );
+void  cmd_slay                ( D_M *dMob, char *arg );
 void  cmd_copyover            ( D_M *dMob, char *arg );
 void  cmd_linkdead            ( D_M *dMob, char *arg );
 void  cmd_north               ( D_M *dMob, char *arg );
@@ -593,6 +599,7 @@ void  cmd_stow                ( D_M *dMob, char *arg );
 void  cmd_give                ( D_M *dMob, char *arg );
 void  cmd_ungive              ( D_M *dMob, char *arg );
 void  cmd_accept              ( D_M *dMob, char *arg );
+void  cmd_time                ( D_M *dMob, char *arg );
 
 /*
  * accounts.c
@@ -642,6 +649,11 @@ json_t *object_to_json_cli( D_OBJECT *obj );
 void echo_room( D_ROOM *room, char *txt, ... );
 void echo_around( D_MOBILE *dMob, char *txt, ... );
 void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *txt, ... );
+
+/*
+ * reset.c
+ */
+void run_resets( LIST *rlist );
 
 /*******************************
  * End of prototype declartion *

@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 
   /* get the current time */
   current_time = time(NULL);
+  boot_time = time( NULL );
 
   json_object_seed( 0 );
 
@@ -101,6 +102,8 @@ int main(int argc, char **argv)
 
   load_areas();
   link_exits();
+
+  check_areas( TRUE ); //initial reset
 
   /* initialize the event queue - part 2*/
   //init_event_queue(2);
@@ -246,7 +249,7 @@ void GameLoop(int icontrol)
     check_rooms();
 
     /*Iterate through areas*/
-    check_areas();
+    check_areas( FALSE );
 
     /*
      * Here we sleep out the rest of the pulse, thus forcing

@@ -421,6 +421,10 @@ void cmd_qui( D_MOBILE *dMob, char *arg )
 
 void cmd_quit(D_MOBILE *dMob, char *arg)
 {
+
+   if( IS_NPC( dMob ) )
+      return;
+
    char buf[MAX_BUFFER];
 
    /* log the attempt */
@@ -439,7 +443,14 @@ void cmd_quit(D_MOBILE *dMob, char *arg)
 
 void cmd_shutdown(D_MOBILE *dMob, char *arg)
 {
-  shut_down = TRUE;
+   system( "touch shutdown.txt" );
+   shut_down = TRUE;
+}
+
+void cmd_shutdow( D_MOBILE *dMob, char *arg )
+{
+   text_to_mobile_j( dMob, "error", "Spell out 'shutdown' to shut the MUD down." );
+   return;
 }
 
 void cmd_commands(D_MOBILE *dMob, char *arg)
@@ -859,7 +870,7 @@ void cmd_unlock( D_MOBILE *dMob, char *arg )
       }
       if( exit->exit == EXIT_OPEN )
       {
-         text_to_mobile_j( dMob, "error", "You have to close it first." );
+         text_to_mobile_j( dMob, "error", "It's already open." );
          return;
       }
       if( exit->lock == LOCK_FREE )
@@ -922,4 +933,24 @@ void cmd_force( D_MOBILE *dMob, char *arg )
    return;
 }
 
+void cmd_time( D_MOBILE *dMob, char *arg )
+{
+   char c[MAX_STRING_LENGTH], b[MAX_STRING_LENGTH];
+   //System time:
+   long  long int diff = (long long int)difftime( current_time, boot_time );
+   long long int days = 0, hours = 0, minutes = 0, seconds = 0;
+
+   days = diff / 86400;
+   diff %= 86400;
+   hours = diff / 3600;
+   diff %= 3600;
+   minutes = diff / 60;
+   diff %= 60;
+   seconds = diff;
+
+   snprintf( c, MAX_STRING_LENGTH, "%s", ctime( &current_time ) );
+   snprintf( b, MAX_STRING_LENGTH, "%s", ctime( &boot_time ) );
+
+   text_to_mobile_j( dMob, "text", "Server Time: %sBootup Time: %sThe MUD has been running for %lld days, %lld hours, %lld minutes, and %lld seconds.", c, b,  days, hours, minutes, seconds );
+}
 

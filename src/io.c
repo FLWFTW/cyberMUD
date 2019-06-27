@@ -14,6 +14,7 @@
 #include "mud.h"
 
 time_t current_time;
+time_t boot_time;
 
 /*
  * Nifty little extendable logfunction,
