@@ -765,4 +765,42 @@ void check_areas( bool force_reset )
    DetachIterator( &Iter );
 }
 
+D_OBJECT *make_corpse( D_MOBILE *dMob )
+{
+   if( !dMob )
+      return NULL;
+   char buf[MAX_STRING_LENGTH];
+
+   D_OBJECT *corpse = new_object();
+   snprintf( buf, MAX_STRING_LENGTH, "corpse %s", dMob->name );
+   corpse->name = strdup( buf );
+   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", dMob->name );
+   corpse->sdesc = strdup( buf );
+   snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", dMob->name );
+   corpse->ldesc = strdup( buf );
+
+   corpse->type = ITEM_CORPSE;
+   corpse->weight_g = 900;//grams
+   corpse->volume_cm3 = 67960;
+   corpse->capacity_cm3 = 1;
+
+   corpse->in_room = dMob->room;
+
+   for( int i = 0; i < WEAR_NONE; i++ )
+   {
+      if( dMob->equipment[i]->worn[0] )
+      {
+         object_to_object( dMob->equipment[i]->worn[0], corpse );
+         dMob->equipment[i]->worn[0] = NULL;
+      }
+      if( dMob->equipment[i]->worn[1] )
+      {
+         object_to_object( dMob->equipment[i]->worn[1], corpse );
+         dMob->equipment[i]->worn[1] = NULL;
+      }
+   }
+
+
+   return corpse;
+}
 

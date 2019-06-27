@@ -951,6 +951,6 @@ void cmd_time( D_MOBILE *dMob, char *arg )
    snprintf( c, MAX_STRING_LENGTH, "%s", ctime( &current_time ) );
    snprintf( b, MAX_STRING_LENGTH, "%s", ctime( &boot_time ) );
 
-   text_to_mobile_j( dMob, "text", "Server Time: %sBootup Time: %sThe MUD has been running for %lld days, %lld hours, %lld minutes, and %lld seconds.", c, b,  days, hours, minutes, seconds );
+   text_to_mobile_j( dMob, "text", "System Time: %sBootup Time: %sMUD uptime: %lld days, %lld hours, %lld minutes, and %lld seconds.", c, b,  days, hours, minutes, seconds );
 }
 
