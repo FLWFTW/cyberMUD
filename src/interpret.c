@@ -86,6 +86,8 @@ const struct typCmd tabCmd [] =
   { "open",          cmd_open,       LEVEL_GOD    },
   { "put",           cmd_put,        LEVEL_GUEST  },
   { "prompt",        cmd_prompt,     LEVEL_GUEST  },
+  { "reboo",         cmd_reboo,      LEVEL_GOD    },
+  { "reboot",        cmd_reboot,     LEVEL_GOD    },
   { "remove",        cmd_remove,     LEVEL_GUEST  },
   { "s",             cmd_south,      LEVEL_GUEST  },
   { "sheath",        cmd_sheath,     LEVEL_GUEST  },

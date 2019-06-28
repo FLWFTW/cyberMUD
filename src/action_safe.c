@@ -447,6 +447,17 @@ void cmd_shutdown(D_MOBILE *dMob, char *arg)
    shut_down = TRUE;
 }
 
+void cmd_reboot( D_MOBILE *dMob, char *arg )
+{
+   shut_down = TRUE;
+}
+
+void cmd_reboo( D_MOBILE *dMob, char *arg )
+{
+   text_to_mobile_j( dMob, "error", "Spell out 'reboot' to reboot the MUD." );
+   return;
+}
+
 void cmd_shutdow( D_MOBILE *dMob, char *arg )
 {
    text_to_mobile_j( dMob, "error", "Spell out 'shutdown' to shut the MUD down." );
