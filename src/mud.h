@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <math.h>
 
 
 #include "list.h"
@@ -94,11 +95,16 @@ typedef  short int         sh_int;
 #define POSSESSIVE(x)           ((x->gender) == MALE ? "his"  : (x->gender) == FEMALE ? "her"    : "their")
 #define SUBJECTIVE(x)           ((x->gender) == MALE ? "he"   : (x->gender) == FEMALE ? "she"    : "they")
 #define OBJECTIVE(x)            ((x->gender) == MALE ? "him"  : (x->gender) == FEMALE ? "her"    : "them")
-#define AORAN(x)                (((toupper((x[0]))=='A'||toupper((x[0]))=='E'||toupper((x[0]))=='I'||toupper((x[0]))=='O'||toupper((x[0]))=='U')?"an":"a"))
+#define AORAN(x)                (((toupper((x[0]))=='A'||toupper((x[0]))=='E'||toupper((x[0]))=='I'||\
+                                   toupper((x[0]))=='O'||toupper((x[0]))=='U')?"an":"a"))
 #define MOBNAME(x)              ((x->socket) == NULL ? (x->sdesc) : (x->name) )
 #define GENDERTERN(x, m, f, n)  (( (x->gender) == MALE ? (m) : (x->gender) == FEMALE ? (f) : (n) ))
-
-
+#define NEEDTHE(x)              (((toupper((x[0]))=='T'&&toupper((x[1]))=='H'&&toupper((x[2]))=='E'&&\
+                                   toupper((x[3]))==' ')?"":"the"))
+#define ISCONTAINER(x)          (((x->type) == ITEM_CONTAINER || (x->type) == ITEM_CORPSE ||\
+                                (x->type) == ITEM_HOLSTER || (x->type) == ITEM_SHEATH ||\
+                                (x->type) == ITEM_MAGAZINE) ? TRUE : FALSE)
+#define ISGUN(x)                ((x->type) == ITEM_FIREARM)
 /***********************
  * End of Macros       *
  ***********************/
@@ -162,6 +168,24 @@ struct dExit
    enum exit_state_t   exit;
 };
 
+/**
+ * ivar guids:
+ * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = composite, 5 = carbonfiber
+ * firearms: 1- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
+ *           2- bullet diameter (in um, so 7.62mm=762um, 5.56mm=556um, etc)
+ *           3- cartridge length (in mm, so 7.62x39mm the 39 is in mm, not um like the diameter)
+ *           4- feed mechanism (-1=magazine, 0=single shot, 1=bolt action, 2+=internal magazine/tube and size)
+ *           5-
+ *           6- # of hands (1 or 2)
+ * keys:     1- pins
+ *           2- lock number
+ * magazine: 1- bullet diameter (in um, so 7.62mm is 762um, etc )
+ *           2- cartridge length( in mm, so 7.62x39mm- the 39 is in mm, not um like the diameter)
+ *           3- capacity
+ * bullet:   1- bullet diameter in um
+ *           2- cartridge length in mm
+ *           3- bullet type( 1=ball, 2=JHP, 3=AP, 4=API, 5=explosive)
+ */
 struct dObject
 {
    D_ROOM          * in_room;
@@ -176,12 +200,13 @@ struct dObject
    unsigned int      capacity_cm3;
    unsigned int      volume_cm3;
    unsigned int      weight_g;//weight in grams
+   unsigned int      repair;
 
    int               ivar1, ivar2, ivar3, ivar4, ivar5, ivar6;
    char             *svar1, *svar2, *svar3, *svar4, *svar5, *svar6;
 
    enum wear_pos_t   wear_pos;
-   enum item_type_t  type;
+    enum item_type_t  type;
 
    LIST            * contents;
 };
@@ -274,6 +299,7 @@ struct dMobile
    unsigned int       vnum;
    enum position_t    position;
    SKILLS           * skills;
+   D_MOBILE         * fighting;
 
    int                cur_hp;
    int                max_hp;
@@ -442,12 +468,6 @@ void *lookup_address          ( void *arg );
 void  handle_new_connections  ( D_S *dsock, char *arg );
 
 /*
- * handler_json.c
- */
-D_ACCOUNT *json_to_account( json_t *json );
-D_RESET   *json_to_reset( json_t *json );
-
-/*
  * interpret.c
  */
 void  handle_cmd_input        ( D_MOBILE *dMob, char *arg );
@@ -541,6 +561,10 @@ void check_mobiles            ();
 void check_rooms              ();
 void check_areas              ( bool force_reset );
 bool is_name                  ( char *name, char *namelist );
+D_OBJECT *make_corpse         ( D_MOBILE *dMob );
+size_t roll                   ( size_t min, size_t max );
+size_t dice                   ( char *str );
+
 /*
  * action_safe.c
  */
@@ -561,6 +585,8 @@ void  cmd_look                ( D_M *dMob, char *arg );
 void  cmd_score               ( D_M *dMob, char *arg );
 void  cmd_quit                ( D_M *dMob, char *arg );
 void  cmd_qui                 ( D_M *dMob, char *arg );
+void  cmd_reboot              ( D_M *dMob, char *arg );
+void  cmd_reboo               ( D_M *dMob, char *arg );
 void  cmd_shutdown            ( D_M *dMob, char *arg );
 void  cmd_shutdow             ( D_M *dMob, char *arg );
 void  cmd_commands            ( D_M *dMob, char *arg );
@@ -634,6 +660,8 @@ void link_exits();
 /*
  * handler_json.c
  */
+D_ACCOUNT *json_to_account( json_t *json );
+D_RESET   *json_to_reset( json_t *json );
 D_ROOM *json_to_room( json_t *json );
 D_OBJECT *json_to_object( json_t *json );
 D_MOBILE *json_to_mobile( json_t *json );
@@ -642,6 +670,7 @@ json_t *mobile_to_json( D_MOBILE *dMob, bool equipment );
 json_t *player_to_json( D_MOBILE *dMob, bool equipment );
 json_t *object_to_json( D_OBJECT *dObj );
 json_t *object_to_json_cli( D_OBJECT *obj );
+json_t *json_from_keys( json_t *parent, int n, ... );
 
 /*
  * comm.c
@@ -653,7 +682,23 @@ void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *txt, ... );
 /*
  * reset.c
  */
-void run_resets( LIST *rlist );
+void reset_area( D_AREA *pArea );
+
+/*
+ * action_wiz.c
+ */
+void cmd_resetarea( D_MOBILE *dMob, char *arg );
+void cmd_astat( D_MOBILE *dMob, char *arg );
+
+/*
+ * action_combat.c
+ */
+void cmd_fire( D_MOBILE *dMob, char *arg );
+
+/*
+ * combat.c
+ */
+void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim );
 
 /*******************************
  * End of prototype declartion *

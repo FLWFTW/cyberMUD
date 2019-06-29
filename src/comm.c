@@ -271,11 +271,11 @@ void communicate(D_MOBILE *dMob, char *txt, int range)
          return;
       case COMM_LOCAL:  /* everyone is in the same room for now... */
          json_object_set_new( json, "type", json_string( "say" ) );
-         json_object_set_new( data, "from", json_string( dMob->name ) );
+         json_object_set_new( data, "from", json_string( MOBNAME( dMob ) ) );
          json_object_set_new( data, "message", json_string( txt ) );
          json_object_set_new( json, "data", data );
 
-         AttachIterator(&Iter, dmobile_list);
+         AttachIterator(&Iter, dMob->room->mobiles);
          while ((xMob = (D_MOBILE *) NextInList(&Iter)) != NULL)
          {
             char *dump = json_dumps( json, 0 );
@@ -286,7 +286,7 @@ void communicate(D_MOBILE *dMob, char *txt, int range)
          break;
       case COMM_CHAT:
          json_object_set_new( json, "type", json_string( "chat" ) );
-         json_object_set_new( data, "from", json_string( dMob->name ) );
+         json_object_set_new( data, "from", json_string( MOBNAME( dMob ) ) );
          json_object_set_new( data, "message", json_string( txt ) );
          json_object_set_new( json, "data", data );
 

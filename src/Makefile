@@ -17,14 +17,15 @@ LIBRARIES= -L$(LUA_LIB) -L$(BCRYPT_LIB) -L$(JANSSON_LIB)
 W_FLAGS = -Wall -Werror -Wshadow -Wformat-security -Wpointer-arith -Wcast-align -Wredundant-decls  -pedantic
 
 C_FLAGS = -g3 $(W_FLAGS) $(INCLUDES) $(LIBRARIES) -std=c11
-L_FLAGS = -lz -llua -lbcrypt -ljansson -lpthread 
+L_FLAGS = -lz -llua -lbcrypt -ljansson -lpthread -lm
 D_FLAGS = -ggdb $(W_FLAGS)
 
 O_FILES = socket.o io.o strings.o utils.o interpret.o help.o  \
 	  action_safe.o mccp.o save.o event.o event-handler.o \
 	  list.o stack.o handler_connections.o accounts.o \
 	  handler_json.o comm.o colors.o world.o objects.o \
-	  tables.o action_objects.c action_combat.c
+	  tables.o action_objects.c action_combat.c handler_lua.o \
+	  reset.o action_wiz.o combat.o
 
 all: $(O_FILES)
 	rm -f $(NAME)

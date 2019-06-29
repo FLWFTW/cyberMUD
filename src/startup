@@ -1,0 +1,27 @@
+#! /bin/csh -f
+
+# Set limits.
+limit coredumpsize unlimited
+ulimit -c unlimited
+limit stacksize unlimited
+rm shutdown.txt
+while ( 1 )
+   set close = `ls | grep "shutdown.txt"`
+   if( $close >= 1) then
+      rm shutdown.txt
+      exit 0
+   endif
+
+    # Run SMAUG.
+    # Check if already running
+    set matches = `netstat -an | grep "9009 " | grep -c LISTEN`
+    if ( $matches >= 1 ) then
+        # Already running
+        echo Port $port is already in use.
+        exit 0
+    endif
+    ./cbm 
+
+    # Restart, giving old connections a chance to die.
+    sleep 5
+end

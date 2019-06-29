@@ -293,6 +293,7 @@ void clear_mobile(D_MOBILE *dMob)
    dMob->prompt       =  NULL;
    dMob->sdesc        =  NULL;
    dMob->ldesc        =  NULL;
+   dMob->fighting     =  NULL;
 
    dMob->race         =  strdup("human");
    dMob->eyecolor     =  strdup("brown");
@@ -750,16 +751,9 @@ void check_areas( bool force_reset )
    AttachIterator( &Iter, darea_list );
    while( (pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
    {
-      time_t t = time(NULL);
-      if( ( difftime( t, pArea->last_reset ) > 120  ) || force_reset == TRUE )
+      if( ( difftime( current_time, pArea->last_reset ) > pArea->reset_interval*60  ) || force_reset == TRUE )
       {
-         log_string( "Running reset script for area %s.", pArea->name );
-         pArea->last_reset = t;
-         if( luaL_dostring( globalLuaState, pArea->reset_script ) == 1 )
-         {
-            log_string( "Error running reset script for area %s.\n%s\n", pArea->name, pArea->reset_script );
-         }
-         run_resets( pArea->resets );
+         reset_area( pArea );
       }
    }
    DetachIterator( &Iter );
@@ -772,11 +766,11 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
    char buf[MAX_STRING_LENGTH];
 
    D_OBJECT *corpse = new_object();
-   snprintf( buf, MAX_STRING_LENGTH, "corpse %s", dMob->name );
+   snprintf( buf, MAX_STRING_LENGTH, "corpse %s", MOBNAME( dMob ) );
    corpse->name = strdup( buf );
-   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", dMob->name );
+   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", MOBNAME( dMob ) );
    corpse->sdesc = strdup( buf );
-   snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", dMob->name );
+   snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", MOBNAME( dMob ) );
    corpse->ldesc = strdup( buf );
 
    corpse->type = ITEM_CORPSE;
@@ -802,5 +796,80 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
 
 
    return corpse;
+}
+
+size_t roll( size_t min, size_t max )
+{
+   return rand() % max + min;
+}
+
+size_t dice( char *str )
+{
+   size_t result = 0, num = 0, size = 0, mod = 0, i = 0, len = strlen( str );
+   char operator = '\0';
+
+   for( i = 0; i < len; i++ )
+   {
+      if( toupper( str[i] ) == 'D' )
+      {
+         str[i] = '\0';
+         break;
+      }
+   }
+
+   num = strtoul( str, NULL, 10 );
+   i++;
+   str += i;
+   len = strlen( str );
+
+   for( i = 0; i < len; i++ )
+   {
+      if( str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^' )
+      {
+         operator = str[i];
+         str[i] = '\0';
+         break;
+      }
+   }
+
+   size = strtoul( str, NULL, 10 );
+   i++;
+   str += i;
+   mod = strtoul( str, NULL, 10 );
+
+   if( num == 0 || size == 0 )
+   {
+      return 0;
+   }
+
+   for( i = 0; i < num; i++ )
+   {
+      result += roll( 1, size );
+   }
+
+   switch( operator )
+   {
+      case '+':
+         result += mod;
+         break;
+      case '-':
+         result -= mod;
+         break;
+      case '/':
+         if( mod == 0 ) mod = 1;
+         result /= mod;
+         break;
+      case '*':
+         result *= mod;
+         break;
+      case '^':
+         result = pow( result, mod );
+         break;
+      default:
+         result = result;
+         break;
+   }
+
+   return result;
 }
 

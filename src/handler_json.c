@@ -723,3 +723,22 @@ json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )
    return json;
 }
 
+json_t *json_from_keys( json_t *parent, int n, ... )
+{
+   json_t *result = json_object();
+   char *key;
+
+   va_list v;
+   va_start( v, n );
+   for( int i = 0; i < n; i++ )
+   {
+      key = va_arg( v, char *);
+      json_object_set( result, key, json_string( "nada" ) );
+   }
+   va_end( v );
+
+   json_object_update_existing( result, parent ); //updates only existing keys
+
+   return result;
+}
+

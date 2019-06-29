@@ -28,6 +28,8 @@ D_MOBILE *load_player( const char *name )
 void save_player( D_MOBILE *dMob )
 {
    char  filename[MAX_BUFFER];
+   if( dMob->socket == NULL )
+      return;//Don't save mobiles
    json_t *json = player_to_json( dMob, TRUE );
    
    snprintf( filename, MAX_BUFFER, "../players/%c/%s.json", toupper(dMob->name[0]), dMob->name );

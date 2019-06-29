@@ -1,17 +1,24 @@
 #include "mud.h"
 
 
-void run_resets( LIST *rlist )
+void reset_area( D_AREA *pArea )
 {
-   if( rlist == NULL )
+   if( pArea == NULL )
       return;
 
+   LIST *rlist = pArea->resets;
    D_RESET *reset;
    D_ROOM  *room;
    D_MOBILE *dMob;
    D_OBJECT *dObj;
 
    ITERATOR Iter;
+   pArea->last_reset = time(NULL);
+   if( pArea->reset_script[0] != '\0' &&
+       luaL_dostring( globalLuaState, pArea->reset_script ) == 1 )
+   {
+      log_string( "Error running reset script for area %s.\n%s\n", pArea->name, pArea->reset_script );
+   }
    AttachIterator( &Iter, rlist );
    while( ( reset = (D_RESET *)NextInList( &Iter ) ) != NULL )
    {

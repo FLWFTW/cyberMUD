@@ -26,18 +26,20 @@ enum bodyparts_t { BODY_HEAD = 0, BODY_EYES, BODY_FACE, BODY_NECK, BODY_LARM,
                    BODY_RLEG, BODY_LFOOT, BODY_RFOOT,
                    MAX_BODY };
 extern const char *body_parts[];
+extern size_t      body_aim_mod[];
 
 enum gender_t { FEMALE=0, MALE, NONBINARY };
 
-enum position_t { POS_UNCONSCIOUS = 0, POS_SLEEPING, POS_RESTING, POS_PRONE, 
-                  POS_SITTING, POS_STANDING, POS_FIGHTING, MAX_POS };
+enum position_t { POS_UNCONSCIOUS = 0, POS_RESTRAINED, POS_SLEEPING, POS_RESTING, 
+                  POS_SITTING, POS_PRONE, POS_KNEELING, POS_STANDING, POS_FIGHTING,
+                  MAX_POS };
 extern const char *positions[];
 
-enum item_type_t { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_BLADE, ITEM_CLUB, ITEM_PISTOL,
-                   ITEM_SMG, ITEM_RIFLE, ITEM_SHOTGUN, ITEM_ELECTRONICS, ITEM_COMPUTER,
+enum item_type_t { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_ELECTRONICS, ITEM_COMPUTER,
                    ITEM_SCRAP, ITEM_FURNITURE, ITEM_LOCKPICK, ITEM_SHEATH, ITEM_HOLSTER,
                    ITEM_CONTAINER, ITEM_MAGAZINE, ITEM_BULLET, ITEM_BOOK, ITEM_MEMORY,
-                   ITEM_CHIP, ITEM_KEY, ITEM_CORPSE, ITEM_UNKNOWN, MAX_ITEM };
+                   ITEM_CHIP, ITEM_KEY, ITEM_CORPSE, ITEM_FIREARM, ITEM_BLADE, ITEM_BLUDGEON,
+                   ITEM_UNKNOWN, MAX_ITEM };
 extern const char *item_type[];
 
 enum trauma_level_t { TRAUMA_NONE = 0, TRAUMA_MILD, TRAUMA_MODERATE, TRAUMA_SEVERE, TRAUMA_CRITICAL, MAX_TRAUMA };

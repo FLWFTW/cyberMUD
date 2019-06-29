@@ -114,7 +114,7 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
       {
          if( dMob->equipment[i]->worn[1] != NULL )
          {
-            text_to_mobile_j( dMob, "error", "You have to remove %s %s first.", AORAN( dMob->equipment[i]->worn[1]->sdesc ), dMob->equipment[i]->worn[1]->sdesc );
+            text_to_mobile_j( dMob, "error", "You have to remove your %s first.", dMob->equipment[i]->worn[1]->sdesc );
             return;
          }
          obj = dMob->equipment[i]->worn[0];
@@ -136,9 +136,9 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
 
    if( !dMob->hold_right )
    {
-      if( obj->type == ITEM_RIFLE || obj->type == ITEM_SHOTGUN || obj->type == ITEM_SMG || obj->type == ITEM_CLUB )
+      if( obj->type == ITEM_FIREARM && obj->ivar6 == 2 )
       {
-         text_to_mobile_j( dMob, "text", "You unsling %s %s and ready it in your right hand.", AORAN( obj->sdesc ), obj->sdesc );
+         text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your right hand.", obj->sdesc );
          echo_around( dMob, "%s unslings %s %s and readies it in %s right hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
       }
       else
@@ -154,9 +154,9 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
    }
    else if( !dMob->hold_left )
    {
-      if( obj->type == ITEM_RIFLE || obj->type == ITEM_SHOTGUN || obj->type == ITEM_SMG || obj->type == ITEM_CLUB )
+      if( obj->type == ITEM_FIREARM && obj->ivar6 == 2 )//ivar6 for weapons is how many hands is needed to operate it. You can sling 2 handed weapons but must sheath or holster 1 handed.
       {
-         text_to_mobile_j( dMob, "text", "You unsling %s %s and ready it in your left hand.", AORAN( obj->sdesc ), obj->sdesc );
+         text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your left hand.", obj->sdesc );
          echo_around( dMob, "%s unslings %s %s and readies it in %s left hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
       }
       else
@@ -775,19 +775,19 @@ void cmd_holster( D_MOBILE *dMob, char *arg )
       return;
    }
 
-   if( obj->type != ITEM_PISTOL )
+   if( obj->type != ITEM_FIREARM )
    {
       if( obj->type == ITEM_BLADE )
       {
          cmd_sheath( dMob, arg );
          return;
       }
-      if( obj->type == ITEM_SMG || obj->type == ITEM_SHOTGUN || obj->type == ITEM_RIFLE || obj->type == ITEM_CLUB )
-      {
-         cmd_sling( dMob, arg );
-         return;
-      }
       text_to_mobile_j( dMob, "error", "You can't holster that." );
+      return;
+   }
+   if( obj->ivar6 > 1 )
+   {
+      cmd_sling( dMob, arg ); //We're gonna say you can't holster 2 handed firearms.
       return;
    }
 
@@ -857,20 +857,17 @@ void cmd_sheath( D_MOBILE *dMob, char *arg )
 
    if( obj->type != ITEM_BLADE )
    {
-      if( obj->type == ITEM_PISTOL )
+      if( obj->type == ITEM_FIREARM )
       {
-         cmd_holster( dMob, arg );
-         return;
-      }
-      if( obj->type == ITEM_SMG || obj->type == ITEM_SHOTGUN || obj->type == ITEM_RIFLE || obj->type == ITEM_CLUB )
-      {
-         cmd_sling( dMob, arg );
+         if( obj->ivar6 < 2 )
+            cmd_holster( dMob, arg );
+         else
+            cmd_sling( dMob, arg );
          return;
       }
       text_to_mobile_j( dMob, "error", "You can't sheath that." );
       return;
    }
-
    bool sheathed = FALSE;
    for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
    {
@@ -935,19 +932,19 @@ void cmd_sling( D_MOBILE *dMob, char *arg )
       return;
    }
 
-   if( obj->type != ITEM_RIFLE && obj->type != ITEM_SMG && obj->type != ITEM_SHOTGUN && obj->type != ITEM_CLUB )
+   if( obj->type != ITEM_FIREARM )
    {
-      if( obj->type == ITEM_PISTOL )
-      {
-         cmd_holster( dMob, arg );
-         return;
-      }
       if( obj->type == ITEM_BLADE )
       {
          cmd_sheath( dMob, arg );
          return;
       }
-      text_to_mobile_j( dMob, "error", "You can't sheath that." );
+      text_to_mobile_j( dMob, "error", "You can't sling that." );
+      return;
+   }
+   if( obj->ivar6 < 2 )
+   {
+      cmd_holster( dMob, arg );
       return;
    }
 
@@ -989,8 +986,8 @@ void cmd_get( D_MOBILE *dMob, char *arg )
       {
          if( ( obj = get_object_list( arg1, con->contents ) ) != NULL )
          {
-            text_to_mobile_j( dMob, "text", "You get %s %s from %s %s and hold it in your %s hand.",
-                  AORAN( obj->sdesc ), obj->sdesc, AORAN(con->sdesc), con->sdesc,
+            text_to_mobile_j( dMob, "text", "You get %s %s from %s%s and hold it in your %s hand.",
+                  AORAN( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc,
                   dMob->hold_right == NULL ? "right" : "left" );
             echo_around( dMob, "%s gets %s %s from %s %s and holds it in %s %s hand.",
                   MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc, AORAN( con->sdesc ), con->sdesc,
@@ -1020,8 +1017,8 @@ void cmd_get( D_MOBILE *dMob, char *arg )
    }
    else
    {
-      text_to_mobile_j( dMob, "text", "You pick up %s %s and hold it in your %s hand.",
-            AORAN( obj->sdesc ), obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+      text_to_mobile_j( dMob, "text", "You pick up %s%s and hold it in your %s hand.",
+            NEEDTHE( obj->sdesc ), obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
       echo_around( dMob, "%s picks up %s %s and holds it in %s %s hand.",
             MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
       object_from_room( obj, dMob->room );
@@ -1079,7 +1076,7 @@ void cmd_put( D_MOBILE *dMob, char *arg )
    
    if( con->capacity_cm3 < 1 )
    {
-      text_to_mobile_j( dMob, "error", "%s %s isn't a container.", AORAN( con->sdesc ), con->sdesc );
+      text_to_mobile_j( dMob, "error", "%s%s isn't a container.", NEEDTHE( con->sdesc ), con->sdesc );
       return;
    }
 
@@ -1097,20 +1094,21 @@ void cmd_put( D_MOBILE *dMob, char *arg )
 
       if( !object_can_fit( obj, con ) )
       {
-         text_to_mobile_j( dMob, "error", "%s %s won't fit in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-               AORAN( con->sdesc ), con->sdesc );
+         text_to_mobile_j( dMob, "error", "%s%s won't fit in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc,
+               NEEDTHE( con->sdesc ), con->sdesc );
          return;
       }
 
-      if( (con->type == ITEM_HOLSTER && obj->type != ITEM_PISTOL) || (con->type == ITEM_SHEATH && obj->type != ITEM_BLADE) )
+      if( (con->type == ITEM_HOLSTER && obj->type != ITEM_FIREARM && obj->ivar6 >1 )
+       || (con->type == ITEM_SHEATH && obj->type != ITEM_BLADE ) )
       {
-         text_to_mobile_j( dMob, "error", "You can't put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc, AORAN(con->sdesc), con->sdesc );
+         text_to_mobile_j( dMob, "error", "You can't put %s%s in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc );
          return;
       }
       object_from_mobile( obj, dMob );
       object_to_object( obj, con );
-      text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-            AORAN( con->sdesc ), con->sdesc );
+      text_to_mobile_j( dMob, "text", "You put %s%s in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc,
+            NEEDTHE( con->sdesc ), con->sdesc );
       echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
             AORAN( con->sdesc ), con->sdesc );
       if( obj == dMob->hold_right && dMob->offer_right->what )

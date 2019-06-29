@@ -48,6 +48,7 @@ const struct typCmd tabCmd [] =
  /* --------------------------------------------- */
 
   { "accept",        cmd_accept,     LEVEL_GUEST  },
+  { "astat",         cmd_astat,      LEVEL_GOD    },
   { "areas",         cmd_areas,      LEVEL_GOD    },
   { "chat",          cmd_chat,       LEVEL_GUEST  },
   { "close",         cmd_close,      LEVEL_GUEST  },
@@ -61,6 +62,7 @@ const struct typCmd tabCmd [] =
   { "enter",         cmd_enter,      LEVEL_GUEST  },
   { "equipment",     cmd_equipment,  LEVEL_GUEST  },
   { "examine",       cmd_examine,    LEVEL_GUEST  },
+  { "fire",          cmd_fire,       LEVEL_GUEST  },
   { "force",         cmd_force,      LEVEL_ADMIN  },
   { "get",           cmd_get,        LEVEL_GUEST  },
   { "give",          cmd_give,       LEVEL_GUEST  },
@@ -89,6 +91,7 @@ const struct typCmd tabCmd [] =
   { "reboo",         cmd_reboo,      LEVEL_GOD    },
   { "reboot",        cmd_reboot,     LEVEL_GOD    },
   { "remove",        cmd_remove,     LEVEL_GUEST  },
+  { "resetarea",     cmd_resetarea,  LEVEL_GOD    },
   { "s",             cmd_south,      LEVEL_GUEST  },
   { "sheath",        cmd_sheath,     LEVEL_GUEST  },
   { "sling",         cmd_sling,      LEVEL_GUEST  },
