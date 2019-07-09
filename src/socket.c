@@ -39,9 +39,6 @@ const unsigned char compress_will   [] = { IAC, WILL, TELOPT_COMPRESS,  '\0' };
 const unsigned char compress_will2  [] = { IAC, WILL, TELOPT_COMPRESS2, '\0' };
 const unsigned char do_echo         [] = { IAC, WONT, TELOPT_ECHO,      '\0' };
 const unsigned char dont_echo       [] = { IAC, WILL, TELOPT_ECHO,      '\0' };
-const char *positions[] = { "unconscious", "sleeping", "resting", "prone",
-                            "sitting", "standing", "fighting", 0};
-
 /* local procedures */
 void GameLoop         ( int control );
 

@@ -50,15 +50,20 @@ static int damage( D_MOBILE *aggressor, D_MOBILE *target, D_OBJECT *weapon, enum
    }
 
    D_OBJECT *armor = NULL;
-   if( target->equipment[b_to_e[location]]->worn[0] != NULL
-         && target->equipment[b_to_e[location]]->worn[0]->type == ITEM_ARMOR )
+   if( target->equipment[b_to_e(location)]->worn[0] != NULL
+         && target->equipment[b_to_e(location)]->worn[0]->type == ITEM_ARMOR )
    {
-      armor = target->equipment[b_to_e[location]]->worn[0];
+      armor = target->equipment[b_to_e(location)]->worn[0];
    }
-   else if( target->equipment[b_to_e[location]]->worn[1] != NULL
-         && target->equipment[b_to_e[location]]->worn[1]->type == ITEM_ARMOR )
+   else if( target->equipment[b_to_e(location)]->worn[1] != NULL
+         && target->equipment[b_to_e(location)]->worn[1]->type == ITEM_ARMOR )
    {
-      armor = target->equipment[b_to_e[location]]->worn[1];
+      armor = target->equipment[b_to_e(location)]->worn[1];
+   }
+
+   if( armor )
+   {
+
    }
 
    return 0;

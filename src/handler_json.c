@@ -241,6 +241,10 @@ D_OBJECT *json_to_object( json_t *json )
       {
          obj->svar6 = strdup( json_string_value( value ) );
       }
+      else if( !strcmp( key, "repair" ) )
+      {
+         obj->repair = json_integer_value( value );
+      }
       else
       {
          bug( "Unknown object JSON key \'%s\'.", key );
@@ -267,6 +271,7 @@ json_t *object_to_json_cli( D_OBJECT *obj )
    json_object_set_new( json, "guid", json_string( obj->guid ) );
    json_object_set_new( json, "type", json_string( item_type[obj->type] ) );
    json_object_set_new( json, "type_string", json_string( item_type[obj->type] ) );
+   json_object_set_new( json, "repair", json_integer( obj->repair ) );
 
 
    return json;
@@ -285,6 +290,7 @@ json_t *object_to_json( D_OBJECT *obj )
    json_object_set_new( json, "volume", json_integer( obj->volume_cm3 ) );
    json_object_set_new( json, "guid", json_string( obj->guid ) );
    json_object_set_new( json, "type", json_string( item_type[obj->type] ) );
+   json_object_set_new( json, "repair", json_integer( obj->repair ) );
 
    json_object_set_new( json, "ivar1", json_integer( obj->ivar1 ) );
    json_object_set_new( json, "ivar2", json_integer( obj->ivar2 ) );

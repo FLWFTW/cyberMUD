@@ -169,7 +169,7 @@ struct dExit
 };
 
 /**
- * ivar guids:
+ * ivar guide:
  * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = composite, 5 = carbonfiber
  * firearms: 1- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
  *           2- bullet diameter (in um, so 7.62mm=762um, 5.56mm=556um, etc)
@@ -206,7 +206,7 @@ struct dObject
    char             *svar1, *svar2, *svar3, *svar4, *svar5, *svar6;
 
    enum wear_pos_t   wear_pos;
-    enum item_type_t  type;
+   enum item_type_t  type;
 
    LIST            * contents;
 };

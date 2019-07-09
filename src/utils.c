@@ -313,7 +313,7 @@ void clear_mobile(D_MOBILE *dMob)
    dMob->offer_left   =  calloc( 1, sizeof( D_OFFER ) );
    dMob->guid         =  gen_guid();
 
-   for( size_t pos = WEAR_HEAD; pos < WEAR_NONE; pos++ )
+   for( size_t pos = WEAR_HEAD; pos < MAX_WEAR; pos++ )
    {
       dMob->equipment[pos] = calloc( 1, sizeof( D_EQUIPMENT ) );
       dMob->equipment[pos]->worn[0] = NULL;
