@@ -1,4 +1,9 @@
 * [ ] Combat System
+  * Can currently shoot at other MOBs/players, need to have armor affect damage, as well as damage affect armor, etc.
+  * MOBs can die and leave a corpse with all of their equipment in it. Need to have dying victims drop whatever they're holding/wielding, not drop to inventory.
+  * Experience/skills on victory
+  * Crippling limbs and effects from this
+  
 * [ ] Skill System (partially implemented)
   * Skill bases
     * Combat
