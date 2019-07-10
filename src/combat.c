@@ -50,6 +50,7 @@ static int damage( D_MOBILE *aggressor, D_MOBILE *target, D_OBJECT *weapon, enum
    }
 
    D_OBJECT *armor = NULL;
+
    if( target->equipment[b_to_e(location)]->worn[0] != NULL
          && target->equipment[b_to_e(location)]->worn[0]->type == ITEM_ARMOR )
    {
@@ -81,55 +82,51 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
       return;
    }
 
+   if( aim == MAX_BODY ) //lets find a place to hit
+   {
+      aim = random_part();
+   }
+   else
+   {
+      aimmod = body_aim_mod[aim];
+   }
+
    if( shooter == target ) //100% chance of success
    {
       chance = 100;
    }
    else
    {
-      if( aim == MAX_BODY ) //lets find a place to hit
-      {
-         aim = random_part();
-      }
-      else
-      {
-         aimmod = body_aim_mod[aim];
-      }
-
       chance = ( shooting_skill * aimmod ) / 100;
+      //position based modifiers
+      if( target->position == POS_KNEELING )
+         chance -=10;
+      if( target->position == POS_PRONE )
+         chance -= 15;
+      if( target->position < POS_RESTING )
+         chance= 95;
+      if( target->position == POS_RESTING )
+         chance+= 15;
+      if( target->position == POS_SITTING )
+         chance+= 10;
 
-      /* Put player's shooting skill check here */
+      if( shooter->position == POS_PRONE )
+         chance+= 15;
+      if( shooter->position == POS_KNEELING )
+         chance+= 10;
+      //Penalty for shooting one handed, greater penalty if the firearm is a
+      //2 handed firearm (rifle, shotgun, etc)
+      if( shooter->hold_left != NULL && shooter->hold_right != NULL ) //<-- are both their hands full?
+         chance -= 10 * firearm->ivar6; //ivar6 is how many hands are required to fire the weapon
    }
 
    size_t check = roll( 1, 100 );
 
-   //position based modifiers
-   if( target->position == POS_KNEELING )
-      chance -=10;
-   if( target->position == POS_PRONE )
-      chance -= 15;
-   if( target->position < POS_RESTING )
-      chance= 95;
-   if( target->position == POS_RESTING )
-      chance+= 15;
-   if( target->position == POS_SITTING )
-      chance+= 10;
-
-   if( shooter->position == POS_PRONE )
-      chance+= 15;
-   if( shooter->position == POS_KNEELING )
-      chance+= 10;
-   //Penalty for shooting one handed, greater penalty if the firearm is a
-   //2 handed firearm (rifle, shotgun, etc)
-   if( shooter->hold_left != NULL && shooter->hold_right != NULL ) //<-- are both their hands full?
-      chance -= 10 * firearm->ivar6; //ivar6 is how many hands are required to fire the weapon
-      
    if( check <= chance ) //hit!
    {
       damage( shooter, target, firearm, aim );
    }
    text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (0.%i) = Chance (%i) Roll (%i) %s %s!",
          shooting_skill, aimmod, chance, check, check <= chance ? "HIT" : "MISS", body_parts[aim] );
-
 }
 

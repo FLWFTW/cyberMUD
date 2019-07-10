@@ -121,7 +121,7 @@ const int b_to_e_table[] = {   [BODY_HEAD]       = WEAR_HEAD,
                                [BODY_RLEG]       = WEAR_LEGS,
                                [BODY_LFOOT]      = WEAR_FEET,
                                [BODY_RFOOT]      = WEAR_FEET,
-                               [MAX_BODY]        = MAX_WEAR };
+                               [MAX_BODY]        = WEAR_BODY };
 
 int b_to_e( int b )
 {
