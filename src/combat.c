@@ -41,11 +41,11 @@ static enum bodyparts_t random_part()
    return BODY_TORSO;
 }
 
-static int damage( D_MOBILE *aggressor, D_MOBILE *target, D_OBJECT *weapon, enum bodyparts_t location )
+int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage_type_t type )
 {
-   if( aggressor == NULL || target == NULL || weapon == NULL )
+   if( target == NULL )
    {
-      bug( "damage called with NULL arguments" );
+      bug( "damage called with NULL target" );
       return 0;
    }
 
@@ -62,12 +62,36 @@ static int damage( D_MOBILE *aggressor, D_MOBILE *target, D_OBJECT *weapon, enum
       armor = target->equipment[b_to_e(location)]->worn[1];
    }
 
-   if( armor )
-   {
 
+   //do damage
+   if( armor ) //damage the armor (if present)
+   {
+      //Armor's strength decreases as its repair status decreases.
+      //ivar1 stores armor's material, (steel=1, alloy=2, kevlar=3, composite=4)
+      amount /= ((armor->ivar1 * armor->repair)/100)+1;
+      armor->repair -= amount/10; //@todo figure out a better algorithm than this...
+      if( armor->repair < 0 )
+      {
+         armor->repair = 0;
+      }
    }
 
-   return 0;
+   //damage the bodypart hit
+   target->body[location]->health -= amount;
+   if( type == DAMAGE_BURN && target->body[location]->burn_trauma < MAX_TRAUMA )
+   {
+      target->body[location]->burn_trauma++;
+   }
+   else if( type == DAMAGE_BLUNT && target->body[location]->blunt_trauma < MAX_TRAUMA )
+   {
+      target->body[location]->blunt_trauma++;
+   }
+   else if( target->body[location]->wound_trauma < MAX_TRAUMA )
+   {
+      target->body[location]->wound_trauma++;
+   }
+
+   return amount;
 }
 
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim )
@@ -124,7 +148,7 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
 
    if( check <= chance ) //hit!
    {
-      damage( shooter, target, firearm, aim );
+      damage( target, (chance-check), aim, DAMAGE_PROJECTILE );
    }
    text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (0.%i) = Chance (%i) Roll (%i) %s %s!",
          shooting_skill, aimmod, chance, check, check <= chance ? "HIT" : "MISS", body_parts[aim] );

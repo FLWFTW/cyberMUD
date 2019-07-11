@@ -42,6 +42,7 @@ enum item_type_t { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_ELECTRONICS, ITEM_COMPUTE
                    ITEM_UNKNOWN, MAX_ITEM };
 extern const char *item_type[];
 
+enum damage_type_t  { DAMAGE_PIERCE = 0, DAMAGE_CUT, DAMAGE_BLUNT, DAMAGE_BURN, DAMAGE_PROJECTILE, DAMAGE_OTHER, MAX_DT };
 enum trauma_level_t { TRAUMA_NONE = 0, TRAUMA_MILD, TRAUMA_MODERATE, TRAUMA_SEVERE, TRAUMA_CRITICAL, MAX_TRAUMA };
 extern const char *wound_trauma[];
 extern const char *blunt_trauma[];

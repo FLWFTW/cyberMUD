@@ -74,14 +74,14 @@ const char *wound_trauma[] = { [TRAUMA_NONE]     = "none",
                                [TRAUMA_MILD]     = "leaking",
                                [TRAUMA_MODERATE] = "bleeding",
                                [TRAUMA_SEVERE]   = "pouring",
-                               [TRAUMA_CRITICAL] = "spraying",
+                               [TRAUMA_CRITICAL] = "severed",
                                [MAX_TRAUMA]      = 0};
 
 const char *blunt_trauma[] = { [TRAUMA_NONE]     = "none",
                                [TRAUMA_MILD]     = "bruised",
-                               [TRAUMA_MODERATE] = "fractured",
-                               [TRAUMA_SEVERE]   = "shattered",
-                               [TRAUMA_CRITICAL] = "compounded fracture",
+                               [TRAUMA_MODERATE] = "battered",
+                               [TRAUMA_SEVERE]   = "smashed",
+                               [TRAUMA_CRITICAL] = "broken",
                                [MAX_TRAUMA]      = 0};
 
 const char *burn_trauma[]  = { [TRAUMA_NONE]     = "none",
@@ -90,6 +90,14 @@ const char *burn_trauma[]  = { [TRAUMA_NONE]     = "none",
                                [TRAUMA_SEVERE]   = "burnt",
                                [TRAUMA_CRITICAL] = "charred",
                                [MAX_TRAUMA]      = 0};
+
+const char *damage_type[]  = { [DAMAGE_PIERCE]      = "piercing",
+                               [DAMAGE_CUT]         = "cutting",
+                               [DAMAGE_BLUNT]       = "blunt",
+                               [DAMAGE_BURN]        = "burning",
+                               [DAMAGE_PROJECTILE]  = "projectile",
+                               [DAMAGE_OTHER]       = "other",
+                               [MAX_DT]             = 0};
 
 const char *reset_types[]  = { [RESET_EXIT]      = "exit",
                                [RESET_MOB]       = "mob",
@@ -123,10 +131,3 @@ const int b_to_e_table[] = {   [BODY_HEAD]       = WEAR_HEAD,
                                [BODY_RFOOT]      = WEAR_FEET,
                                [MAX_BODY]        = WEAR_BODY };
 
-int b_to_e( int b )
-{
-   if( b < BODY_HEAD || b > BODY_RFOOT )
-      return WEAR_NONE;
-
-   return b_to_e_table[b];
-}

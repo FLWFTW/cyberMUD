@@ -3,6 +3,42 @@
  */
 #include "mud.h"
 
+void cmd_restore( D_MOBILE *dMob, char *arg )
+{
+   D_MOBILE *target = NULL;
+
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Restore who?" );
+      return;
+   }
+
+   if( !strcasecmp( arg, "self" ) )
+      target = dMob;
+   else
+      target = get_mobile_list( arg, dmobile_list );
+
+   if( target == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find them." );
+      return;
+   }
+
+   target->cur_hp = target->max_hp;
+   for( enum bodyparts_t i = BODY_HEAD; i < MAX_BODY; i++ )
+   {
+      target->body[i]->health = 100;
+      target->body[i]->wound_trauma = TRAUMA_NONE;
+      target->body[i]->blunt_trauma = TRAUMA_NONE;
+      target->body[i]->burn_trauma = TRAUMA_NONE;
+   }
+   text_to_mobile_j( dMob, "text", "Done." );
+   if( dMob != target )
+      text_to_mobile_j( target, "text", "Your health has been fully restored." );
+
+   return;
+}
+
 void cmd_astat( D_MOBILE *dMob, char *arg )
 {
    D_AREA *area = NULL;

@@ -105,6 +105,7 @@ typedef  short int         sh_int;
                                 (x->type) == ITEM_HOLSTER || (x->type) == ITEM_SHEATH ||\
                                 (x->type) == ITEM_MAGAZINE) ? TRUE : FALSE)
 #define ISGUN(x)                ((x->type) == ITEM_FIREARM)
+#define b_to_e( b )             (((b)>=BODY_HEAD && (b)<MAX_BODY)?b_to_e_table[(b)]:WEAR_NONE)
 /***********************
  * End of Macros       *
  ***********************/
@@ -170,7 +171,7 @@ struct dExit
 
 /**
  * ivar guide:
- * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = composite, 5 = carbonfiber
+ * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = Composite(Carbon Fiber/Graphene composite) 
  * firearms: 1- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
  *           2- bullet diameter (in um, so 7.62mm=762um, 5.56mm=556um, etc)
  *           3- cartridge length (in mm, so 7.62x39mm the 39 is in mm, not um like the diameter)
@@ -200,7 +201,7 @@ struct dObject
    unsigned int      capacity_cm3;
    unsigned int      volume_cm3;
    unsigned int      weight_g;//weight in grams
-   unsigned int      repair;
+   unsigned int      repair;//percent/100
 
    int               ivar1, ivar2, ivar3, ivar4, ivar5, ivar6;
    char             *svar1, *svar2, *svar3, *svar4, *svar5, *svar6;
@@ -391,7 +392,6 @@ typedef struct buffer_type
  ***************************/
 
 extern  D_ROOM      *   froom;
-
 extern  STACK       *   dsock_free;       /* the socket free list               */
 extern  LIST        *   dsock_list;       /* the linked list of active sockets  */
 extern  STACK       *   dmobile_free;     /* the mobile free list               */
@@ -409,6 +409,7 @@ extern  char        *   motd;             /* the MOTD help file                 
 extern  int             control;          /* boot control socket thingy         */
 extern  time_t          current_time;     /* let's cut down on calls to time()  */
 extern  time_t          boot_time;         /* What time the MUD booted up        */
+extern  const int       b_to_e_table[];   /* bodypart to equipment wear position */
 
 /*************************** 
  * End of Global Variables *
@@ -626,6 +627,7 @@ void  cmd_give                ( D_M *dMob, char *arg );
 void  cmd_ungive              ( D_M *dMob, char *arg );
 void  cmd_accept              ( D_M *dMob, char *arg );
 void  cmd_time                ( D_M *dMob, char *arg );
+void  cmd_restore             ( D_M *dMob, char *arg );
 
 /*
  * accounts.c

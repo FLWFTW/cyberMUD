@@ -244,6 +244,8 @@ D_OBJECT *json_to_object( json_t *json )
       else if( !strcmp( key, "repair" ) )
       {
          obj->repair = json_integer_value( value );
+         if( obj->repair > 100 ) obj->repair = 100;
+         if( obj->repair < 0 )   obj->repair = 0;
       }
       else
       {
