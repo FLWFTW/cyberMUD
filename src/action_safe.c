@@ -41,6 +41,12 @@ void cmd_enter( D_MOBILE *dMob, char *arg )
       return;
    }
 
+   if( IS_FIGHTING( dMob ) )
+   {
+      text_to_mobile_j( dMob, "error", "You're in the middle of a fight!" );
+      return;
+   }
+
    if( !strcasecmp( arg, "north" ) || !strcasecmp( arg, "south" ) ) //we do this so north doesn't collide with northeast, etc.
    {
       AttachIterator( &Iter, dMob->room->exits );

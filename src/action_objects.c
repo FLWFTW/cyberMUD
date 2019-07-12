@@ -395,7 +395,7 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                      MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_right->sdesc );
-               echo_around_two( pMob, dMob, "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
                      dMob->hold_right->sdesc, MOBNAME(dMob) );
                return;
             }
@@ -410,7 +410,7 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                      MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_left->sdesc );
-               echo_around_two( pMob, dMob, "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
                      dMob->hold_left->sdesc, MOBNAME(dMob));
                return;
             }
@@ -431,7 +431,7 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                      MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_right->sdesc );
-               echo_around_two( pMob, dMob, "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
                      dMob->hold_right->sdesc, MOBNAME(dMob) );
                return;
             }
@@ -446,7 +446,7 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                      MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_left->sdesc );
-               echo_around_two( pMob, dMob, "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
                      dMob->hold_left->sdesc, MOBNAME(dMob) );
                return;
             }

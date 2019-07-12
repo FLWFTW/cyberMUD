@@ -66,6 +66,7 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
    //do damage
    if( armor ) //damage the armor (if present)
    {
+      log_string( "Checking armor %s (Repair: %i)(Material: %i)", armor->sdesc, armor->repair, armor->ivar1 );
       //Armor's strength decreases as its repair status decreases.
       //ivar1 stores armor's material, (steel=1, alloy=2, kevlar=3, composite=4)
       amount /= ((armor->ivar1 * armor->repair)/100)+1;
@@ -94,10 +95,20 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
    return amount;
 }
 
+void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
+{
+   if( IS_PC( aggressor ) && IS_PC( target ) && aggressor->fighting != target )
+      log_string( "[COMBAT] %s initiated combat against %s", MOBNAME( aggressor ), MOBNAME( target ) );
+
+   aggressor->fighting = target;
+   target->fighting = aggressor;
+
+   return;
+}
+
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim )
 {
-   int aimmod = 100, chance = 0;
-
+   int aimmod = 100, chance = 0, dam = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
 
    if( shooter == NULL || target == NULL || firearm == NULL )
@@ -106,9 +117,12 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
       return;
    }
 
+   init_combat( shooter, target );
+
    if( aim == MAX_BODY ) //lets find a place to hit
    {
       aim = random_part();
+      aimmod = 100;
    }
    else
    {
@@ -145,12 +159,16 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    }
 
    size_t check = roll( 1, 100 );
+   dam = (firearm->ivar2*firearm->ivar3)/1000;//the volume of the cartridge modified by the strength of the roll / 1000
+   int resist = 0;
 
    if( check <= chance ) //hit!
    {
-      damage( target, (chance-check), aim, DAMAGE_PROJECTILE );
+      resist = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
    }
-   text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (0.%i) = Chance (%i) Roll (%i) %s %s!",
-         shooting_skill, aimmod, chance, check, check <= chance ? "HIT" : "MISS", body_parts[aim] );
+   log_string( "Bullet diameter = %i\nCartridge length = %i\nChance = %i\nCheck = %i\nDiameter * Length * (chance - check)/1000 = %i\nResist = %i\n",
+         firearm->ivar2, firearm->ivar3, chance, check, dam, resist );
+   text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Chance (%i) Roll (%i) %s %s for %i(%i/%i) damage!",
+         shooting_skill, aimmod/100, chance, check, check <= chance ? "HIT" : "MISS", body_parts[aim], dam, resist, dam-resist );
 }
 

@@ -194,7 +194,7 @@ void text_to_mobile_j( D_MOBILE *dMob, const char *type, const char *txt2, ... )
 
 
 //Assumes one and two are in the same room.
-void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *txt, ... )
+void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *type, char *txt, ... )
 {
    D_MOBILE *around;
    ITERATOR Iter;
@@ -212,7 +212,7 @@ void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *txt, ... )
       if( around == one || around == two )
          continue;
       else
-         text_to_mobile_j( around, "text", buf );
+         text_to_mobile_j( around, type, buf );
    }
    DetachIterator( &Iter );
 }

@@ -91,6 +91,7 @@ typedef  short int         sh_int;
 #define UMIN(a, b)		((a) < (b) ? (a) : (b))
 #define IS_ADMIN(dMob)          ((dMob->level) > LEVEL_PLAYER ? TRUE : FALSE)
 #define IS_NPC(x)               ((x->socket) == NULL ? TRUE : FALSE )
+#define IS_PC(x)                ((x->socket) == NULL ? FALSE : TRUE )
 #define GENDER(x)               ((x->gender) == MALE ? "male" : (x->gender) == FEMALE ? "female" : "nonbinary")
 #define POSSESSIVE(x)           ((x->gender) == MALE ? "his"  : (x->gender) == FEMALE ? "her"    : "their")
 #define SUBJECTIVE(x)           ((x->gender) == MALE ? "he"   : (x->gender) == FEMALE ? "she"    : "they")
@@ -106,6 +107,7 @@ typedef  short int         sh_int;
                                 (x->type) == ITEM_MAGAZINE) ? TRUE : FALSE)
 #define ISGUN(x)                ((x->type) == ITEM_FIREARM)
 #define b_to_e( b )             (((b)>=BODY_HEAD && (b)<MAX_BODY)?b_to_e_table[(b)]:WEAR_NONE)
+#define IS_FIGHTING( x )        (((x)->fighting) == NULL ? FALSE : TRUE )
 /***********************
  * End of Macros       *
  ***********************/
@@ -685,7 +687,7 @@ json_t *json_from_keys( json_t *parent, int n, ... );
  */
 void echo_room( D_ROOM *room, char *txt, ... );
 void echo_around( D_MOBILE *dMob, char *txt, ... );
-void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *txt, ... );
+void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *type, char *txt, ... );
 
 /*
  * reset.c
