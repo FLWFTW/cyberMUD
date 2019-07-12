@@ -35,6 +35,12 @@ void cmd_enter( D_MOBILE *dMob, char *arg )
    ITERATOR Iter;
    D_EXIT *exit;
 
+   if( dMob->position != POS_STANDING )
+   {
+      text_to_mobile_j( dMob, "error", "Stand up, first!" );
+      return;
+   }
+
    if( !strcasecmp( arg, "north" ) || !strcasecmp( arg, "south" ) ) //we do this so north doesn't collide with northeast, etc.
    {
       AttachIterator( &Iter, dMob->room->exits );
@@ -459,6 +465,219 @@ void cmd_commands(D_MOBILE *dMob, char *arg)
   if (col % 4) bprintf(buf, "\n\r");
   text_to_mobile(dMob, buf->data);
   buffer_free(buf);
+}
+
+void cmd_stand( D_MOBILE *dMob, char *arg )
+{
+   if( dMob->position == POS_STANDING )
+   {
+      text_to_mobile_j( dMob, "error", "You're already standing." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not stand." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "text", "You wake up and raise to your feet." );
+      echo_around( dMob, "%s wakes up and raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You raise to your feet." );
+      echo_around( dMob, "%s raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+   }
+   
+   dMob->position = POS_STANDING;
+}
+
+void cmd_sit( D_MOBILE *dMob, char *arg ) ///@TODO: Add functionality to sit _on_ things
+{
+   if( dMob->position == POS_SITTING )
+   {
+      text_to_mobile_j( dMob, "error", "You're already sitting." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "text", "You wake up and raise to a seated position." );
+      echo_around( dMob, "%s wakes up and raises to a seated position.", MOBNAME( dMob ) );
+   }
+   else if( dMob->position == POS_RESTING || dMob->position == POS_PRONE )
+   {
+      text_to_mobile_j( dMob, "text", "You raise to a seated position." );
+      echo_around( dMob, "%s raises to a seated position.", MOBNAME( dMob ) );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You sit on the ground." );
+      echo_around( dMob, "%s sits on the ground.", MOBNAME( dMob ) );
+   }
+   
+   dMob->position = POS_SITTING;
+}
+
+void cmd_kneel( D_MOBILE *dMob, char *arg )
+{
+   if( dMob->position == POS_KNEELING )
+   {
+      text_to_mobile_j( dMob, "error", "You're already kneeling." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "text", "You wake up and raise to a kneeling position." );
+      echo_around( dMob, "%s wakes up and raises to a kneeling position.", MOBNAME( dMob ) );
+   }
+   else if( dMob->position == POS_RESTING || dMob->position == POS_PRONE || dMob->position == POS_SITTING )
+   {
+      text_to_mobile_j( dMob, "text", "You raise to a kneeling position." );
+      echo_around( dMob, "%s raises to a kneeling position.", MOBNAME( dMob ) );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You lower yourself into a kneeling position." );
+      echo_around( dMob, "%s lowers %sself into a kneeling position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
+   }
+   
+   dMob->position = POS_KNEELING;
+}
+
+void cmd_prone( D_MOBILE *dMob, char *arg )
+{
+   if( dMob->position == POS_PRONE )
+   {
+      text_to_mobile_j( dMob, "error", "You're already prone." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "text", "You wake up and roll into the prone position." );
+      echo_around( dMob, "%s wakes up and rolls into the prone position.", MOBNAME( dMob ) );
+   }
+   else if( dMob->position == POS_RESTING )
+   {
+      text_to_mobile_j( dMob, "text", "You roll into the prone position." );
+      echo_around( dMob, "%s rolls into the prone position.", MOBNAME( dMob ) );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You lower yourself into the prone position." );
+      echo_around( dMob, "%s lowers %sself into the prone position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
+   }
+   
+   dMob->position = POS_PRONE;
+}
+
+void cmd_rest( D_MOBILE *dMob, char *arg )
+{
+   if( dMob->position == POS_RESTING )
+   {
+      text_to_mobile_j( dMob, "error", "You're already resting." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "text", "Your senses heighten as you emerge from your sleep." );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You sprawl out on the ground." );
+      echo_around( dMob, "%s sprawls out on the ground.", MOBNAME( dMob ) );
+   }
+   
+   dMob->position = POS_RESTING;
+}
+
+void cmd_sleep( D_MOBILE *dMob, char *arg )
+{
+   if( dMob->position == POS_SLEEPING )
+   {
+      text_to_mobile_j( dMob, "error", "You're already resting." );
+      return;
+   }
+   if( dMob->position == POS_RESTRAINED )
+   {
+      text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
+      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      return;
+   }
+   if( dMob->position == POS_UNCONSCIOUS )
+   {
+      text_to_mobile_j( dMob, "error", "You can't seem to wake up..." );
+      return;
+   }
+
+   if( dMob->position == POS_RESTING || dMob->position == POS_PRONE )
+   {
+      text_to_mobile_j( dMob, "text", "You drift off into a deep sleep..." );
+      echo_around( dMob, "%s drifts off to sleep...", MOBNAME( dMob ) );
+   }
+   else if( dMob->position == POS_SITTING )
+   {
+      text_to_mobile_j( dMob, "text", "You slump over into a deep sleep." );
+      echo_around( dMob, "%s slumps over into a deep sleep.", MOBNAME( dMob ) );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "text", "You collapse into a deep sleep" );
+      echo_around( dMob, "%s collapses into a deep sleep.", MOBNAME( dMob ) );
+   }
+   
+   dMob->position = POS_SLEEPING;
 }
 
 void cmd_who(D_MOBILE *dMob, char *arg)

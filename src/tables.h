@@ -30,8 +30,8 @@ extern size_t      body_aim_mod[];
 
 enum gender_t { FEMALE=0, MALE, NONBINARY };
 
-enum position_t { POS_UNCONSCIOUS = 0, POS_RESTRAINED, POS_SLEEPING, POS_RESTING, 
-                  POS_SITTING, POS_PRONE, POS_KNEELING, POS_STANDING, POS_FIGHTING,
+enum position_t { POS_UNCONSCIOUS = 0, POS_SLEEPING, POS_RESTRAINED, POS_RESTING, 
+                  POS_SITTING, POS_PRONE, POS_KNEELING, POS_STANDING,
                   MAX_POS };
 extern const char *positions[];
 

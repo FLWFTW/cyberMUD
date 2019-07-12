@@ -228,11 +228,10 @@ void echo_around( D_MOBILE *dMob, char *txt, ... )
    vsnprintf( buf, MAX_BUFFER, txt, args );
    va_end( args );
 
-
    AttachIterator( &Iter, dMob->room->mobiles );
    while( ( around = (D_MOBILE *)NextInList( &Iter ) ) != NULL )
    {
-      if( around == dMob )
+      if( around == dMob || around->position < POS_RESTRAINED )
          continue;
       else
          text_to_mobile_j( around, "text", "%s", buf );

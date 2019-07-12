@@ -628,6 +628,12 @@ void  cmd_ungive              ( D_M *dMob, char *arg );
 void  cmd_accept              ( D_M *dMob, char *arg );
 void  cmd_time                ( D_M *dMob, char *arg );
 void  cmd_restore             ( D_M *dMob, char *arg );
+void  cmd_kneel               ( D_M *dMob, char *arg );
+void  cmd_prone               ( D_M *dMob, char *arg );
+void  cmd_rest                ( D_M *dMob, char *arg );
+void  cmd_sleep               ( D_M *dMob, char *arg );
+void  cmd_sit                 ( D_M *dMob, char *arg );
+void  cmd_stand               ( D_M *dMob, char *arg );
 
 /*
  * accounts.c

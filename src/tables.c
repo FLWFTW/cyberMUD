@@ -105,14 +105,13 @@ const char *reset_types[]  = { [RESET_EXIT]      = "exit",
                                [MAX_RESET]       = 0};
 
 const char *positions[]    = { [POS_UNCONSCIOUS] = "unconscious",
-                               [POS_RESTRAINED]  = "restrained",
                                [POS_SLEEPING]    = "sleeping",
+                               [POS_RESTRAINED]  = "restrained",
                                [POS_RESTING]     = "resting",
                                [POS_SITTING]     = "sitting",
                                [POS_PRONE]       = "prone",
                                [POS_KNEELING]    = "kneeling",
                                [POS_STANDING]    = "standing",
-                               [POS_FIGHTING]    = "fighting",
                                [MAX_POS]         = 0};
 
 const int b_to_e_table[] = {   [BODY_HEAD]       = WEAR_HEAD,
