@@ -49,27 +49,13 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
       return 0;
    }
 
-   D_OBJECT *armor = NULL;
-
-   if( target->equipment[b_to_e(location)]->worn[0] != NULL
-         && target->equipment[b_to_e(location)]->worn[0]->type == ITEM_ARMOR )
-   {
-      armor = target->equipment[b_to_e(location)]->worn[0];
-   }
-   else if( target->equipment[b_to_e(location)]->worn[1] != NULL
-         && target->equipment[b_to_e(location)]->worn[1]->type == ITEM_ARMOR )
-   {
-      armor = target->equipment[b_to_e(location)]->worn[1];
-   }
-
+   D_OBJECT *armor = get_armor_pos( target, b_to_e(location) );
 
    //do damage
    if( armor ) //damage the armor (if present)
    {
-      log_string( "Checking armor %s (Repair: %i)(Material: %i)", armor->sdesc, armor->repair, armor->ivar1 );
-      //Armor's strength decreases as its repair status decreases.
-      //ivar1 stores armor's material, (steel=1, alloy=2, kevlar=3, composite=4)
-      amount -= armor->ivar1 * armor->repair / 100 * amount / 100;
+      log_string( "Checking armor %s (Repair: %i)(Base Stopping Power: %i)", armor->sdesc, armor->repair, armor->ivar1 * 3 + 1 );
+      //ivar1 stores armor's material, (leather = 0, steel=1, alloy=2, kevlar=3, composite=4)
       armor->repair -= amount/10; //@todo figure out a better algorithm than this...
       if( armor->repair < 0 )
       {
@@ -111,7 +97,7 @@ void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
 
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim )
 {
-   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0;
+   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, stopping_power = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
 
    if( shooter == NULL || target == NULL || firearm == NULL )
@@ -162,16 +148,22 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    }
 
    chance = chance + tpMod + spMod + handMod;
-   int armorMod = 0;
+   D_OBJECT *armor = get_armor_pos( target, b_to_e( aim ) );
+   if( armor )
+   {
+      stopping_power = armor->ivar1 * 4 + 1;
+      stopping_power = stopping_power; //modify stopping power by armor repair status.
+   }
 
    size_t check = roll( 1, 100 );
    dam = dice( (char*)ammo_dice[ firearm->ivar1 % MAX_AMMO ] );
+   dam -= stopping_power;
 
    if( check <= chance ) //hit!
    {
-      armorMod = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
+      damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
       text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) HIT %s for %s(%i-%i=%i) damage!",
-            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim], ammo_dice[firearm->ivar1 % MAX_AMMO], dam, armorMod, dam-armorMod );
+            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim], ammo_dice[firearm->ivar1 % MAX_AMMO], dam+stopping_power, stopping_power, dam );
    }
    else
    {

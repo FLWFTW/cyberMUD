@@ -148,10 +148,10 @@ const char *ammo_type[]   = { [AMMO_38SPC]       = "38 Special",
                               [AMMO_20GAUGE]     = "20 Gauge",
                               [MAX_AMMO]         = 0};
 
-const char *ammo_dice[]   = { [AMMO_38SPC]       = "2d6",   //0
+const char *ammo_dice[]   = { [AMMO_38SPC]       = "1d6+2", //0
                               [AMMO_9x19]        = "2d6+1", //1
-                              [AMMO_357MAG]      = "2d6+2", //2
-                              [AMMO_45APC]       = "2d6+3", //3
+                              [AMMO_357MAG]      = "2d6+3", //2
+                              [AMMO_45APC]       = "2d6+2", //3
                               [AMMO_10MM]        = "2d6+4", //4
                               [AMMO_44MAG]       = "4d6+1", //5
                               [AMMO_50AE]        = "4d6+2", //6

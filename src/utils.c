@@ -875,3 +875,13 @@ size_t dice( char *str2 )
    return result;
 }
 
+D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos )
+{
+   if( dMob->equipment[pos]->worn[0] != NULL && dMob->equipment[pos]->worn[0]->type == ITEM_ARMOR )
+      return dMob->equipment[pos]->worn[0];
+   else if( dMob->equipment[pos]->worn[1] != NULL && dMob->equipment[pos]->worn[1]->type == ITEM_ARMOR )
+      return dMob->equipment[pos]->worn[1];
+   else
+      return NULL;
+}
+   

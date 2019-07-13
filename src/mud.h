@@ -173,7 +173,8 @@ struct dExit
 
 /**
  * ivar guide:
- * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = Composite(Carbon Fiber/Graphene composite) 
+ * armor:    1- material (0 = leather, 1 = steel, 2 = alloy, 3 = kevlar, 4 = Composite(Carbon Fiber/Graphene composite) 
+ *              Stopping power = material*3+1
  * firearms: 1- caliber
  *           2- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
  *           3- feed mechanism (-1=magazine, 0=single shot, 1=bolt action, 2+=internal magazine/tube and size)
@@ -528,6 +529,7 @@ D_OBJECT *get_object_mob      ( D_MOBILE *dMob, char *name );
 /*
  * utils.c
  */
+D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos );
 char *gen_guid();
 D_EXIT *get_exit_by_name      ( D_ROOM *room, char *name );
 bool  check_name              ( const char *name );
