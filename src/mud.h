@@ -174,20 +174,16 @@ struct dExit
 /**
  * ivar guide:
  * armor:    1- material (1 = steel, 2 = alloy, 3 = kevlar, 4 = Composite(Carbon Fiber/Graphene composite) 
- * firearms: 1- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
- *           2- bullet diameter (in um, so 7.62mm=762um, 5.56mm=556um, etc)
- *           3- cartridge length (in mm, so 7.62x39mm the 39 is in mm, not um like the diameter)
- *           4- feed mechanism (-1=magazine, 0=single shot, 1=bolt action, 2+=internal magazine/tube and size)
- *           5-
- *           6- # of hands (1 or 2)
+ * firearms: 1- caliber
+ *           2- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
+ *           3- feed mechanism (-1=magazine, 0=single shot, 1=bolt action, 2+=internal magazine/tube and size)
+ *           4- # of hands (1 or 2)
  * keys:     1- pins
  *           2- lock number
- * magazine: 1- bullet diameter (in um, so 7.62mm is 762um, etc )
- *           2- cartridge length( in mm, so 7.62x39mm- the 39 is in mm, not um like the diameter)
- *           3- capacity
- * bullet:   1- bullet diameter in um
- *           2- cartridge length in mm
- *           3- bullet type( 1=ball, 2=JHP, 3=AP, 4=API, 5=explosive)
+ * magazine: 1- caliber 
+ *           2- capacity
+ * bullet:   1- caliber
+ *           2- bullet type( 1=ball, 2=JHP, 3=AP, 4=API, 5=explosive)
  */
 struct dObject
 {

@@ -69,7 +69,7 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
       log_string( "Checking armor %s (Repair: %i)(Material: %i)", armor->sdesc, armor->repair, armor->ivar1 );
       //Armor's strength decreases as its repair status decreases.
       //ivar1 stores armor's material, (steel=1, alloy=2, kevlar=3, composite=4)
-      amount /= ((armor->ivar1 * armor->repair)/100)+1;
+      amount -= armor->ivar1 * armor->repair / 100 * amount / 100;
       armor->repair -= amount/10; //@todo figure out a better algorithm than this...
       if( armor->repair < 0 )
       {
@@ -97,6 +97,9 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
 
 void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
 {
+   if( aggressor == target )
+      return;
+
    if( IS_PC( aggressor ) && IS_PC( target ) && aggressor->fighting != target )
       log_string( "[COMBAT] %s initiated combat against %s", MOBNAME( aggressor ), MOBNAME( target ) );
 
@@ -108,7 +111,7 @@ void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
 
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim )
 {
-   int aimmod = 100, chance = 0, dam = 0;
+   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
 
    if( shooter == NULL || target == NULL || firearm == NULL )
@@ -138,37 +141,42 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
       chance = ( shooting_skill * aimmod ) / 100;
       //position based modifiers
       if( target->position == POS_KNEELING )
-         chance -=10;
+         tpMod -=10;
       if( target->position == POS_PRONE )
-         chance -= 15;
+         tpMod -= 15;
       if( target->position < POS_RESTING )
-         chance= 95;
+         tpMod = 95;
       if( target->position == POS_RESTING )
-         chance+= 15;
+         tpMod += 15;
       if( target->position == POS_SITTING )
-         chance+= 10;
+         tpMod += 10;
 
       if( shooter->position == POS_PRONE )
-         chance+= 15;
+         spMod += 15;
       if( shooter->position == POS_KNEELING )
-         chance+= 10;
+         spMod += 10;
       //Penalty for shooting one handed, greater penalty if the firearm is a
       //2 handed firearm (rifle, shotgun, etc)
       if( shooter->hold_left != NULL && shooter->hold_right != NULL ) //<-- are both their hands full?
-         chance -= 10 * firearm->ivar6; //ivar6 is how many hands are required to fire the weapon
+         handMod -= 10 * firearm->ivar4; //ivar4 is how many hands are required to fire the weapon
    }
 
+   chance = chance + tpMod + spMod + handMod;
+   int armorMod = 0;
+
    size_t check = roll( 1, 100 );
-   dam = (firearm->ivar2*firearm->ivar3)/1000;//the volume of the cartridge modified by the strength of the roll / 1000
-   int resist = 0;
+   dam = dice( (char*)ammo_dice[ firearm->ivar1 % MAX_AMMO ] );
 
    if( check <= chance ) //hit!
    {
-      resist = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
+      armorMod = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
+      text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) HIT %s for %s(%i-%i=%i) damage!",
+            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim], ammo_dice[firearm->ivar1 % MAX_AMMO], dam, armorMod, dam-armorMod );
    }
-   log_string( "Bullet diameter = %i\nCartridge length = %i\nChance = %i\nCheck = %i\nDiameter * Length * (chance - check)/1000 = %i\nResist = %i\n",
-         firearm->ivar2, firearm->ivar3, chance, check, dam, resist );
-   text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Chance (%i) Roll (%i) %s %s for %i(%i/%i) damage!",
-         shooting_skill, aimmod/100, chance, check, check <= chance ? "HIT" : "MISS", body_parts[aim], dam, resist, dam-resist );
+   else
+   {
+      text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) MISS %s!",
+            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim] );
+   }
 }
 

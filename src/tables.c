@@ -130,3 +130,39 @@ const int b_to_e_table[] = {   [BODY_HEAD]       = WEAR_HEAD,
                                [BODY_RFOOT]      = WEAR_FEET,
                                [MAX_BODY]        = WEAR_BODY };
 
+const char *ammo_type[]   = { [AMMO_38SPC]       = "38 Special",
+                              [AMMO_9x19]        = "9mm Luger",
+                              [AMMO_357MAG]      = ".357 Magnum",
+                              [AMMO_45APC]       = ".45 APC",
+                              [AMMO_10MM]        = "10mm Auto",
+                              [AMMO_44MAG]       = ".44 Magnum",
+                              [AMMO_50AE]        = ".50 AE",
+                              [AMMO_556NATO]     = "5.56mm NATO",
+                              [AMMO_762x39]      = "7.62 Kalashnikov",
+                              [AMMO_762x51]      = "7.62 NATO",
+                              [AMMO_762x54R]     = "7.62 Nagant",
+                              [AMMO_127x108]     = "12.7x108mm",
+                              [AMMO_145x114]     = "14.5x114mm",
+                              [AMMO_10GAUGE]     = "10 Gauge",
+                              [AMMO_12GAUGE]     = "12 Gauge",
+                              [AMMO_20GAUGE]     = "20 Gauge",
+                              [MAX_AMMO]         = 0};
+
+const char *ammo_dice[]   = { [AMMO_38SPC]       = "2d6",   //0
+                              [AMMO_9x19]        = "2d6+1", //1
+                              [AMMO_357MAG]      = "2d6+2", //2
+                              [AMMO_45APC]       = "2d6+3", //3
+                              [AMMO_10MM]        = "2d6+4", //4
+                              [AMMO_44MAG]       = "4d6+1", //5
+                              [AMMO_50AE]        = "4d6+2", //6
+                              [AMMO_556NATO]     = "5d6",   //7
+                              [AMMO_762x39]      = "6d6+1", //8
+                              [AMMO_762x51]      = "6d6+2", //9
+                              [AMMO_762x54R]     = "6d6+3", //10
+                              [AMMO_127x108]     = "5d9",   //11
+                              [AMMO_145x114]     = "5d10",  //12
+                              [AMMO_10GAUGE]     = "5d6+3", //13
+                              [AMMO_12GAUGE]     = "4d6+2", //14
+                              [AMMO_20GAUGE]     = "3d6+1", //15
+                              [MAX_AMMO]         = 0};
+

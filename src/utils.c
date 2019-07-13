@@ -803,10 +803,12 @@ size_t roll( size_t min, size_t max )
    return rand() % max + min;
 }
 
-size_t dice( char *str )
+size_t dice( char *str2 )
 {
-   size_t result = 0, num = 0, size = 0, mod = 0, i = 0, len = strlen( str );
-   char operator = '\0';
+   size_t result = 0, num = 0, size = 0, mod = 0, i = 0, len = 0;
+   char operator = '\0', buf[MAX_STRING_LENGTH], *str;
+   len = snprintf( buf, MAX_STRING_LENGTH, "%s", str2 ); //operate on a local copy
+   str = buf;
 
    for( i = 0; i < len; i++ )
    {
