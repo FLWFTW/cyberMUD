@@ -54,13 +54,10 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
    //do damage
    if( armor ) //damage the armor (if present)
    {
-      log_string( "Checking armor %s (Repair: %i)(Base Stopping Power: %i)", armor->sdesc, armor->repair, armor->ivar1 * 3 + 1 );
       //ivar1 stores armor's material, (leather = 0, steel=1, alloy=2, kevlar=3, composite=4)
-      armor->repair -= amount/10; //@todo figure out a better algorithm than this...
-      if( armor->repair < 0 )
-      {
-         armor->repair = 0;
-      }
+      amount -= armor->ivar1;
+      if( amount > 0 && armor->ivar1 > 0 )
+         armor->ivar1--;
    }
 
    //damage the bodypart hit
@@ -148,20 +145,13 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    }
 
    chance = chance + tpMod + spMod + handMod;
-   D_OBJECT *armor = get_armor_pos( target, b_to_e( aim ) );
-   if( armor )
-   {
-      stopping_power = armor->ivar1 * 4 + 1;
-      stopping_power = stopping_power; //modify stopping power by armor repair status.
-   }
 
    size_t check = roll( 1, 100 );
    dam = dice( (char*)ammo_dice[ firearm->ivar1 % MAX_AMMO ] );
-   dam -= stopping_power;
 
    if( check <= chance ) //hit!
    {
-      damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
+      stopping_power = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
       text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) HIT %s for %s(%i-%i=%i) damage!",
             shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim], ammo_dice[firearm->ivar1 % MAX_AMMO], dam+stopping_power, stopping_power, dam );
    }
@@ -171,4 +161,44 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
             shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim] );
    }
 }
+
+D_OBJECT *make_corpse( D_MOBILE *dMob )
+{
+   if( !dMob )
+      return NULL;
+   char buf[MAX_STRING_LENGTH];
+
+   D_OBJECT *corpse = new_object();
+   snprintf( buf, MAX_STRING_LENGTH, "corpse %s", MOBNAME( dMob ) );
+   corpse->name = strdup( buf );
+   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", MOBNAME( dMob ) );
+   corpse->sdesc = strdup( buf );
+   snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", MOBNAME( dMob ) );
+   corpse->ldesc = strdup( buf );
+
+   corpse->type = ITEM_CORPSE;
+   corpse->weight_g = 900;//grams
+   corpse->volume_cm3 = 67960;
+   corpse->capacity_cm3 = 1;
+
+   corpse->in_room = dMob->room;
+
+   for( int i = 0; i < WEAR_NONE; i++ )
+   {
+      if( dMob->equipment[i]->worn[0] )
+      {
+         object_to_object( dMob->equipment[i]->worn[0], corpse );
+         dMob->equipment[i]->worn[0] = NULL;
+      }
+      if( dMob->equipment[i]->worn[1] )
+      {
+         object_to_object( dMob->equipment[i]->worn[1], corpse );
+         dMob->equipment[i]->worn[1] = NULL;
+      }
+   }
+
+
+   return corpse;
+}
+
 
