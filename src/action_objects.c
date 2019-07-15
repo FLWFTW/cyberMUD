@@ -136,7 +136,7 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
 
    if( !dMob->hold_right )
    {
-      if( obj->type == ITEM_FIREARM && obj->ivar6 == 2 )
+      if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )
       {
          text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your right hand.", obj->sdesc );
          echo_around( dMob, "%s unslings %s %s and readies it in %s right hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
@@ -154,7 +154,7 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
    }
    else if( !dMob->hold_left )
    {
-      if( obj->type == ITEM_FIREARM && obj->ivar6 == 2 )//ivar6 for weapons is how many hands is needed to operate it. You can sling 2 handed weapons but must sheath or holster 1 handed.
+      if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )//ivar4 for weapons is how many hands is needed to operate it. You can sling 2 handed weapons but must sheath or holster 1 handed.
       {
          text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your left hand.", obj->sdesc );
          echo_around( dMob, "%s unslings %s %s and readies it in %s left hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
@@ -785,7 +785,7 @@ void cmd_holster( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "error", "You can't holster that." );
       return;
    }
-   if( obj->ivar6 > 1 )
+   if( obj->ivar4 > 1 )
    {
       cmd_sling( dMob, arg ); //We're gonna say you can't holster 2 handed firearms.
       return;
@@ -859,7 +859,7 @@ void cmd_sheath( D_MOBILE *dMob, char *arg )
    {
       if( obj->type == ITEM_FIREARM )
       {
-         if( obj->ivar6 < 2 )
+         if( obj->ivar4 < 2 )
             cmd_holster( dMob, arg );
          else
             cmd_sling( dMob, arg );
@@ -942,7 +942,7 @@ void cmd_sling( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "error", "You can't sling that." );
       return;
    }
-   if( obj->ivar6 < 2 )
+   if( obj->ivar4 < 2 ) //For firearms-- number of hands needed to use it.
    {
       cmd_holster( dMob, arg );
       return;
@@ -1099,7 +1099,7 @@ void cmd_put( D_MOBILE *dMob, char *arg )
          return;
       }
 
-      if( (con->type == ITEM_HOLSTER && obj->type != ITEM_FIREARM && obj->ivar6 >1 )
+      if( (con->type == ITEM_HOLSTER && obj->type != ITEM_FIREARM && obj->ivar4 > 1 )
        || (con->type == ITEM_SHEATH && obj->type != ITEM_BLADE ) )
       {
          text_to_mobile_j( dMob, "error", "You can't put %s %s in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc );

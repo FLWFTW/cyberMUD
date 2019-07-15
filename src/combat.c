@@ -202,7 +202,7 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
 
 void kill( D_MOBILE *dMob )
 {
-   if( dMob->fighting->fighting == dMob )
+   if( dMob->fighting && dMob->fighting->fighting == dMob )
       dMob->fighting->fighting = NULL;
    dMob->fighting = NULL;
    
