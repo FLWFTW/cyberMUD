@@ -986,7 +986,7 @@ void cmd_get( D_MOBILE *dMob, char *arg )
       {
          if( ( obj = get_object_list( arg1, con->contents ) ) != NULL )
          {
-            text_to_mobile_j( dMob, "text", "You get %s %s from %s%s and hold it in your %s hand.",
+            text_to_mobile_j( dMob, "text", "You get %s %s from %s %s and hold it in your %s hand.",
                   AORAN( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc,
                   dMob->hold_right == NULL ? "right" : "left" );
             echo_around( dMob, "%s gets %s %s from %s %s and holds it in %s %s hand.",
@@ -1017,7 +1017,7 @@ void cmd_get( D_MOBILE *dMob, char *arg )
    }
    else
    {
-      text_to_mobile_j( dMob, "text", "You pick up %s%s and hold it in your %s hand.",
+      text_to_mobile_j( dMob, "text", "You pick up %s %s and hold it in your %s hand.",
             NEEDTHE( obj->sdesc ), obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
       echo_around( dMob, "%s picks up %s %s and holds it in %s %s hand.",
             MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
@@ -1076,7 +1076,7 @@ void cmd_put( D_MOBILE *dMob, char *arg )
    
    if( con->capacity_cm3 < 1 )
    {
-      text_to_mobile_j( dMob, "error", "%s%s isn't a container.", NEEDTHE( con->sdesc ), con->sdesc );
+      text_to_mobile_j( dMob, "error", "%s %s isn't a container.", NEEDTHE( con->sdesc ), con->sdesc );
       return;
    }
 
@@ -1094,7 +1094,7 @@ void cmd_put( D_MOBILE *dMob, char *arg )
 
       if( !object_can_fit( obj, con ) )
       {
-         text_to_mobile_j( dMob, "error", "%s%s won't fit in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc,
+         text_to_mobile_j( dMob, "error", "%s %s won't fit in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc,
                NEEDTHE( con->sdesc ), con->sdesc );
          return;
       }
@@ -1102,12 +1102,12 @@ void cmd_put( D_MOBILE *dMob, char *arg )
       if( (con->type == ITEM_HOLSTER && obj->type != ITEM_FIREARM && obj->ivar6 >1 )
        || (con->type == ITEM_SHEATH && obj->type != ITEM_BLADE ) )
       {
-         text_to_mobile_j( dMob, "error", "You can't put %s%s in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc );
+         text_to_mobile_j( dMob, "error", "You can't put %s %s in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc );
          return;
       }
       object_from_mobile( obj, dMob );
       object_to_object( obj, con );
-      text_to_mobile_j( dMob, "text", "You put %s%s in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc,
+      text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc,
             NEEDTHE( con->sdesc ), con->sdesc );
       echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
             AORAN( con->sdesc ), con->sdesc );

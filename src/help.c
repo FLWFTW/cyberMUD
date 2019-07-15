@@ -19,6 +19,7 @@
 LIST     *  help_list = NULL;   /* the linked list of help files     */
 char     *  greeting;           /* the welcome greeting              */
 char     *  motd;               /* the MOTD help file                */
+char     *  death_message;
 
 /*
  * Check_help()

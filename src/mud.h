@@ -405,9 +405,10 @@ extern  const struct    typCmd tabCmd[];  /* the command table                  
 extern  bool            shut_down;        /* used for shutdown                  */
 extern  char        *   greeting;         /* the welcome greeting               */
 extern  char        *   motd;             /* the MOTD help file                 */
+extern  char        *   death_message;    /* what a player sees when they die   */
 extern  int             control;          /* boot control socket thingy         */
 extern  time_t          current_time;     /* let's cut down on calls to time()  */
-extern  time_t          boot_time;         /* What time the MUD booted up        */
+extern  time_t          boot_time;        /* What time the MUD booted up        */
 extern  const int       b_to_e_table[];   /* bodypart to equipment wear position */
 
 /*************************** 
@@ -707,6 +708,8 @@ void cmd_fire( D_MOBILE *dMob, char *arg );
  * combat.c
  */
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim );
+int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage_type_t type );
+void kill( D_MOBILE *dMob );
 
 /*******************************
  * End of prototype declartion *

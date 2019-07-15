@@ -197,8 +197,52 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
       }
    }
 
-
    return corpse;
 }
 
+void kill( D_MOBILE *dMob )
+{
+   if( dMob->fighting->fighting == dMob )
+      dMob->fighting->fighting = NULL;
+   dMob->fighting = NULL;
+   
+   echo_around( dMob, "combat", "%s crumples to the ground, dead.", MOBNAME( dMob ) );
+   D_OBJECT *corpse = make_corpse( dMob );
+   if( dMob->hold_right )
+   {
+      echo_around( dMob, "combat", "%s %s skitters across the ground as it falls from %s's grasp.",
+            AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc, MOBNAME( dMob ) );
+      object_from_mobile( dMob->hold_right, dMob );
+      object_to_room( dMob->hold_right, dMob->room );
+      dMob->hold_right = NULL;
+   }
+   if( dMob->hold_left )
+   {
+      echo_around( dMob, "combat", "%s %s skitters across the ground as it falls from %s's grasp.",
+            AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc, MOBNAME( dMob ) );
+      object_from_mobile( dMob->hold_left, dMob );
+      object_to_room( dMob->hold_left, dMob->room );
+      dMob->hold_left = NULL;
+   }
 
+   object_to_room( corpse, dMob->room );
+
+   //@todo: remove any affects from poisons, stims, chems, etc.
+   if( IS_PC( dMob ) )
+   {
+      mob_to_room( dMob, get_room_by_vnum( FIRST_ROOM ) );
+      if( death_message == NULL )
+      {
+         text_to_mobile_j( dMob, "death", "You have been killed..." );
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "death", "%s", death_message );
+      }
+      log_string( "%s has been killed!", dMob->name );
+   }
+   else
+   {
+      free_mobile( dMob );
+   }
+}

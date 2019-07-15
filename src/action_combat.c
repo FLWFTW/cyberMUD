@@ -30,10 +30,8 @@ void cmd_slay( D_MOBILE *dMob, char *arg )
    }
 
    text_to_mobile_j( dMob, "combat", "You slay %s in cold blood!", victim->name );
-   object_to_room( make_corpse( victim ), dMob->room );
 
-   if( IS_NPC ( victim ) )
-      free_mobile( victim );
+   kill( victim );
 }
 
 void cmd_fire( D_MOBILE *dMob, char *arg )
