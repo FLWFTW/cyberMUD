@@ -253,3 +253,34 @@ void cmd_shutdow( D_MOBILE *dMob, char *arg )
    text_to_mobile_j( dMob, "error", "Spell out 'shutdown' to shut the MUD down." );
    return;
 }
+
+void cmd_hedit( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "edit which help entry?" );
+      return;
+   }
+
+   char action[MAX_STRING_LENGTH] = { 0 };
+   char helpname[MAX_STRING_LENGTH] = { 0 };
+
+   arg = one_arg( arg, action );
+   arg = one_arg( arg, helpname );
+
+   if( !strcasecmp( action, "save" ) )
+   {
+      ITERATOR &Iter;
+      HELP_DATA *pHelp;
+
+      AttachIterator( &Iter, help_list );
+      json_t *allhelps = json_array();
+      while( ( pHelp = NextInList( &Iter ) ) != NULL )
+      {
+         json_array_append_new( allhelps, help_to_json( pHelp ) );
+      }
+      DetachIterator( &Iter );
+   }
+
+   return;
+}

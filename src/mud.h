@@ -505,6 +505,7 @@ int     bprintf               ( BUFFER *buffer, char *fmt, ... );
 /*
  * help.c
  */
+HELP_DATA *new_help           ( void );
 bool  check_help              ( D_M *dMob, char *helpfile );
 void  load_helps              ( void );
 
@@ -674,6 +675,8 @@ D_RESET   *json_to_reset( json_t *json );
 D_ROOM *json_to_room( json_t *json );
 D_OBJECT *json_to_object( json_t *json );
 D_MOBILE *json_to_mobile( json_t *json );
+HELP_DATA *json_to_help( json_t *json );
+json_t *help_to_json( HELP_DATA *help );
 json_t *exit_to_json( D_EXIT *exit );
 json_t *mobile_to_json( D_MOBILE *dMob, bool equipment );
 json_t *player_to_json( D_MOBILE *dMob, bool equipment );

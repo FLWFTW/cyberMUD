@@ -21,6 +21,18 @@ char     *  greeting;           /* the welcome greeting              */
 char     *  motd;               /* the MOTD help file                */
 char     *  death_message;
 
+HELP_DATA *new_help()
+{
+   HELP_DATA *help;
+   help = calloc( 1, sizeof( HELP_DATA ) );
+   if( help == NULL )
+   {
+      bug( "Unable to allocate memory for HELP_DATA" );
+      exit( 1 );
+   }
+   return help;
+}
+
 /*
  * Check_help()
  *
@@ -95,7 +107,37 @@ bool check_help(D_MOBILE *dMob, char *helpfile)
 /*
  * Loads all the helpfiles found in ../help/
  */
+
 void load_helps()
+{
+   json_t *helps = json_load_file( "../help/help_data.json", 0, NULL );
+   help_list = AllocList();
+   HELP_DATA *pHelp;
+   size_t index;
+   json_t *help;
+
+   if( helps == NULL )
+   {
+      bug( "Syntax error in help_data.json" );
+      return;
+   }
+
+   json_array_foreach( helps, index, help )
+   {
+      pHelp = json_to_help( help );
+      AppendToList( pHelp, help_list );
+      if (!strcasecmp("GREETING", pHelp->keyword))
+         greeting = pHelp->text;
+      else if (!strcasecmp("MOTD", pHelp->keyword))
+         motd = pHelp->text;
+      else if( !strcasecmp( "death_message", pHelp->keyword ) )
+         death_message = pHelp->text;
+   }
+
+   json_decref( helps );
+
+}
+void load_helps2()
 {
   HELP_DATA *new_help;
   char buf[MAX_BUFFER];
@@ -137,6 +179,8 @@ void load_helps()
       greeting = new_help->text;
     else if (!strcasecmp("MOTD", new_help->keyword))
       motd = new_help->text;
+    else if( !strcasecmp( "death_message", new_help->keyword ) )
+       death_message = new_help->text;
   }
   closedir(directory);
 }

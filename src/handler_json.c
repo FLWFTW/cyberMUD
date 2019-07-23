@@ -79,6 +79,49 @@ D_EXIT *json_to_exit( json_t *json )
    return exit;
 }
 
+HELP_DATA *json_to_help( json_t *json )
+{
+   if( !json )
+      return NULL;
+
+   HELP_DATA *hdata = new_help();
+   json_t *value;
+   const char *key;
+
+   json_object_foreach( json, key, value )
+   {
+      if( !strcmp( key, "keyword" ) )
+      {
+         hdata->keyword = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "text" ) )
+      {
+         hdata->text = strdup( json_string_value( value ) );
+      }
+      else
+      {
+         bug( "Unknown help_data key '%s'.", key );
+      }
+   }
+   hdata->load_time = time(NULL);
+
+   return hdata;
+}
+
+json_t *help_to_json( HELP_DATA *help )
+{
+   if( !help )
+      return NULL;
+
+   json_t *json = json_object();
+
+   json_object_set_new( json, "keyword", json_string( help->keyword ) );
+   json_object_set_new( json, "text", json_string( help->text ) );
+
+   return json;
+}
+
+
 D_ROOM *json_to_room( json_t *json )
 {
    if( !json )
