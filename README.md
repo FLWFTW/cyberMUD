@@ -9,6 +9,7 @@ Uses a custom web client, project located at https://github.com/FLWFTW/cyberMUD.
 * [Cyberpunk 2077](https://en.wikipedia.org/wiki/Cyberpunk_2077)
 * [Altered Carbon](https://en.wikipedia.org/wiki/Altered_Carbon)
 * [Akira](https://en.wikipedia.org/wiki/Akira_(1988_film))
+* [Ghost in the Shell](https://en.wikipedia.org/wiki/Ghost_in_the_Shell_(1995_film))
 * [Terminator](https://en.wikipedia.org/wiki/Terminator_(franchise))
 * [Robocop](https://en.wikipedia.org/wiki/RoboCop_(franchise))
 * [Tank Girl](https://en.wikipedia.org/wiki/Tank_Girl)
