@@ -1,0 +1,38 @@
+[
+   {
+      "keyword": "ENTER",
+      "text": "usage:\r\n   [direction]\r\n   enter [direction or exit name]\r\n\r\n   Moves your character through the exit specified. Used to\r\n   travel through the game world.\r\n"
+   },
+   {
+      "keyword": "DEATHMESSAGE",
+      "text": ""
+   },
+   {
+      "keyword": "ANSI",
+      "text": "SocketMud(tm) supports ANSI colors, and you can access them by using the\r\n'#' character, followed by the colorkey from the table below.\r\n\r\nYellow    #yy #YY#n\r\nBlue      #bb #BB#n\r\nGreen     #gg #GG#n\r\nRed       #rr #RR#n\r\nCyan      #cc #CC#n\r\nPurple    #pp #PP#n\r\nDark      #dd #DD#n\r\nWhite     #ww #WW#n\r\n\r\nThe 'n' key is the default SocketMud(tm) color, and the mudcolor will\r\nalways revert to this color at the end of a string.\r\n"
+   },
+   {
+      "keyword": "GREETING",
+      "text": "                  ##                                                      \r\n############### #####      ####  ############    ############## ##########\r\n###############   ###########    ##########      ############## ############\r\n ###                 ######      ###   ######### ###            ###    #####\r\n ###                   ###       ##############  ############## ############\r\n ##############        ###       ####  ######    ###            ###   #####\r\n###############        ###       #### ####       ############## ###      ###\r\n                                 ######                                    ##\r\n                                 ###                   #                     #\r\n                                 #                   ###     \r\n                     ##             ## #####       #####  ##################\r\n                     #####        #### #####       #####  ##################\r\n                     ########  ####### #####       #####  #####       ######\r\n                     ################# #####       #####  #####      #######\r\n                     ##### ##### ##### #################  #####   ########  \r\n                     #####       ##### #################  #############     \r\n                                                          ##########        \r\n                                                          #######           \r\n                                                          ####              \r\n                                                          ##\r\nWELCOME TO THE NEON JUNGLE\r\n\r\n"
+   },
+   {
+      "keyword": "MCCP",
+      "text": "The Mud Client Compression Protocol has the purpose of reducing the\r\nbandwidth usage of the mudserver, by using an MCCP-complient mudclient,\r\nthe data send to you will be compressed by 80-85%, and thus not only\r\nreducing the amount of data processed by the server, but also greatly\r\nreduces the amount of data you need to download (i.e. less lag for you).\r\n\r\nThis MUD supports both versions 1 and 2 of the compression protocol,\r\nand any client supporting either of those version can be used to\r\nenable compression. Most clients enable compression automatically,\r\nbut some require that you type 'compress'. The same command can also\r\nbe used to disable compression.\r\n\r\nMCCP was created by Oliver Jowett\r\n"
+   },
+   {
+      "keyword": "MOTD",
+      "text": "Welcome to CyberMUD!\r\n\r\nEverything is still under construction so bare\r\nwith us. If you notice any bugs please report\r\nthem to the MUD administrators. If you have any\r\nideas please give them to, you guessed it, the\r\nMUD administrators.\r\n\r\nThanks!\r\nThe MUD Administrators.\r\n"
+   },
+   {
+      "keyword": "ACCEPT",
+      "text": "Usage:\r\n   accept [item name or player name]\r\n\r\n   Used to accept an offered item. In the case of multiple offers\r\n   you can specify which object you are accepting or from which\r\n   person you are accepting an offer from.\r\n\r\n   Note: You must have at leat one free hand available to receive\r\n   the offered item.\r\n"
+   },
+   {
+      "keyword": "death_message",
+      "text": "...Everything fades to black...\r\n\r\nSuddenly, a bright dot of light flickers into view in the distance.\r\nThe light grows and grows until it fully encompasses your entire field\r\nof vision.\r\n\r\nYour eyes slowly focus on the robotic arms and intricate sensor arrays\r\nwhizzing around your body just in time to fade back out to black once\r\nmore.\r\n\r\nWhen you come to you find yourself in a strange, sterile room...\r\n"
+   },
+   {
+      "keyword": "CREDITS",
+      "text": "SocketMUD(tm) was originally coded by Brian Graversen and improved upon by\r\nthe various coders in the community that took the time to return useful\r\nfeedback.\r\n\r\nThanks goes to Beej for his network guide, which got me started with \r\nnetwork programming, and to Erwin Andreasen whose various small articles\r\non MUD programming and useful bits of code has helped my over the time.\r\n\r\nThanks also goes to all the helpful people who have spend the time to help\r\nme improve on the original SocketMUD(tm) release.\r\n"
+   }
+]
