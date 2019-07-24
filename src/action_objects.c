@@ -758,6 +758,11 @@ void cmd_holster( D_MOBILE *dMob, char *arg )
 
    if( arg[0] == '\0' )
    {
+      if( dMob->hold_right == NULL && dMob->hold_left == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "You aren't holding anything." );
+         return;
+      }
       if( dMob->hold_right )
          cmd_holster( dMob, dMob->hold_right->guid );
       if( dMob->hold_left )
@@ -838,6 +843,11 @@ void cmd_sheath( D_MOBILE *dMob, char *arg )
 
    if( arg[0] == '\0' )
    {
+      if( dMob->hold_right == NULL && dMob->hold_left == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "You aren't holding anything." );
+         return;
+      }
       if( dMob->hold_right )
          cmd_sheath( dMob, dMob->hold_right->guid );
       if( dMob->hold_left )
@@ -915,6 +925,11 @@ void cmd_sling( D_MOBILE *dMob, char *arg )
 
    if( arg[0] == '\0' )
    {
+      if( dMob->hold_right == NULL && dMob->hold_left == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "You aren't holding anything." );
+         return;
+      }
       if( dMob->hold_right )
          cmd_sling( dMob, dMob->hold_right->guid );
       if( dMob->hold_left )

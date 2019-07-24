@@ -73,6 +73,19 @@ void free_object( D_OBJECT *obj )
    
 }
 
+D_OBJECT *get_object_by_vnum( unsigned int vnum )
+{
+   ITERATOR Iter;
+   D_OBJECT *obj;
+
+   AttachIterator( &Iter, object_protos );
+   while( ( obj = (D_OBJECT *)NextInList( &Iter ) ) != NULL )
+      if( obj->vnum == vnum )
+         break;
+   DetachIterator( &Iter );
+   return obj;
+}
+
 D_OBJECT *spawn_object( unsigned int vnum )
 {
    ITERATOR Iter;

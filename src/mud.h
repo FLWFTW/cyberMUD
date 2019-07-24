@@ -489,6 +489,7 @@ int     fread_number          ( FILE *fp );                 /* just an integer *
 /* 
  * strings.c
  */
+bool   is_number              ( char *str );
 int    isascii                ( int c );
 char   *one_arg               ( char *fStr, char *bStr );
 char   *strdup                ( const char *s );
@@ -514,6 +515,7 @@ void  cmd_hedit               ( D_MOBILE *dMob, char *arg );
 /*
  * objects.c
  */
+D_OBJECT *get_object_by_vnum       ( unsigned int vnum );
 void free_object              ( D_OBJECT *object );
 void object_to_room           ( D_OBJECT *object, D_ROOM *room );
 void object_to_mobile         ( D_OBJECT *object, D_MOBILE *dMob );
@@ -703,6 +705,11 @@ void reset_area( D_AREA *pArea );
  */
 void cmd_resetarea( D_MOBILE *dMob, char *arg );
 void cmd_astat( D_MOBILE *dMob, char *arg );
+
+/*
+ * building.c
+ */
+void cmd_oset( D_MOBILE *dMOb, char *arg );
 
 /*
  * action_combat.c

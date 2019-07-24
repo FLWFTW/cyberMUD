@@ -85,6 +85,7 @@ const struct typCmd tabCmd [] =
   { "nw",            cmd_northwest,  LEVEL_GUEST  },
   { "northwest",     cmd_northwest,  LEVEL_GUEST  },
   { "ospawn",        cmd_ospawn,     LEVEL_GOD    },
+  { "oset",          cmd_oset,       LEVEL_GOD    },
   { "ostat",         cmd_ostat,      LEVEL_GOD    },
   { "olist",         cmd_olist,      LEVEL_GOD    },
   { "open",          cmd_open,       LEVEL_GOD    },

@@ -20,6 +20,17 @@ int isascii( int c )
    return FALSE;
 }
 
+bool is_number( char *str )
+{
+   for( int i = 0; str[i] != '\0'; i++ )
+   {
+      if( isalpha(str[i] ) )
+         return FALSE;
+   }
+
+   return TRUE;
+}
+
 /*
  * Checks if aStr is a prefix of bStr.
  */
