@@ -68,6 +68,7 @@ const struct typCmd tabCmd [] =
   { "give",          cmd_give,       LEVEL_GUEST  },
   { "goto",          cmd_goto,       LEVEL_GOD    },
   { "help",          cmd_help,       LEVEL_GUEST  },
+  { "hedit",         cmd_hedit,      LEVEL_GOD    },
   { "holster",       cmd_holster,    LEVEL_GUEST  },
   { "inventory",     cmd_inventory,  LEVEL_GUEST  },
   { "kneel",         cmd_kneel,      LEVEL_GUEST  },

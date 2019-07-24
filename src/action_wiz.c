@@ -270,7 +270,7 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
 
    if( !strcasecmp( action, "save" ) )
    {
-      ITERATOR &Iter;
+      ITERATOR Iter;
       HELP_DATA *pHelp;
 
       AttachIterator( &Iter, help_list );
@@ -280,7 +280,10 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
          json_array_append_new( allhelps, help_to_json( pHelp ) );
       }
       DetachIterator( &Iter );
+      json_dump_file( allhelps, "../help/help_data.json", JSON_INDENT(3) );
+      json_decref( allhelps );
    }
+
 
    return;
 }

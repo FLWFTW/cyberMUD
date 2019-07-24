@@ -50,16 +50,12 @@ bool check_help(D_MOBILE *dMob, char *helpfile)
 {
   HELP_DATA *pHelp;
   ITERATOR Iter;
-  char buf[MAX_HELP_ENTRY + 80];
-  char *entry, *hFile;
   bool found = FALSE;
-
-  hFile = capitalize(helpfile);
 
   AttachIterator(&Iter, help_list);
   while ((pHelp = (HELP_DATA *) NextInList(&Iter)) != NULL)
   {
-    if (is_name(helpfile, pHelp->keyword))
+    if (is_name(helpfile, pHelp->keyword) && dMob->level >= pHelp->level )
     {
       found = TRUE;
       break;
@@ -67,41 +63,9 @@ bool check_help(D_MOBILE *dMob, char *helpfile)
   }
   DetachIterator(&Iter);
 
-  /* If there is an updated version we load it */
-  if (found)
-  {
-    if (last_modified(hFile) > pHelp->load_time)
-    {
-      free(pHelp->text);
-      pHelp->text = strdup(read_help_entry(hFile));
-    }
-  }
-  else /* is there a version at all ?? */
-  {
-    /* helpfiles do not contain double dots (no moving out of the helpdir) */
-    if (strstr(hFile, "..") != NULL)
-      return FALSE;
+  text_to_mobile_j(dMob, "help", "[%i] %s\r\n\r\n%s", pHelp->level, pHelp->keyword, pHelp->text );
 
-    if ((entry = read_help_entry(hFile)) == NULL)
-      return FALSE;
-    else
-    {
-      if ((pHelp = malloc(sizeof(*pHelp))) == NULL)
-      { 
-        bug("Check_help: Cannot allocate memory.");
-        abort();
-      }
-      pHelp->keyword    =  strdup(hFile);
-      pHelp->text       =  strdup(entry);
-      pHelp->load_time  =  time(NULL);
-      AttachToList(pHelp, help_list);
-    }
-  }
-
-  snprintf(buf, MAX_HELP_ENTRY + 80, "=== %s ===\n\r%s", pHelp->keyword, pHelp->text);
-  text_to_mobile_j(dMob, "help", buf);
-
-  return TRUE;
+  return found;
 }
 
 /*
@@ -137,6 +101,7 @@ void load_helps()
    json_decref( helps );
 
 }
+/*
 void load_helps2()
 {
   HELP_DATA *new_help;
@@ -184,3 +149,5 @@ void load_helps2()
   }
   closedir(directory);
 }
+*/
+

@@ -347,9 +347,10 @@ struct dMobile
 
 struct help_data
 {
-  time_t              load_time;
-  char              * keyword;
-  char              * text;
+   time_t              load_time;
+   char              * keyword;
+   char              * text;
+   int                 level;
 };
 
 struct lookup_data
@@ -508,6 +509,7 @@ int     bprintf               ( BUFFER *buffer, char *fmt, ... );
 HELP_DATA *new_help           ( void );
 bool  check_help              ( D_M *dMob, char *helpfile );
 void  load_helps              ( void );
+void  cmd_hedit               ( D_MOBILE *dMob, char *arg );
 
 /*
  * objects.c
