@@ -222,7 +222,7 @@ static void state_choose_char( D_SOCKET *dsock, char *arg )
          dsock->player->socket = dsock;
          AttachToList( dsock->player, dmobile_list );
          AppendToList( dsock->player, dsock->player->room->mobiles );
-         echo_around( dsock->player, "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
+         echo_around( dsock->player, "text", "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
          //init_events_player(dsock->player);
          //strip_event_socket(dsock, EVENT_SOCKET_IDLE);
          text_to_mobile_j( dsock->player, "text", "%s\n\n", motd);
@@ -340,7 +340,7 @@ static void state_chargen( D_SOCKET *dsock, char *arg )
       save_account( dsock->account );
       dsock->player->room = get_room_by_vnum( FIRST_ROOM );
       AppendToList( dsock->player, dsock->player->room->mobiles );
-      echo_around( dsock->player, "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
+      echo_around( dsock->player, "text", "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
       log_string("New Player: %s has finished chargen.", dsock->player->name);
       log_string("Player: %s has entered the game.", dsock->player->name);
       save_player( dsock->player );
@@ -621,7 +621,7 @@ static void state_chargen_eyecolor( D_SOCKET *dsock, char *arg )
    save_account( dsock->account );
    dsock->player->room = get_room_by_vnum( FIRST_ROOM );
    AppendToList( dsock->player, dsock->player->room->mobiles );
-   echo_around( dsock->player, "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
+   echo_around( dsock->player, "text", "The world vibrates slightly and %s flickers into existance.", dsock->player->name );
    log_string("New Player: %s has finished chargen.", dsock->player->name);
    log_string("Player: %s has entered the game.", dsock->player->name);
    save_player( dsock->player );

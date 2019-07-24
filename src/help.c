@@ -33,19 +33,7 @@ HELP_DATA *new_help()
    return help;
 }
 
-/*
- * Check_help()
- *
- * This function first sees if there is a valid
- * help file in the help_list, should there be
- * no helpfile in the help_list, it will check
- * the ../help/ directory for a suitable helpfile
- * entry. Even if it finds the helpfile in the
- * help_list, it will still check the ../help/
- * directory, and should the file be newer than
- * the currently loaded helpfile, it will reload
- * the helpfile.
- */
+/* checks the help_list for the appropriate help file */
 bool check_help(D_MOBILE *dMob, char *helpfile)
 {
   HELP_DATA *pHelp;
@@ -69,7 +57,7 @@ bool check_help(D_MOBILE *dMob, char *helpfile)
 }
 
 /*
- * Loads all the helpfiles found in ../help/
+ * Loads all the helpfiles found in ../help/help_data.json
  */
 
 void load_helps()
@@ -101,53 +89,4 @@ void load_helps()
    json_decref( helps );
 
 }
-/*
-void load_helps2()
-{
-  HELP_DATA *new_help;
-  char buf[MAX_BUFFER];
-  char *s;
-  DIR *directory;
-  struct dirent *entry;
-
-  log_string("Load_helps: getting all help files.");
-
-  help_list = AllocList();
-
-  directory = opendir("../help/");
-  for (entry = readdir(directory); entry; entry = readdir(directory))
-  {
-    if (!strcmp(entry->d_name, ".") || !strcmp(entry->d_name, ".."))
-      continue;
-
-    snprintf(buf, MAX_BUFFER, "../help/%s", entry->d_name);
-    s = read_help_entry(buf);
-
-    if (s == NULL)
-    {
-      bug("load_helps: Helpfile %s does not exist.", buf);
-      continue;
-    }
-
-    if ((new_help = malloc(sizeof(*new_help))) == NULL)
-    {
-      bug("Load_helps: Cannot allocate memory.");
-      abort();
-    }
-
-    new_help->keyword    =  strdup(entry->d_name);
-    new_help->text       =  strdup(s);
-    new_help->load_time  =  time(NULL);
-    AttachToList(new_help, help_list);
-
-    if (!strcasecmp("GREETING", new_help->keyword))
-      greeting = new_help->text;
-    else if (!strcasecmp("MOTD", new_help->keyword))
-      motd = new_help->text;
-    else if( !strcasecmp( "death_message", new_help->keyword ) )
-       death_message = new_help->text;
-  }
-  closedir(directory);
-}
-*/
 

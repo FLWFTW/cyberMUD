@@ -217,7 +217,7 @@ void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *type, char *txt, ... )
    DetachIterator( &Iter );
 }
 
-void echo_around( D_MOBILE *dMob, char *txt, ... )
+void echo_around( D_MOBILE *dMob, char *type, char *txt, ... )
 {
    D_MOBILE *around;
    ITERATOR Iter;
@@ -234,12 +234,12 @@ void echo_around( D_MOBILE *dMob, char *txt, ... )
       if( around == dMob || around->position < POS_RESTRAINED )
          continue;
       else
-         text_to_mobile_j( around, "text", "%s", buf );
+         text_to_mobile_j( around, type, "%s", buf );
    }
    DetachIterator( &Iter );
 }
 
-void echo_room( D_ROOM *room, char *txt, ... )
+void echo_room( D_ROOM *room, char *type, char *txt, ... )
 {
    D_MOBILE *mobs;
    ITERATOR Iter;
@@ -252,7 +252,7 @@ void echo_room( D_ROOM *room, char *txt, ... )
 
    AttachIterator( &Iter, room->mobiles );
    while( ( mobs = NextInList( &Iter ) ) != NULL )
-      text_to_mobile_j( mobs, "text", "%s", buf );
+      text_to_mobile_j( mobs, type, "%s", buf );
    DetachIterator( &Iter );
 }
 

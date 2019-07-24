@@ -98,6 +98,10 @@ HELP_DATA *json_to_help( json_t *json )
       {
          hdata->text = strdup( json_string_value( value ) );
       }
+      else if( !strcmp( key, "level" ) )
+      {
+         hdata->level = json_integer_value( value );
+      }
       else
       {
          bug( "Unknown help_data key '%s'.", key );
@@ -117,6 +121,7 @@ json_t *help_to_json( HELP_DATA *help )
 
    json_object_set_new( json, "keyword", json_string( help->keyword ) );
    json_object_set_new( json, "text", json_string( help->text ) );
+   json_object_set_new( json, "level", json_integer( help->level ) );
 
    return json;
 }

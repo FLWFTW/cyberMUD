@@ -221,16 +221,16 @@ void object_from_mobile( D_OBJECT *object, D_MOBILE *dMob )
 {
    if( dMob->offer_right->what && dMob->offer_right->what == object )
    {
-      text_to_mobile_j( dMob->offer_right->to, "text", "%s rescinds %s offer of %s %s",
-            dMob->name, POSSESSIVE(dMob), AORAN( object->sdesc ), object->sdesc );
+      text_to_mobile_j( dMob->offer_right->to, "text", "%s rescinds %s offer of %s.",
+            dMob->name, POSSESSIVE(dMob), object->sdesc );
       dMob->offer_right->what = NULL;
       dMob->offer_right->to = NULL;
       dMob->offer_right->when = 0;
    }
    else if( dMob->offer_left->what && dMob->offer_left->what == object )
    {
-      text_to_mobile_j( dMob->offer_right->to, "text", "%s rescinds %s offer of %s %s",
-            dMob->name, POSSESSIVE(dMob), AORAN( object->sdesc ), object->sdesc );
+      text_to_mobile_j( dMob->offer_right->to, "text", "%s rescinds %s offer of %s.",
+            dMob->name, POSSESSIVE(dMob), object->sdesc );
       dMob->offer_left->what = NULL;
       dMob->offer_left->to = NULL;
       dMob->offer_left->when = 0;

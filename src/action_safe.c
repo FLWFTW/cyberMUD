@@ -76,9 +76,9 @@ void cmd_enter( D_MOBILE *dMob, char *arg )
    }
 
 
-   echo_around( dMob, "%s leaves through the %s\r\n", MOBNAME(dMob), exit->name );//Need to check for non n/s/e/w exits, wouldn't make sense to see "Blah leaves door"
+   echo_around( dMob, "text", "%s leaves through the %s\r\n", MOBNAME(dMob), exit->name );//Need to check for non n/s/e/w exits, wouldn't make sense to see "Blah leaves door"
    mob_to_room( dMob, exit->to_room );
-   echo_around( dMob, "%s enters from the %s\r\n", MOBNAME(dMob), exit->farside_name );
+   echo_around( dMob, "text", "%s enters from the %s\r\n", MOBNAME(dMob), exit->farside_name );
    cmd_look( dMob, "" );
 }
 
@@ -120,7 +120,7 @@ void cmd_open( D_MOBILE *dMob, char *arg )
    if( exit->exit == EXIT_CLOSED )
    {
       text_to_mobile_j( dMob, "text", "You open the door to the %s.", exit->name );
-      echo_around( dMob, "%s opens the door to the %s.", MOBNAME(dMob), exit->name );
+      echo_around( dMob, "text", "%s opens the door to the %s.", MOBNAME(dMob), exit->name );
       echo_room( exit->to_room, "The door to the %s opens.", exit->farside_exit->name );
       exit->exit = EXIT_OPEN;
       exit->farside_exit->exit = EXIT_OPEN;
@@ -151,7 +151,7 @@ void cmd_close( D_MOBILE *dMob, char *arg )
    if( exit->exit == EXIT_OPEN )
    {
       text_to_mobile_j( dMob, "text", "You close the door to the %s.", exit->name );
-      echo_around( dMob, "%s closes the door to the %s.", MOBNAME(dMob), exit->name );
+      echo_around( dMob, "text", "%s closes the door to the %s.", MOBNAME(dMob), exit->name );
       echo_room( exit->to_room, "The door to the %s closes.", exit->farside_exit->name );
       exit->exit = EXIT_CLOSED;
       exit->farside_exit->exit = EXIT_CLOSED;
@@ -293,7 +293,7 @@ void cmd_examine( D_MOBILE *dMob, char *arg )
    if( obj )
    {
       cmd_look( dMob, obj->guid );
-      text_to_mobile_j( dMob, "text", "You look in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc );
+      text_to_mobile_j( dMob, "text", "You look in %s.", obj->sdesc );
       show_mob_obj_list( dMob, obj->contents, 6 );
       return;
    }
@@ -339,11 +339,11 @@ void cmd_look( D_MOBILE *dMob, char *arg )
 
       if( obj->capacity_cm3 < 1 )
       {
-         text_to_mobile_j( dMob, "error", "%s %s is not a container.", AORAN( obj->sdesc ), obj->sdesc );
+         text_to_mobile_j( dMob, "error", "%s is not a container.", obj->sdesc );
          return;
       }
 
-      text_to_mobile_j( dMob, "text", "You look in %s%s.", NEEDTHE( obj->sdesc ), obj->sdesc );
+      text_to_mobile_j( dMob, "text", "You look in %s.", obj->sdesc );
       show_mob_obj_list( dMob, obj->contents, 6 );
 
       return;
@@ -369,18 +369,18 @@ void cmd_look( D_MOBILE *dMob, char *arg )
          {
             obj = m->equipment[i]->worn[1];
             if( obj->wear_pos == WEAR_SLUNG )
-               text_to_mobile_j( dMob, "text", "    %s %s, %s", AORAN( obj->sdesc ), obj->sdesc, wear_pos[obj->wear_pos] );
+               text_to_mobile_j( dMob, "text", "    %s, %s", obj->sdesc, wear_pos[obj->wear_pos] );
             else
-               text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
+               text_to_mobile_j( dMob, "text", "    %s on %s %s", obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
             count++;
          }
          else if( m->equipment[i]->worn[0] != NULL )
          {
             obj = m->equipment[i]->worn[0];
             if( obj->wear_pos == WEAR_SLUNG )
-               text_to_mobile_j( dMob, "text", "    %s %s, %s", AORAN( obj->sdesc ), obj->sdesc, wear_pos[obj->wear_pos] );
+               text_to_mobile_j( dMob, "text", "    %s, %s", obj->sdesc, wear_pos[obj->wear_pos] );
             else
-               text_to_mobile_j( dMob, "text", "    %s %s on %s %s", AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
+               text_to_mobile_j( dMob, "text", "    %s on %s %s", obj->sdesc, POSSESSIVE(m), wear_pos[obj->wear_pos] );
             count++;
          }
       }
@@ -396,13 +396,13 @@ void cmd_look( D_MOBILE *dMob, char *arg )
 
       if( m->hold_left != NULL )
       {
-         text_to_mobile_j( dMob, "text", "    %s %s in %s left hand.", 
-               AORAN( m->hold_left->sdesc), m->hold_left->sdesc, POSSESSIVE(m) );
+         text_to_mobile_j( dMob, "text", "    %s in %s left hand.", 
+               m->hold_left->sdesc, POSSESSIVE(m) );
       }
       if( m->hold_right != NULL )
       {
-         text_to_mobile_j( dMob, "text", "    %s %s in %s right hand.",
-               AORAN( m->hold_right->sdesc), m->hold_right->sdesc, POSSESSIVE(m) );
+         text_to_mobile_j( dMob, "text", "    %s in %s right hand.",
+               m->hold_right->sdesc, POSSESSIVE(m) );
       }
  
       return;
@@ -411,8 +411,8 @@ void cmd_look( D_MOBILE *dMob, char *arg )
    if( ( obj = get_object_list( arg1, dMob->room->objects ) ) != NULL 
          || ( obj = get_object_mob( dMob, arg1 ) ) != NULL )
    {
-      text_to_mobile_j( dMob, "text", "You closely examine %s %s\r\nYou can see that it has a volume of %d and a weight of %d.", 
-            AORAN(obj->sdesc), obj->sdesc, obj->volume_cm3, obj->weight_g );
+      text_to_mobile_j( dMob, "text", "You closely examine %s\r\nYou can see that it has a volume of %d and a weight of %d.", 
+            obj->sdesc, obj->volume_cm3, obj->weight_g );
       if( obj->capacity_cm3 > 0 )
       {
          text_to_mobile_j( dMob, "text", "It appears to be able to hold around %d cubic centimeters. It's about %d percent full.",
@@ -483,7 +483,7 @@ void cmd_stand( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not stand." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -494,12 +494,12 @@ void cmd_stand( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_SLEEPING )
    {
       text_to_mobile_j( dMob, "text", "You wake up and raise to your feet." );
-      echo_around( dMob, "%s wakes up and raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s wakes up and raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
    }
    else
    {
       text_to_mobile_j( dMob, "text", "You raise to your feet." );
-      echo_around( dMob, "%s raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s raises to %s feet.", MOBNAME( dMob ), POSSESSIVE( dMob ) );
    }
    
    dMob->position = POS_STANDING;
@@ -515,7 +515,7 @@ void cmd_sit( D_MOBILE *dMob, char *arg ) ///@TODO: Add functionality to sit _on
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -526,17 +526,17 @@ void cmd_sit( D_MOBILE *dMob, char *arg ) ///@TODO: Add functionality to sit _on
    if( dMob->position == POS_SLEEPING )
    {
       text_to_mobile_j( dMob, "text", "You wake up and raise to a seated position." );
-      echo_around( dMob, "%s wakes up and raises to a seated position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s wakes up and raises to a seated position.", MOBNAME( dMob ) );
    }
    else if( dMob->position == POS_RESTING || dMob->position == POS_PRONE )
    {
       text_to_mobile_j( dMob, "text", "You raise to a seated position." );
-      echo_around( dMob, "%s raises to a seated position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s raises to a seated position.", MOBNAME( dMob ) );
    }
    else
    {
       text_to_mobile_j( dMob, "text", "You sit on the ground." );
-      echo_around( dMob, "%s sits on the ground.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s sits on the ground.", MOBNAME( dMob ) );
    }
    
    dMob->position = POS_SITTING;
@@ -552,7 +552,7 @@ void cmd_kneel( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -563,17 +563,17 @@ void cmd_kneel( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_SLEEPING )
    {
       text_to_mobile_j( dMob, "text", "You wake up and raise to a kneeling position." );
-      echo_around( dMob, "%s wakes up and raises to a kneeling position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s wakes up and raises to a kneeling position.", MOBNAME( dMob ) );
    }
    else if( dMob->position == POS_RESTING || dMob->position == POS_PRONE || dMob->position == POS_SITTING )
    {
       text_to_mobile_j( dMob, "text", "You raise to a kneeling position." );
-      echo_around( dMob, "%s raises to a kneeling position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s raises to a kneeling position.", MOBNAME( dMob ) );
    }
    else
    {
       text_to_mobile_j( dMob, "text", "You lower yourself into a kneeling position." );
-      echo_around( dMob, "%s lowers %sself into a kneeling position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
+      echo_around( dMob, "text", "%s lowers %sself into a kneeling position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
    }
    
    dMob->position = POS_KNEELING;
@@ -589,7 +589,7 @@ void cmd_prone( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -600,17 +600,17 @@ void cmd_prone( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_SLEEPING )
    {
       text_to_mobile_j( dMob, "text", "You wake up and roll into the prone position." );
-      echo_around( dMob, "%s wakes up and rolls into the prone position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s wakes up and rolls into the prone position.", MOBNAME( dMob ) );
    }
    else if( dMob->position == POS_RESTING )
    {
       text_to_mobile_j( dMob, "text", "You roll into the prone position." );
-      echo_around( dMob, "%s rolls into the prone position.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s rolls into the prone position.", MOBNAME( dMob ) );
    }
    else
    {
       text_to_mobile_j( dMob, "text", "You lower yourself into the prone position." );
-      echo_around( dMob, "%s lowers %sself into the prone position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
+      echo_around( dMob, "text", "%s lowers %sself into the prone position.", MOBNAME( dMob ), OBJECTIVE( dMob ) );
    }
    
    dMob->position = POS_PRONE;
@@ -626,7 +626,7 @@ void cmd_rest( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -642,7 +642,7 @@ void cmd_rest( D_MOBILE *dMob, char *arg )
    else
    {
       text_to_mobile_j( dMob, "text", "You sprawl out on the ground." );
-      echo_around( dMob, "%s sprawls out on the ground.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s sprawls out on the ground.", MOBNAME( dMob ) );
    }
    
    dMob->position = POS_RESTING;
@@ -658,7 +658,7 @@ void cmd_sleep( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTRAINED )
    {
       text_to_mobile_j( dMob, "error", "You struggle against your restraints but can not move." );
-      echo_around( dMob, "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
+      echo_around( dMob, "text", "%s struggles against %s restraints", MOBNAME( dMob ), POSSESSIVE( dMob ) );
       return;
    }
    if( dMob->position == POS_UNCONSCIOUS )
@@ -670,17 +670,17 @@ void cmd_sleep( D_MOBILE *dMob, char *arg )
    if( dMob->position == POS_RESTING || dMob->position == POS_PRONE )
    {
       text_to_mobile_j( dMob, "text", "You drift off into a deep sleep..." );
-      echo_around( dMob, "%s drifts off to sleep...", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s drifts off to sleep...", MOBNAME( dMob ) );
    }
    else if( dMob->position == POS_SITTING )
    {
       text_to_mobile_j( dMob, "text", "You slump over into a deep sleep." );
-      echo_around( dMob, "%s slumps over into a deep sleep.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s slumps over into a deep sleep.", MOBNAME( dMob ) );
    }
    else
    {
       text_to_mobile_j( dMob, "text", "You collapse into a deep sleep" );
-      echo_around( dMob, "%s collapses into a deep sleep.", MOBNAME( dMob ) );
+      echo_around( dMob, "text", "%s collapses into a deep sleep.", MOBNAME( dMob ) );
    }
    
    dMob->position = POS_SLEEPING;

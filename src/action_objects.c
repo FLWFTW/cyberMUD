@@ -139,15 +139,15 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
       if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )
       {
          text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your right hand.", obj->sdesc );
-         echo_around( dMob, "%s unslings %s %s and readies it in %s right hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
+         echo_around( dMob, "text", "%s unslings %s and readies it in %s right hand.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob ) );
       }
       else
       {
 
-         text_to_mobile_j( dMob, "text", "You remove %s %s and hold it in your right hand.",
-               AORAN( obj->sdesc ), obj->sdesc );
-         echo_around( dMob, "%s removes %s %s and holds it in %s right hand.",
-               MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
+         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your right hand.",
+               obj->sdesc );
+         echo_around( dMob, "text", "%s removes %s and holds it in %s right hand.",
+               MOBNAME(dMob), obj->sdesc,
                POSSESSIVE( dMob ) );
       }
       dMob->hold_right = obj;
@@ -157,15 +157,15 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
       if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )//ivar4 for weapons is how many hands is needed to operate it. You can sling 2 handed weapons but must sheath or holster 1 handed.
       {
          text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your left hand.", obj->sdesc );
-         echo_around( dMob, "%s unslings %s %s and readies it in %s left hand.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob ) );
+         echo_around( dMob, "text", "%s unslings %s and readies it in %s left hand.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob ) );
       }
       else
       {
 
          text_to_mobile_j( dMob, "text", "You remove %s %s and hold it in your left hand.",
-               AORAN( obj->sdesc ), obj->sdesc );
-         echo_around( dMob, "%s removes %s %s and holds it in %s left hand.",
-               MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
+               obj->sdesc );
+         echo_around( dMob, "text", "%s removes %s and holds it in %s left hand.",
+               MOBNAME(dMob), obj->sdesc,
                POSSESSIVE( dMob ) );
       }
       dMob->hold_left = obj;
@@ -217,7 +217,7 @@ void cmd_give( D_MOBILE *dMob, char *arg )
    if( dMob->hold_right && dMob->hold_right == what )
    {
       text_to_mobile_j( dMob, "text", "You offer the %s in your right hand to %s.", what->sdesc, MOBNAME(to) );
-      text_to_mobile_j( to, "text", "%s offers you %s %s.", MOBNAME(dMob), AORAN( what->sdesc ), what->sdesc );
+      text_to_mobile_j( to, "text", "%s offers you %s.", MOBNAME(dMob),  what->sdesc );
       dMob->offer_right->to = to;
       dMob->offer_right->what = what;
       dMob->offer_right->when = time( NULL );
@@ -225,7 +225,7 @@ void cmd_give( D_MOBILE *dMob, char *arg )
    else if( dMob->hold_left && dMob->hold_left == what )
    {
       text_to_mobile_j( dMob, "text", "You offer the %s in your left hand to %s.", what->sdesc, MOBNAME(to) );
-      text_to_mobile_j( to, "text", "%s offers you %s %s.", MOBNAME(dMob), AORAN( what->sdesc ), what->sdesc );
+      text_to_mobile_j( to, "text", "%s offers you %s.", MOBNAME(dMob), what->sdesc );
       dMob->offer_left->to = to;
       dMob->offer_left->what = what;
       dMob->offer_left->when = time( NULL );
@@ -257,10 +257,10 @@ void cmd_draw( D_MOBILE *dMob, char *arg )
       {
          if( dMob->hold_right && dMob->hold_left ) //If they type draw with no argument and fill their hands
             return;
-         text_to_mobile_j( dMob, "text", "You draw %s %s from %s %s and wield it in your %s hand.",
-               AORAN( obj->sdesc ), obj->sdesc, AORAN( con->sdesc ), con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
-         echo_around( dMob, "%s draws %s %s from %s %s and wields it in %s %s hand.",
-               MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, AORAN(con->sdesc), con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+         text_to_mobile_j( dMob, "text", "You draw %s from %s and wield it in your %s hand.",
+               obj->sdesc, con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+         echo_around( dMob, "text", "%s draws %s from %s and wields it in %s %s hand.",
+               MOBNAME(dMob), obj->sdesc, con->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
          object_from_object( obj, con );
          object_to_mobile( obj, dMob );
          drawn = TRUE;
@@ -276,9 +276,9 @@ void cmd_draw( D_MOBILE *dMob, char *arg )
          if( dMob->hold_right && dMob->hold_left ) //If they type draw with no argument and fill their hands
             return;
          text_to_mobile_j( dMob, "text", "You draw %s %s from %s %s and wield it in your %s hand.",
-               AORAN( obj->sdesc ), obj->sdesc, AORAN( con->sdesc ), con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
-         echo_around( dMob, "%s draws %s %s from %s %s and wields it in %s %s hand.",
-               MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, AORAN(con->sdesc), con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+               obj->sdesc, con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+         echo_around( dMob, "text", "%s draws %s %s from %s %s and wields it in %s %s hand.",
+               MOBNAME(dMob), obj->sdesc, con->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
          object_from_object( obj, con );
          object_to_mobile( obj, dMob );
          drawn = TRUE;
@@ -334,11 +334,11 @@ void cmd_ungive( D_MOBILE *dMob, char *arg )
 
    if( dMob->offer_right->what && ( is_name( arg, dMob->offer_right->what->name ) || arg[0] == '\0' ) )
    {
-      text_to_mobile_j( dMob, "text", "You retract your offer of %s %s to %s.",
-            AORAN( dMob->offer_right->what->sdesc ), dMob->offer_right->what->sdesc,
+      text_to_mobile_j( dMob, "text", "You retract your offer of %s to %s.",
+            dMob->offer_right->what->sdesc,
             MOBNAME(dMob->offer_right->to) );
-      text_to_mobile_j( dMob->offer_right->to, "text", "%s retracts %s offer of %s %s.",
-            MOBNAME(dMob), POSSESSIVE( dMob ), AORAN( dMob->offer_right->what->sdesc ),
+      text_to_mobile_j( dMob->offer_right->to, "text", "%s retracts %s offer of %s.",
+            MOBNAME(dMob), POSSESSIVE( dMob ), 
             dMob->offer_right->what->sdesc );
       dMob->offer_right->what = NULL;
       dMob->offer_right->to   = NULL;
@@ -346,11 +346,11 @@ void cmd_ungive( D_MOBILE *dMob, char *arg )
    }
    else if( dMob->offer_left->what && ( is_name( arg, dMob->offer_left->what->name ) || arg[0] == '\0' ) )
    {
-      text_to_mobile_j( dMob, "text", "You retract your offer of %s %s to %s.",
-            AORAN( dMob->offer_left->what->sdesc ), dMob->offer_left->what->sdesc,
+      text_to_mobile_j( dMob, "text", "You retract your offer of %s to %s.",
+            dMob->offer_left->what->sdesc,
             MOBNAME(dMob->offer_left->to) );
-      text_to_mobile_j( dMob->offer_left->to, "text", "%s retracts %s offer of %s %s.",
-            MOBNAME(dMob), POSSESSIVE( dMob ), AORAN( dMob->offer_left->what->sdesc ),
+      text_to_mobile_j( dMob->offer_left->to, "text", "%s retracts %s offer of %s.",
+            MOBNAME(dMob), POSSESSIVE( dMob ),
             dMob->offer_left->what->sdesc );
       dMob->offer_left->what = NULL;
       dMob->offer_left->to   = NULL;
@@ -391,11 +391,11 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                pMob->offer_right->what = NULL;
                pMob->offer_right->to = NULL;
                pMob->offer_right->when = 0;
-               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s %s and take it in your right hand.",
-                     MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc );
+               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s and take it in your right hand.",
+                     MOBNAME(pMob), dMob->hold_right->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_right->sdesc );
-               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s to %s.", MOBNAME(pMob), 
                      dMob->hold_right->sdesc, MOBNAME(dMob) );
                return;
             }
@@ -406,11 +406,11 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                pMob->offer_right->what = NULL;
                pMob->offer_right->to = NULL;
                pMob->offer_right->when = 0;
-               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s %s and take it in your left hand.",
-                     MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc );
+               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s and take it in your left hand.",
+                     MOBNAME(pMob), dMob->hold_left->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_left->sdesc );
-               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s to %s.", MOBNAME(pMob), 
                      dMob->hold_left->sdesc, MOBNAME(dMob));
                return;
             }
@@ -427,11 +427,11 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                pMob->offer_left->what = NULL;
                pMob->offer_left->to = NULL;
                pMob->offer_left->when = 0;
-               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s %s and take it in your right hand.",
-                     MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc );
+               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s and take it in your right hand.",
+                     MOBNAME(pMob), dMob->hold_right->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_right->sdesc );
-               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_right->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s to %s.", MOBNAME(pMob), 
                      dMob->hold_right->sdesc, MOBNAME(dMob) );
                return;
             }
@@ -442,11 +442,11 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
                pMob->offer_left->what = NULL;
                pMob->offer_left->to = NULL;
                pMob->offer_left->when = 0;
-               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s %s and take it in your left hand.",
-                     MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc );
+               text_to_mobile_j( dMob, "text", "You accept %s's offer of %s and take it in your left hand.",
+                     MOBNAME(pMob), dMob->hold_left->sdesc );
                text_to_mobile_j( pMob, "text", "%s accepts your offer and you give %s your %s.",
                      MOBNAME(dMob), OBJECTIVE( dMob ), dMob->hold_left->sdesc );
-               echo_around_two( pMob, dMob, "text", "%s gives %s %s to %s.", MOBNAME(pMob), AORAN( dMob->hold_left->sdesc ),
+               echo_around_two( pMob, dMob, "text", "%s gives %s to %s.", MOBNAME(pMob), 
                      dMob->hold_left->sdesc, MOBNAME(dMob) );
                return;
             }
@@ -482,8 +482,8 @@ void cmd_wear( D_MOBILE *dMob, char *arg )
    }
    if( obj->wear_pos == WEAR_NONE )
    {
-      text_to_mobile_j( dMob, "error", "You can't wear %s %s.\r\n", 
-            AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc );
+      text_to_mobile_j( dMob, "error", "You can't wear %s.\r\n", 
+            dMob->hold_right->sdesc );
       return;
    }
 
@@ -499,13 +499,13 @@ void cmd_wear( D_MOBILE *dMob, char *arg )
             dMob->hold_left = NULL;
          if( obj->wear_pos == WEAR_SLUNG )
          {
-            text_to_mobile_j( dMob, "text", "You sling %s %s.", AORAN( obj->sdesc ), obj->sdesc );
-            echo_around( dMob, "%s slings %s %s.", MOBNAME(dMob), POSSESSIVE(dMob), obj->sdesc );
+            text_to_mobile_j( dMob, "text", "You sling %s.", obj->sdesc );
+            echo_around( dMob, "text", "%s slings %s %s.", MOBNAME(dMob), POSSESSIVE(dMob), obj->sdesc );
          }
          else
          {
-            text_to_mobile_j( dMob, "text", "You wear %s %s on your %s.", AORAN(obj->sdesc), obj->sdesc, wear_pos[obj->wear_pos] );
-            echo_around( dMob, "%s wears %s %s on %s %s.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob), wear_pos[obj->wear_pos] );
+            text_to_mobile_j( dMob, "text", "You wear %s on your %s.", obj->sdesc, wear_pos[obj->wear_pos] );
+            echo_around( dMob, "text", "%s wears %s on %s %s.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob), wear_pos[obj->wear_pos] );
          }
          return;
       }
@@ -524,10 +524,10 @@ void cmd_wear( D_MOBILE *dMob, char *arg )
          else
             dMob->hold_left = NULL;
 
-         text_to_mobile_j( dMob, "text", "You wear %s %s over %s %s on your %s.", AORAN(obj->sdesc), obj->sdesc, 
-               AORAN(dMob->equipment[obj->wear_pos]->worn[0]->sdesc), dMob->equipment[obj->wear_pos]->worn[0]->sdesc,
+         text_to_mobile_j( dMob, "text", "You wear %s over %s on your %s.", obj->sdesc, 
+               dMob->equipment[obj->wear_pos]->worn[0]->sdesc,
                wear_pos[obj->wear_pos] );
-         echo_around( dMob, "%s wears %s %s on %s %s.", MOBNAME(dMob), AORAN(obj->sdesc), obj->sdesc, POSSESSIVE(dMob), wear_pos[obj->wear_pos] );
+         echo_around( dMob, "text", "%s wears %s on %s %s.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob), wear_pos[obj->wear_pos] );
          return;
       }
 
@@ -677,10 +677,10 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
          con = dMob->equipment[i]->worn[0];
          if( con && object_can_fit( obj, con ) && con->type == ITEM_CONTAINER )
          {
-            text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
-            echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
+            text_to_mobile_j( dMob, "text", "You put %s in %s.", obj->sdesc,
+                  con->sdesc );
+            echo_around( dMob, "text", "%s puts %s in %s", MOBNAME(dMob), obj->sdesc,
+                  con->sdesc );
             object_from_mobile( obj, dMob );
             object_to_object( obj, con );
             if( obj == dMob->hold_right )
@@ -692,10 +692,10 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
          con = dMob->equipment[i]->worn[1];
          if( con && object_can_fit( obj, con ) && con->type == ITEM_CONTAINER )
          {
-            text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
-            echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
+            text_to_mobile_j( dMob, "text", "You put %s in %s.", obj->sdesc,
+                  con->sdesc );
+            echo_around( dMob, "text", "%s puts %s in %s", MOBNAME(dMob), obj->sdesc,
+                  con->sdesc );
             object_from_mobile( obj, dMob );
             object_to_object( obj, con );
             if( obj == dMob->hold_right )
@@ -705,7 +705,7 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
             return;
          }
       }
-      text_to_mobile_j( dMob, "error", "You can't fit %s %s anywhere.", AORAN( obj->sdesc ), obj->sdesc );
+      text_to_mobile_j( dMob, "error", "You can't fit %s anywhere.", obj->sdesc );
       return;
    }
 
@@ -723,10 +723,10 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
          con = dMob->equipment[i]->worn[0];
          if( con && object_can_fit( obj, con ) )
          {
-            text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
-            echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
+            text_to_mobile_j( dMob, "text", "You put %s in %s.", obj->sdesc,
+                  con->sdesc );
+            echo_around( dMob, "text", "%s puts %s in %s", MOBNAME(dMob), obj->sdesc,
+                  con->sdesc );
             object_from_room( obj, dMob->room );
             object_to_object( obj, con );
             return;
@@ -734,17 +734,17 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
          con = dMob->equipment[i]->worn[1];
          if( con && object_can_fit( obj, con ) && con->type == ITEM_CONTAINER )
          {
-            text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
-            echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
-                  AORAN( con->sdesc ), con->sdesc );
+            text_to_mobile_j( dMob, "text", "You put %s in %s.", obj->sdesc,
+                  con->sdesc );
+            echo_around( dMob, "text", "%s puts %s in %s", MOBNAME(dMob), obj->sdesc,
+                  con->sdesc );
             object_from_room( obj, dMob->room );
             object_to_object( obj, con );
             return;
          }
       }
 
-      text_to_mobile_j( dMob, "error", "You can't fit %s %s anywhere.", AORAN( obj->sdesc ), obj->sdesc );
+      text_to_mobile_j( dMob, "error", "You can't fit %s anywhere.", obj->sdesc );
       return;
    }
 
@@ -801,9 +801,9 @@ void cmd_holster( D_MOBILE *dMob, char *arg )
          object_from_mobile( obj, dMob );
          object_to_object( obj, dMob->equipment[i]->worn[0] );
          holstered = TRUE;
-         text_to_mobile_j( dMob, "text", "You holster %s %s in your %s.", AORAN( obj->sdesc ),
+         text_to_mobile_j( dMob, "text", "You holster %s in your %s.", 
                obj->sdesc, dMob->equipment[i]->worn[0]->sdesc );
-         echo_around( dMob, "%s holsters %s %s in %s %s.", MOBNAME(dMob), AORAN( obj->sdesc ),
+         echo_around( dMob, "text", "%s holsters %s in %s %s.", MOBNAME(dMob), 
                obj->sdesc, POSSESSIVE(dMob), dMob->equipment[i]->worn[0]->sdesc );
          break;
       }
@@ -814,9 +814,9 @@ void cmd_holster( D_MOBILE *dMob, char *arg )
          object_from_mobile( obj, dMob );
          object_to_object( obj, dMob->equipment[i]->worn[1] );
          holstered = TRUE;
-         text_to_mobile_j( dMob, "text", "You holster %s %s in your %s.", AORAN( obj->sdesc ),
+         text_to_mobile_j( dMob, "text", "You holster %s in your %s.", 
                obj->sdesc, dMob->equipment[i]->worn[1]->sdesc );
-         echo_around( dMob, "%s holsters %s %s in %s %s.", MOBNAME(dMob), AORAN( obj->sdesc ),
+         echo_around( dMob, "text", "%s holsters %s in %s %s.", MOBNAME(dMob),
                obj->sdesc, POSSESSIVE(dMob), dMob->equipment[i]->worn[1]->sdesc );
          break;
       }
@@ -878,9 +878,9 @@ void cmd_sheath( D_MOBILE *dMob, char *arg )
          object_from_mobile( obj, dMob );
          object_to_object( obj, dMob->equipment[i]->worn[0] );
          sheathed = TRUE;
-         text_to_mobile_j( dMob, "text", "You sheath %s %s in your %s.", AORAN( obj->sdesc ),
+         text_to_mobile_j( dMob, "text", "You sheath %s in your %s.", 
                obj->sdesc, dMob->equipment[i]->worn[0]->sdesc );
-         echo_around( dMob, "%s sheaths %s %s in %s %s.", MOBNAME(dMob), AORAN( obj->sdesc ),
+         echo_around( dMob, "text", "%s sheaths %s in %s %s.", MOBNAME(dMob), 
                obj->sdesc, POSSESSIVE(dMob), dMob->equipment[i]->worn[0]->sdesc );
          break;
       }
@@ -891,9 +891,9 @@ void cmd_sheath( D_MOBILE *dMob, char *arg )
          object_from_mobile( obj, dMob );
          object_to_object( obj, dMob->equipment[i]->worn[1] );
          sheathed = TRUE;
-         text_to_mobile_j( dMob, "text", "You sheath %s %s in your %s.", AORAN( obj->sdesc ),
+         text_to_mobile_j( dMob, "text", "You sheath %s in your %s.", 
                obj->sdesc, dMob->equipment[i]->worn[1]->sdesc );
-         echo_around( dMob, "%s sheaths %s %s in %s %s.", MOBNAME(dMob), AORAN( obj->sdesc ),
+         echo_around( dMob, "text", "%s sheaths %s in %s %s.", MOBNAME(dMob), 
                obj->sdesc, POSSESSIVE(dMob), dMob->equipment[i]->worn[1]->sdesc );
          break;
       }
@@ -986,11 +986,11 @@ void cmd_get( D_MOBILE *dMob, char *arg )
       {
          if( ( obj = get_object_list( arg1, con->contents ) ) != NULL )
          {
-            text_to_mobile_j( dMob, "text", "You get %s %s from %s %s and hold it in your %s hand.",
-                  AORAN( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc,
+            text_to_mobile_j( dMob, "text", "You get %s from %s and hold it in your %s hand.",
+                  obj->sdesc, con->sdesc,
                   dMob->hold_right == NULL ? "right" : "left" );
-            echo_around( dMob, "%s gets %s %s from %s %s and holds it in %s %s hand.",
-                  MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc, AORAN( con->sdesc ), con->sdesc,
+            echo_around( dMob, "text", "%s gets %s from %s and holds it in %s %s hand.",
+                  MOBNAME(dMob), obj->sdesc, con->sdesc,
                   POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
             object_from_object( obj, con );
             object_to_mobile( obj, dMob );
@@ -998,7 +998,7 @@ void cmd_get( D_MOBILE *dMob, char *arg )
          }
          else
          {
-            text_to_mobile_j( dMob, "error", "You can't find that in %s %s.", AORAN( con->sdesc ), con->sdesc );
+            text_to_mobile_j( dMob, "error", "You can't find that in %s.", con->sdesc );
             return;
          }
       }
@@ -1017,10 +1017,10 @@ void cmd_get( D_MOBILE *dMob, char *arg )
    }
    else
    {
-      text_to_mobile_j( dMob, "text", "You pick up %s %s and hold it in your %s hand.",
-            NEEDTHE( obj->sdesc ), obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
-      echo_around( dMob, "%s picks up %s %s and holds it in %s %s hand.",
-            MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
+      text_to_mobile_j( dMob, "text", "You pick up %s and hold it in your %s hand.",
+            obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
+      echo_around( dMob, "text", "%s picks up %s and holds it in %s %s hand.",
+            MOBNAME(dMob), obj->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
       object_from_room( obj, dMob->room );
       object_to_mobile( obj, dMob );
    }
@@ -1076,7 +1076,7 @@ void cmd_put( D_MOBILE *dMob, char *arg )
    
    if( con->capacity_cm3 < 1 )
    {
-      text_to_mobile_j( dMob, "error", "%s %s isn't a container.", NEEDTHE( con->sdesc ), con->sdesc );
+      text_to_mobile_j( dMob, "error", "%s isn't a container.", con->sdesc );
       return;
    }
 
@@ -1094,23 +1094,23 @@ void cmd_put( D_MOBILE *dMob, char *arg )
 
       if( !object_can_fit( obj, con ) )
       {
-         text_to_mobile_j( dMob, "error", "%s %s won't fit in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc,
-               NEEDTHE( con->sdesc ), con->sdesc );
+         text_to_mobile_j( dMob, "error", "%s won't fit in %s.", obj->sdesc,
+               con->sdesc );
          return;
       }
 
       if( (con->type == ITEM_HOLSTER && obj->type != ITEM_FIREARM && obj->ivar4 > 1 )
        || (con->type == ITEM_SHEATH && obj->type != ITEM_BLADE ) )
       {
-         text_to_mobile_j( dMob, "error", "You can't put %s %s in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc, NEEDTHE(con->sdesc), con->sdesc );
+         text_to_mobile_j( dMob, "error", "You can't put %s in %s.", obj->sdesc, con->sdesc );
          return;
       }
       object_from_mobile( obj, dMob );
       object_to_object( obj, con );
-      text_to_mobile_j( dMob, "text", "You put %s %s in %s %s.", NEEDTHE( obj->sdesc ), obj->sdesc,
-            NEEDTHE( con->sdesc ), con->sdesc );
-      echo_around( dMob, "%s puts %s %s in %s %s", MOBNAME(dMob), AORAN( obj->sdesc ), obj->sdesc,
-            AORAN( con->sdesc ), con->sdesc );
+      text_to_mobile_j( dMob, "text", "You put %s in %s.", obj->sdesc,
+            con->sdesc );
+      echo_around( dMob, "text", "%s puts %s in %s", MOBNAME(dMob), obj->sdesc,
+            con->sdesc );
       if( obj == dMob->hold_right && dMob->offer_right->what )
       {
          dMob->offer_right->what = NULL;
@@ -1175,8 +1175,8 @@ void cmd_ospawn( D_MOBILE *dMob, char *arg )
    }
 
    AppendToList( obj, dMob->room->objects );
-   text_to_mobile( dMob, "The entire world vibrates for a split second and %s %s appears before you.\r\n",
-         AORAN( obj->sdesc ), obj->sdesc );
+   text_to_mobile( dMob, "The entire world vibrates for a split second and %s appears before you.\r\n",
+         obj->sdesc );
    return;
 }
 

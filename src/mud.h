@@ -689,8 +689,8 @@ json_t *json_from_keys( json_t *parent, int n, ... );
 /*
  * comm.c
  */
-void echo_room( D_ROOM *room, char *txt, ... );
-void echo_around( D_MOBILE *dMob, char *txt, ... );
+void echo_room( D_ROOM *room, char *type, char *txt, ... );
+void echo_around( D_MOBILE *dMob, char *type, char *txt, ... );
 void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *type, char *txt, ... );
 
 /*

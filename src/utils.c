@@ -708,10 +708,10 @@ void check_mobiles()
       //Check for any outstanding gives
       if( pMob->offer_right->what != NULL && difftime( time(NULL), pMob->offer_right->when ) > 20 )
       {
-         text_to_mobile_j( pMob->offer_right->to, "text", "You ignore %s\'s offer of  %s %s.", 
-               pMob->name, AORAN( pMob->offer_right->what->sdesc ), pMob->offer_right->what->sdesc );
-         text_to_mobile_j( pMob, "text", "%s ignores your offer of %s %s.", 
-               pMob->offer_right->to->name, AORAN( pMob->offer_right->what->sdesc ), 
+         text_to_mobile_j( pMob->offer_right->to, "text", "You ignore %s\'s offer of  %s.", 
+               pMob->name, pMob->offer_right->what->sdesc );
+         text_to_mobile_j( pMob, "text", "%s ignores your offer of %s.", 
+               pMob->offer_right->to->name, 
                pMob->offer_right->what->sdesc );
          pMob->offer_right->what = NULL;
          pMob->offer_right->to = NULL;
@@ -719,10 +719,10 @@ void check_mobiles()
       }
       if( pMob->offer_left->what != NULL && difftime( time(NULL), pMob->offer_left->when ) > 20 )
       {
-         text_to_mobile_j( pMob->offer_left->to, "text", "You ignore %s\'s offer of  %s %s.", 
-               pMob->name, AORAN( pMob->offer_left->what->sdesc ), pMob->offer_left->what->sdesc );
-         text_to_mobile_j( pMob, "text", "%s ignores your offer of %s %s.", 
-               pMob->offer_left->to->name, AORAN( pMob->offer_left->what->sdesc ), 
+         text_to_mobile_j( pMob->offer_left->to, "text", "You ignore %s\'s offer of  %s.", 
+               pMob->name, pMob->offer_left->what->sdesc );
+         text_to_mobile_j( pMob, "text", "%s ignores your offer of %s.", 
+               pMob->offer_left->to->name, 
                pMob->offer_left->what->sdesc );
          pMob->offer_left->what = NULL;
          pMob->offer_left->to = NULL;

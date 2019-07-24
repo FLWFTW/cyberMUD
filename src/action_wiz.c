@@ -283,7 +283,13 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
       json_dump_file( allhelps, "../help/help_data.json", JSON_INDENT(3) );
       json_decref( allhelps );
    }
+   else if( !strcasecmp( action, "reload" ) )
+   {
+      FreeList( help_list );
+      load_helps();
+   }
 
+      text_to_mobile_j( dMob, "text", "Ok." );
 
    return;
 }

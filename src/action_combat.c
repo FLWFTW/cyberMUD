@@ -30,6 +30,7 @@ void cmd_slay( D_MOBILE *dMob, char *arg )
    }
 
    text_to_mobile_j( dMob, "combat", "You slay %s in cold blood!", victim->name );
+   text_to_mobile_j( victim, "combat", "A sudden snap and you collapse to the ground, dead." );
 
    kill( victim );
 }

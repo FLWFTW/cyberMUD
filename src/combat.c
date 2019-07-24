@@ -171,7 +171,7 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
    D_OBJECT *corpse = new_object();
    snprintf( buf, MAX_STRING_LENGTH, "corpse %s", MOBNAME( dMob ) );
    corpse->name = strdup( buf );
-   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", MOBNAME( dMob ) );
+   snprintf( buf, MAX_STRING_LENGTH, "corpse of %s", MOBNAME( dMob ) );
    corpse->sdesc = strdup( buf );
    snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", MOBNAME( dMob ) );
    corpse->ldesc = strdup( buf );
@@ -210,16 +210,16 @@ void kill( D_MOBILE *dMob )
    D_OBJECT *corpse = make_corpse( dMob );
    if( dMob->hold_right )
    {
-      echo_around( dMob, "combat", "%s %s skitters across the ground as it falls from %s's grasp.",
-            AORAN( dMob->hold_right->sdesc ), dMob->hold_right->sdesc, MOBNAME( dMob ) );
+      echo_around( dMob, "combat", "%s skitters across the ground as it falls from %s's grasp.",
+            dMob->hold_right->sdesc, MOBNAME( dMob ) );
       object_from_mobile( dMob->hold_right, dMob );
       object_to_room( dMob->hold_right, dMob->room );
       dMob->hold_right = NULL;
    }
    if( dMob->hold_left )
    {
-      echo_around( dMob, "combat", "%s %s skitters across the ground as it falls from %s's grasp.",
-            AORAN( dMob->hold_left->sdesc ), dMob->hold_left->sdesc, MOBNAME( dMob ) );
+      echo_around( dMob, "combat", "%s skitters across the ground as it falls from %s's grasp.",
+            dMob->hold_left->sdesc, MOBNAME( dMob ) );
       object_from_mobile( dMob->hold_left, dMob );
       object_to_room( dMob->hold_left, dMob->room );
       dMob->hold_left = NULL;
@@ -231,15 +231,10 @@ void kill( D_MOBILE *dMob )
    if( IS_PC( dMob ) )
    {
       mob_to_room( dMob, get_room_by_vnum( FIRST_ROOM ) );
-      if( death_message == NULL )
-      {
-         text_to_mobile_j( dMob, "death", "You have been killed..." );
-      }
-      else
-      {
-         text_to_mobile_j( dMob, "death", "%s", death_message );
-      }
+      text_to_mobile_j( dMob, "combat", "You have been killed!" );
+      text_to_mobile_j( dMob, "death", "%s", death_message );
       log_string( "%s has been killed!", dMob->name );
+      dMob->position = POS_RESTING;
    }
    else
    {
