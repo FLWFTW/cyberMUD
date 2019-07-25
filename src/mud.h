@@ -244,23 +244,28 @@ struct dAccount
 
 struct dSocket
 {
-  D_MOBILE      * player;
-  D_ACCOUNT     * account;
-  LIST          * events;
-  char          * hostname;
-  char            inbuf[MAX_BUFFER];
-  char            outbuf[MAX_OUTPUT];
-  char            next_command[MAX_BUFFER];
-  bool            bust_prompt;
-  sh_int          lookup_status;
-  enum state_t    state;
-  sh_int          control;
-  sh_int          top_output;
-  unsigned char   compressing;                 /* MCCP support */
-  z_stream      * out_compress;                /* MCCP support */
-  unsigned char * out_compress_buf;            /* MCCP support */
+   D_MOBILE      * player;
+   D_ACCOUNT     * account;
+   LIST          * events;
+   char          * hostname;
+   char            inbuf[MAX_BUFFER];
+   char            outbuf[MAX_OUTPUT];
+   char            next_command[MAX_BUFFER];
+   bool            bust_prompt;
+   sh_int          lookup_status;
+   enum state_t    state;
+   sh_int          control;
+   sh_int          top_output;
+   unsigned char   compressing;                 /* MCCP support */
+   z_stream      * out_compress;                /* MCCP support */
+   unsigned char * out_compress_buf;            /* MCCP support */
 
-  char            loginName[MAX_BUFFER];
+   LIST          * com_cmd_list;
+   LIST          * act_cmd_list;
+   LIST          * ooc_cmd_list;
+   LIST          * wiz_cmd_list;
+
+   char            loginName[MAX_BUFFER];
 };
 
 struct skills
@@ -364,6 +369,14 @@ struct typCmd
   char              * cmd_name;
   void             (* cmd_funct)(D_MOBILE *dMOb, char *arg);
   sh_int              level;
+  enum cmd_type_t     type;
+};
+
+struct command_data
+{
+   void           (* func)(D_MOBILE *dMob, char *arg);
+   D_MOBILE        * dMob;
+   char            * arg;
 };
 
 struct dOffer
@@ -458,7 +471,7 @@ void  text_to_buffer          ( D_S *dsock, const char *txt, ... );  /* buffers 
 void  send_json_m             ( D_M *dMob, const char *txt, ... );   /* Sends json data to a mobile */
 void  text_to_mobile          ( D_M *dMob, const char *txt, ... );   /* buffers the output        */
 void  text_to_mobile_j        ( D_M *dMob, const char *type, const char *txt, ... );   /* buffers the output        */
-void  next_cmd_from_buffer    ( D_S *dsock );
+int   next_cmd_from_buffer    ( D_S *dsock );
 bool  flush_output            ( D_S *dsock );
 void  clear_socket            ( D_S *sock_new, int sock );
 void  recycle_sockets         ( void );

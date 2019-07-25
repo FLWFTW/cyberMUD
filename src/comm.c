@@ -329,7 +329,7 @@ bool flush_output( D_SOCKET *dsock )
    {
       json_t *json = json_object();
 
-      text_to_buffer( dsock, "\r\n%s", parse_prompt( dsock->player ) );
+      text_to_buffer( dsock, "\n%s", parse_prompt( dsock->player ) );
       dsock->bust_prompt = FALSE;
       json_object_set_new( json, "type", json_string( "prompt" ) );
       json_object_set_new( json, "data", player_to_json( dsock->player, FALSE ) );

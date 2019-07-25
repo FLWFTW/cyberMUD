@@ -728,7 +728,58 @@ void check_mobiles()
          pMob->offer_left->to = NULL;
          pMob->offer_left->when = 0;
       }
+      if( IS_PC( pMob ) && SizeOfList( pMob->socket->act_cmd_list ) > 0 )
+      {
+         ITERATOR cmdIter;
+         struct command_data *cmd = NULL;
 
+         AttachIterator( &cmdIter, pMob->socket->act_cmd_list );
+         cmd = NextInList( &cmdIter );
+         cmd->func( cmd->dMob, cmd->arg );
+         free( cmd->arg );
+         free( cmd );
+         DetachFromList( cmd, pMob->socket->act_cmd_list );
+         DetachIterator( &cmdIter );
+      }
+      if( IS_PC( pMob ) && SizeOfList( pMob->socket->com_cmd_list ) > 0 )
+      {
+         ITERATOR cmdIter;
+         struct command_data *cmd = NULL;
+
+         AttachIterator( &cmdIter, pMob->socket->com_cmd_list );
+         cmd = NextInList( &cmdIter );
+         cmd->func( cmd->dMob, cmd->arg );
+         free( cmd->arg );
+         free( cmd );
+         DetachFromList( cmd, pMob->socket->com_cmd_list );
+         DetachIterator( &cmdIter );
+      }
+      if( IS_PC( pMob ) && SizeOfList( pMob->socket->ooc_cmd_list ) > 0 )
+      {
+         ITERATOR cmdIter;
+         struct command_data *cmd = NULL;
+
+         AttachIterator( &cmdIter, pMob->socket->ooc_cmd_list );
+         cmd = NextInList( &cmdIter );
+         cmd->func( cmd->dMob, cmd->arg );
+         free( cmd->arg );
+         free( cmd );
+         DetachFromList( cmd, pMob->socket->ooc_cmd_list );
+         DetachIterator( &cmdIter );
+      }
+      if( IS_PC( pMob ) && SizeOfList( pMob->socket->wiz_cmd_list ) > 0 )
+      {
+         ITERATOR cmdIter;
+         struct command_data *cmd = NULL;
+
+         AttachIterator( &cmdIter, pMob->socket->wiz_cmd_list );
+         cmd = NextInList( &cmdIter );
+         cmd->func( cmd->dMob, cmd->arg );
+         free( cmd->arg );
+         free( cmd );
+         DetachFromList( cmd, pMob->socket->wiz_cmd_list );
+         DetachIterator( &cmdIter );
+      }
    }
    DetachIterator( &Iter );
 
@@ -768,7 +819,8 @@ size_t dice( char *str2 )
 {
    size_t result = 0, num = 0, size = 0, mod = 0, i = 0, len = 0;
    char operator = '\0', buf[MAX_STRING_LENGTH], *str;
-   len = snprintf( buf, MAX_STRING_LENGTH, "%s", str2 ); //operate on a local copy
+   strncpy( buf, str2, MAX_STRING_LENGTH );
+   len = strlen( buf );
    str = buf;
 
    for( i = 0; i < len; i++ )

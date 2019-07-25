@@ -30,7 +30,39 @@ void handle_cmd_input(D_MOBILE *dMob, char *arg)
     if (is_prefix(command, tabCmd[i].cmd_name))
     {
       found_cmd = TRUE;
-      (*tabCmd[i].cmd_funct)(dMob, arg);
+      struct command_data *cmd = calloc( 1, sizeof( struct command_data ) );
+      cmd->func = tabCmd[i].cmd_funct;
+      cmd->dMob = dMob;
+      cmd->arg  = strdup( arg );
+      switch( tabCmd[i].type)
+      {
+         case CMD_WIZ:
+            {
+               AppendToList( cmd, dMob->socket->wiz_cmd_list );
+               break;
+            }
+         case CMD_ACT:
+            {
+               AppendToList( cmd, dMob->socket->act_cmd_list );
+               break;
+            }
+         case CMD_COM:
+            {
+               AppendToList( cmd, dMob->socket->com_cmd_list );
+               break;
+            }
+         case CMD_OOC:
+            {
+               AppendToList( cmd, dMob->socket->ooc_cmd_list );
+               break;
+            }
+         default:
+            {
+               bug( "Invalid command type for command %s (%s).", tabCmd[i].cmd_name, command );
+               free( cmd );
+               break;
+            }
+      }
     }
   }
 
@@ -47,87 +79,87 @@ const struct typCmd tabCmd [] =
  /* command          function        Req. Level   */
  /* --------------------------------------------- */
 
-  { "accept",        cmd_accept,     LEVEL_GUEST  },
-  { "astat",         cmd_astat,      LEVEL_GOD    },
-  { "areas",         cmd_areas,      LEVEL_GOD    },
-  { "chat",          cmd_chat,       LEVEL_GUEST  },
-  { "close",         cmd_close,      LEVEL_GUEST  },
-  { "commands",      cmd_commands,   LEVEL_GUEST  },
-  { "compress",      cmd_compress,   LEVEL_GUEST  },
-  { "copyover",      cmd_copyover,   LEVEL_GOD    },
-  { "draw",          cmd_draw,       LEVEL_GUEST  },
-  { "drop",          cmd_drop,       LEVEL_GUEST  },
-  { "e",             cmd_east,       LEVEL_GUEST  },
-  { "east",          cmd_east,       LEVEL_GUEST  },
-  { "enter",         cmd_enter,      LEVEL_GUEST  },
-  { "equipment",     cmd_equipment,  LEVEL_GUEST  },
-  { "examine",       cmd_examine,    LEVEL_GUEST  },
-  { "fire",          cmd_fire,       LEVEL_GUEST  },
-  { "force",         cmd_force,      LEVEL_ADMIN  },
-  { "get",           cmd_get,        LEVEL_GUEST  },
-  { "give",          cmd_give,       LEVEL_GUEST  },
-  { "goto",          cmd_goto,       LEVEL_GOD    },
-  { "help",          cmd_help,       LEVEL_GUEST  },
-  { "hedit",         cmd_hedit,      LEVEL_GOD    },
-  { "holster",       cmd_holster,    LEVEL_GUEST  },
-  { "inventory",     cmd_inventory,  LEVEL_GUEST  },
-  { "kneel",         cmd_kneel,      LEVEL_GUEST  },
-  { "l",             cmd_look,       LEVEL_GUEST  },
-  { "lock",          cmd_lock,       LEVEL_GUEST  },
-  { "look",          cmd_look,       LEVEL_GUEST  },
-  { "linkdead",      cmd_linkdead,   LEVEL_ADMIN  },
-  { "mlist",         cmd_mlist,      LEVEL_ADMIN  },
-  { "mspawn",        cmd_mspawn,     LEVEL_GOD    },
-  { "n",             cmd_north,      LEVEL_GUEST  },
-  { "north",         cmd_north,      LEVEL_GUEST  },
-  { "ne",            cmd_northeast,  LEVEL_GUEST  },
-  { "northeast",     cmd_northeast,  LEVEL_GUEST  },
-  { "nw",            cmd_northwest,  LEVEL_GUEST  },
-  { "northwest",     cmd_northwest,  LEVEL_GUEST  },
-  { "ospawn",        cmd_ospawn,     LEVEL_GOD    },
-  { "oset",          cmd_oset,       LEVEL_GOD    },
-  { "ostat",         cmd_ostat,      LEVEL_GOD    },
-  { "olist",         cmd_olist,      LEVEL_GOD    },
-  { "open",          cmd_open,       LEVEL_GOD    },
-  { "put",           cmd_put,        LEVEL_GUEST  },
-  { "prompt",        cmd_prompt,     LEVEL_GUEST  },
-  { "prone",         cmd_prone,      LEVEL_GUEST  },
-  { "reboo",         cmd_reboo,      LEVEL_GOD    },
-  { "reboot",        cmd_reboot,     LEVEL_GOD    },
-  { "rest",          cmd_rest,       LEVEL_GUEST  },
-  { "restore",       cmd_restore,    LEVEL_GOD    },
-  { "remove",        cmd_remove,     LEVEL_GUEST  },
-  { "resetarea",     cmd_resetarea,  LEVEL_GOD    },
-  { "s",             cmd_south,      LEVEL_GUEST  },
-  { "sheath",        cmd_sheath,     LEVEL_GUEST  },
-  { "sleep",         cmd_sleep,      LEVEL_GUEST  },
-  { "sling",         cmd_sling,      LEVEL_GUEST  },
-  { "south",         cmd_south,      LEVEL_GUEST  },
-  { "southeast",     cmd_southeast,  LEVEL_GUEST  },
-  { "southwest",     cmd_southwest,  LEVEL_GUEST  },
-  { "se",            cmd_southeast,  LEVEL_GUEST  },
-  { "sw",            cmd_southwest,  LEVEL_GUEST  },
-  { "say",           cmd_say,        LEVEL_GUEST  },
-  { "save",          cmd_save,       LEVEL_GUEST  },
-  { "sit",           cmd_sit,        LEVEL_GUEST  },
-  { "slay",          cmd_slay,       LEVEL_GOD    },
-  { "stand",         cmd_stand,      LEVEL_GUEST  },
-  { "stow",          cmd_stow,       LEVEL_GUEST  },
-  { "shutdow",       cmd_shutdow,    LEVEL_GOD    },
-  { "shutdown",      cmd_shutdown,   LEVEL_GOD    },
-  { "qui",           cmd_qui,        LEVEL_GUEST  },
-  { "quit",          cmd_quit,       LEVEL_GUEST  },
-  { "ungive",        cmd_ungive,     LEVEL_GUEST  },
-  { "unlock",        cmd_unlock,     LEVEL_GUEST  },
-  { "unsling",       cmd_unsling,    LEVEL_GUEST  },
-  { "w",             cmd_west,       LEVEL_GUEST  },
-  { "wake",          cmd_stand,      LEVEL_GUEST  },
-  { "west",          cmd_west,       LEVEL_GUEST  },
-  { "wear",          cmd_wear,       LEVEL_GUEST  },
-  { "who",           cmd_who,        LEVEL_GUEST  },
-  { "score",         cmd_score,      LEVEL_GUEST  },
-  { "time",          cmd_time,       LEVEL_GUEST  },
-
+  { "accept",        cmd_accept,     LEVEL_GUEST,     CMD_WIZ  },
+  { "astat",         cmd_astat,      LEVEL_GOD,       CMD_WIZ  },
+  { "areas",         cmd_areas,      LEVEL_GOD,       CMD_OOC  },
+  { "chat",          cmd_chat,       LEVEL_GUEST,     CMD_COM  },
+  { "close",         cmd_close,      LEVEL_GUEST,     CMD_ACT  },
+  { "commands",      cmd_commands,   LEVEL_GUEST,     CMD_OOC  },
+  { "compress",      cmd_compress,   LEVEL_GUEST,     CMD_WIZ  },
+  { "copyover",      cmd_copyover,   LEVEL_GOD,       CMD_WIZ  },
+  { "draw",          cmd_draw,       LEVEL_GUEST,     CMD_ACT  },
+  { "drop",          cmd_drop,       LEVEL_GUEST,     CMD_ACT  },
+  { "e",             cmd_east,       LEVEL_GUEST,     CMD_ACT  },
+  { "east",          cmd_east,       LEVEL_GUEST,     CMD_ACT  },
+  { "enter",         cmd_enter,      LEVEL_GUEST,     CMD_ACT  },
+  { "equipment",     cmd_equipment,  LEVEL_GUEST,     CMD_OOC  },
+  { "examine",       cmd_examine,    LEVEL_GUEST,     CMD_ACT  },
+  { "fire",          cmd_fire,       LEVEL_GUEST,     CMD_ACT  },
+  { "force",         cmd_force,      LEVEL_ADMIN,     CMD_WIZ  },
+  { "get",           cmd_get,        LEVEL_GUEST,     CMD_ACT  },
+  { "give",          cmd_give,       LEVEL_GUEST,     CMD_ACT  },
+  { "goto",          cmd_goto,       LEVEL_GOD,       CMD_WIZ  },
+  { "help",          cmd_help,       LEVEL_GUEST,     CMD_OOC  },
+  { "hedit",         cmd_hedit,      LEVEL_GOD,       CMD_WIZ  },
+  { "holster",       cmd_holster,    LEVEL_GUEST,     CMD_ACT  },
+  { "inventory",     cmd_inventory,  LEVEL_GUEST,     CMD_OOC  },
+  { "kneel",         cmd_kneel,      LEVEL_GUEST,     CMD_ACT  },
+  { "l",             cmd_look,       LEVEL_GUEST,     CMD_ACT  },
+  { "lock",          cmd_lock,       LEVEL_GUEST,     CMD_ACT  },
+  { "look",          cmd_look,       LEVEL_GUEST,     CMD_ACT  },
+  { "linkdead",      cmd_linkdead,   LEVEL_ADMIN,     CMD_WIZ  },
+  { "mlist",         cmd_mlist,      LEVEL_ADMIN,     CMD_WIZ  },
+  { "mspawn",        cmd_mspawn,     LEVEL_GOD,       CMD_WIZ  },
+  { "n",             cmd_north,      LEVEL_GUEST,     CMD_ACT  },
+  { "north",         cmd_north,      LEVEL_GUEST,     CMD_ACT  },
+  { "ne",            cmd_northeast,  LEVEL_GUEST,     CMD_ACT  },
+  { "northeast",     cmd_northeast,  LEVEL_GUEST,     CMD_ACT  },
+  { "nw",            cmd_northwest,  LEVEL_GUEST,     CMD_ACT  },
+  { "northwest",     cmd_northwest,  LEVEL_GUEST,     CMD_ACT  },
+  { "ospawn",        cmd_ospawn,     LEVEL_GOD,       CMD_WIZ  },
+  { "oset",          cmd_oset,       LEVEL_GOD,       CMD_WIZ  },
+  { "ostat",         cmd_ostat,      LEVEL_GOD,       CMD_WIZ  },
+  { "olist",         cmd_olist,      LEVEL_GOD,       CMD_WIZ  },
+  { "open",          cmd_open,       LEVEL_GOD,       CMD_ACT  },
+  { "put",           cmd_put,        LEVEL_GUEST,     CMD_ACT  },
+  { "prompt",        cmd_prompt,     LEVEL_GUEST,     CMD_OOC  },
+  { "prone",         cmd_prone,      LEVEL_GUEST,     CMD_ACT  },
+  { "reboo",         cmd_reboo,      LEVEL_GOD,       CMD_WIZ  },
+  { "reboot",        cmd_reboot,     LEVEL_GOD,       CMD_WIZ  },
+  { "rest",          cmd_rest,       LEVEL_GUEST,     CMD_ACT  },
+  { "restore",       cmd_restore,    LEVEL_GOD,       CMD_WIZ  },
+  { "remove",        cmd_remove,     LEVEL_GUEST,     CMD_ACT  },
+  { "resetarea",     cmd_resetarea,  LEVEL_GOD,       CMD_WIZ  },
+  { "s",             cmd_south,      LEVEL_GUEST,     CMD_ACT  },
+  { "sheath",        cmd_sheath,     LEVEL_GUEST,     CMD_ACT  },
+  { "sleep",         cmd_sleep,      LEVEL_GUEST,     CMD_ACT  },
+  { "sling",         cmd_sling,      LEVEL_GUEST,     CMD_ACT  },
+  { "south",         cmd_south,      LEVEL_GUEST,     CMD_ACT  },
+  { "southeast",     cmd_southeast,  LEVEL_GUEST,     CMD_ACT  },
+  { "southwest",     cmd_southwest,  LEVEL_GUEST,     CMD_ACT  },
+  { "se",            cmd_southeast,  LEVEL_GUEST,     CMD_ACT  },
+  { "sw",            cmd_southwest,  LEVEL_GUEST,     CMD_ACT  },
+  { "say",           cmd_say,        LEVEL_GUEST,     CMD_COM  },
+  { "save",          cmd_save,       LEVEL_GUEST,     CMD_OOC  },
+  { "sit",           cmd_sit,        LEVEL_GUEST,     CMD_ACT  },
+  { "slay",          cmd_slay,       LEVEL_GOD,       CMD_WIZ  },
+  { "stand",         cmd_stand,      LEVEL_GUEST,     CMD_ACT  },
+  { "stow",          cmd_stow,       LEVEL_GUEST,     CMD_ACT  },
+  { "shutdow",       cmd_shutdow,    LEVEL_GOD,       CMD_WIZ  },
+  { "shutdown",      cmd_shutdown,   LEVEL_GOD,       CMD_WIZ  },
+  { "qui",           cmd_qui,        LEVEL_GUEST,     CMD_OOC  },
+  { "quit",          cmd_quit,       LEVEL_GUEST,     CMD_OOC  },
+  { "ungive",        cmd_ungive,     LEVEL_GUEST,     CMD_ACT  },
+  { "unlock",        cmd_unlock,     LEVEL_GUEST,     CMD_ACT  },
+  { "unsling",       cmd_unsling,    LEVEL_GUEST,     CMD_ACT  },
+  { "w",             cmd_west,       LEVEL_GUEST,     CMD_ACT  },
+  { "wake",          cmd_stand,      LEVEL_GUEST,     CMD_ACT  },
+  { "west",          cmd_west,       LEVEL_GUEST,     CMD_ACT  },
+  { "wear",          cmd_wear,       LEVEL_GUEST,     CMD_ACT  },
+  { "who",           cmd_who,        LEVEL_GUEST,     CMD_OOC  },
+  { "score",         cmd_score,      LEVEL_GUEST,     CMD_OOC  },
+  { "time",          cmd_time,       LEVEL_GUEST,     CMD_OOC  },
+    
   /* end of table */
-  { "", 0 }
+  { "", 0, 0, MAX_CMD }
 };

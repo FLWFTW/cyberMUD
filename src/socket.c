@@ -184,10 +184,7 @@ void GameLoop(int icontrol)
       }
 
       /* Ok, check for a new command */
-      next_cmd_from_buffer(dsock);
-
-      /* Is there a new command pending ? */
-      if (dsock->next_command[0] != '\0')
+      while( next_cmd_from_buffer(dsock) > 0 )
       {
         /* figure out how to deal with the incoming command */
         switch(dsock->state)
@@ -515,17 +512,17 @@ bool read_from_socket(D_SOCKET *dsock)
   return TRUE;
 }
 
-void next_cmd_from_buffer(D_SOCKET *dsock)
+int next_cmd_from_buffer(D_SOCKET *dsock)
 {
   int size = 0, i = 0, j = 0, telopt = 0;
 
   /* if there's already a command ready, we return */
   if (dsock->next_command[0] != '\0')
-    return;
+    return 0;
 
   /* if there is nothing pending, then return */
   if (dsock->inbuf[0] == '\0')
-    return;
+    return 0;
 
   /* check how long the next command is */
   while (dsock->inbuf[size] != '\0' && dsock->inbuf[size] != '\n' && dsock->inbuf[size] != '\r')
@@ -533,7 +530,7 @@ void next_cmd_from_buffer(D_SOCKET *dsock)
 
   /* we only deal with real commands */
   if (dsock->inbuf[size] == '\0')
-    return;
+    return 0;
 
   /* copy the next command into next_command */
   for ( ; i < size; i++)
@@ -589,42 +586,48 @@ void next_cmd_from_buffer(D_SOCKET *dsock)
     size++;
   }
   dsock->inbuf[size - i] = '\0';
+
+  return j;//length of the command
 }
 
 void clear_socket(D_SOCKET *sock_new, int sock)
 {
-  memset(sock_new, 0, sizeof(*sock_new));
+   memset(sock_new, 0, sizeof(*sock_new));
 
-  sock_new->control        =  sock;
-  sock_new->state          =  STATE_GET_ACCOUNT;
-  sock_new->lookup_status  =  TSTATE_LOOKUP;
-  sock_new->player         =  NULL;
-  sock_new->top_output     =  0;
-  sock_new->events         =  AllocList();
+   sock_new->control        =  sock;
+   sock_new->state          =  STATE_GET_ACCOUNT;
+   sock_new->lookup_status  =  TSTATE_LOOKUP;
+   sock_new->player         =  NULL;
+   sock_new->top_output     =  0;
+   sock_new->events         =  AllocList();
+   sock_new->com_cmd_list   =  AllocList();
+   sock_new->act_cmd_list   =  AllocList();
+   sock_new->ooc_cmd_list   =  AllocList();
+   sock_new->wiz_cmd_list   =  AllocList();
 }
 
 /* does the lookup, changes the hostname, and dies */
 void *lookup_address(void *arg)
 {
-  LOOKUP_DATA *lData = (LOOKUP_DATA *) arg;
-  struct hostent *from;
+   LOOKUP_DATA *lData = (LOOKUP_DATA *) arg;
+   struct hostent *from;
 
-  /* do the lookup and store the result at &from */
-  if( (from = gethostbyaddr(lData->buf, sizeof(lData->buf), AF_INET ) ) != NULL )
-  {
-     free( lData->dsock->hostname );
-     lData->dsock->hostname = strdup( from->h_name );
-  }
+   /* do the lookup and store the result at &from */
+   if( (from = gethostbyaddr(lData->buf, sizeof(lData->buf), AF_INET ) ) != NULL )
+   {
+      free( lData->dsock->hostname );
+      lData->dsock->hostname = strdup( from->h_name );
+   }
 
-  /* set it ready to be closed or used */
-  lData->dsock->lookup_status++;
+   /* set it ready to be closed or used */
+   lData->dsock->lookup_status++;
 
-  /* free the lookup data */
-  free(lData->buf);
-  free(lData);
+   /* free the lookup data */
+   free(lData->buf);
+   free(lData);
 
-  /* and kill the thread */
-  pthread_exit(0);
+   /* and kill the thread */
+   pthread_exit(0);
 }
 
 void recycle_sockets()

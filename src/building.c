@@ -78,14 +78,14 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
          if( is_prefix( arg, item_type[i] ) )
          {
             obj->type = i;
+            break;
          }
       }
-      if( !is_prefix( arg, "unknown" ) )
+      if( i == MAX_ITEM )
       {
          text_to_mobile_j( dMob, "error", "Invalid object type." );
          return;
       }
-      text_to_mobile_j( dMob, "text", "Object's type set to %s.", item_type[i] );
    }
    else if( !strcasecmp( action, "wear" ) )
    {
@@ -100,14 +100,14 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
          if( is_prefix( arg, wear_pos[i] ) )
          {
             obj->wear_pos = i;
+            break;
          }
       }
-      if( !is_prefix( arg, "none" ) )
+      if( !is_prefix( arg, "none" ) && i == WEAR_NONE )
       {
          text_to_mobile_j( dMob, "error", "Invalid wear position." );
          return;
       }
-      text_to_mobile_j( dMob, "text", "Object's wear position set to %s.", wear_pos[i] );
    }
    else
    {
