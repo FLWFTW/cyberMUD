@@ -192,11 +192,26 @@ void cmd_goto( D_MOBILE *dMob, char *arg )
 
    if( ( room = get_room_by_vnum( vnum ) ) == NULL )
    {
+      ITERATOR Iter;
+      D_AREA *area;
+      AttachIterator( &Iter, darea_list );
+      while( ( area = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( vnum >= area->r_low && vnum <= area->r_hi )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( area == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "That vnum is not in the range of any known areas. Create an area with that vnum range or choose a different vnum." );
+         return;
+      }
       text_to_mobile_j( dMob, "text", "You type sudo touch room.%i and the room digitizes into existance.\r\n", vnum );
       room = new_room();
       room->vnum = vnum;
       room->description = strdup( "A newly created room fresh from /dev/null" );
       room->name        = strdup( "A newly created room" );
+      room->area = area;
       AppendToList( room, droom_list );
    }
 

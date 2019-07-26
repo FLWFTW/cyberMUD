@@ -3,11 +3,13 @@
       "name": "The City",
       "author": "Will",
       "filename": "city.json",
-      "r_low": 0,
+      "reset_script":"lplogstring(\"Resetting The City!\");",
+      "reset_interval":15,
+      "r_low": 1,
       "r_hi": 10,
-      "o_low": 0,
+      "o_low": 1,
       "o_hi": 20,
-      "m_low": 0,
+      "m_low": 1,
       "m_hi": 10
    }
 ]

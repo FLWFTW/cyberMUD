@@ -169,6 +169,25 @@ D_ROOM *json_to_room( json_t *json )
    return room;
 }
 
+json_t *room_to_json( D_ROOM *room )
+{
+   json_t *json = json_object();
+   json_object_set_new( json, "name", json_string( room->name ) );
+   json_object_set_new( json, "description", json_string( room->description ) );
+   json_object_set_new( json, "vnum", json_integer( room->vnum ) );
+   json_t *exits = json_array();
+   ITERATOR Iter;
+   D_EXIT *exit = NULL;
+   AttachIterator( &Iter, room->exits );
+   while( ( exit = (D_EXIT *)NextInList( &Iter ) ) != NULL )
+   {
+      json_array_append_new( exits, exit_to_json( exit ) );
+   }
+   DetachIterator( &Iter );
+   json_object_set_new( json, "exits", exits );
+   return json;
+}
+
 D_OBJECT *json_to_object( json_t *json )
 {
    if( json == NULL )
@@ -375,6 +394,15 @@ json_t *object_to_json( D_OBJECT *obj )
       DetachIterator( &Iter );
       json_object_set_new( json, "contents", contents );
    }
+   return json;
+}
+
+json_t *reset_to_json( D_RESET *reset )
+{
+   json_t *json = json_object();
+   json_object_set_new( json, "type", json_integer( reset->type ) );
+   json_object_set_new( json, "location", json_integer( reset->location ) );
+   json_object_set_new( json, "data", json_deep_copy( reset->data ) );
    return json;
 }
 

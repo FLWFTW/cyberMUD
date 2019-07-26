@@ -577,6 +577,7 @@ D_MOBILE *new_mobile          ();
 D_RESET *new_reset            ();
 D_ROOM *get_room_by_vnum      ( unsigned int vnum );
 D_MOBILE *spawn_mobile        ( unsigned int vnum );
+D_MOBILE *get_mobile_by_vnum  ( unsigned int vnum );
 D_MOBILE *get_mobile_list     ( const char *name, LIST *list );
 D_ROOM *mob_to_room           ( D_MOBILE *dMob, D_ROOM *to );
 D_ROOM *obj_to_room           ( D_OBJECT *dObj, D_ROOM *to );
@@ -706,6 +707,8 @@ json_t *player_to_json( D_MOBILE *dMob, bool equipment );
 json_t *object_to_json( D_OBJECT *dObj );
 json_t *object_to_json_cli( D_OBJECT *obj );
 json_t *json_from_keys( json_t *parent, int n, ... );
+json_t *room_to_json( D_ROOM *room );
+json_t *reset_to_json( D_RESET *reset );
 
 /*
  * comm.c
@@ -730,6 +733,7 @@ void cmd_astat( D_MOBILE *dMob, char *arg );
  */
 void cmd_oset( D_MOBILE *dMOb, char *arg );
 void cmd_redit( D_MOBILE *dMob, char *arg );
+void cmd_savearea( D_MOBILE *dMob, char *arg );
 
 /*
  * action_combat.c

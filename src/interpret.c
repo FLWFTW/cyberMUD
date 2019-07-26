@@ -178,6 +178,7 @@ const struct typCmd tabCmd [] =
   { "remove",        cmd_remove,     LEVEL_GUEST,     CMD_ACT  },
   { "resetarea",     cmd_resetarea,  LEVEL_GOD,       CMD_WIZ  },
   { "s",             cmd_south,      LEVEL_GUEST,     CMD_ACT  },
+  { "savearea",      cmd_savearea,   LEVEL_GOD,       CMD_WIZ  },
   { "sheath",        cmd_sheath,     LEVEL_GUEST,     CMD_ACT  },
   { "sleep",         cmd_sleep,      LEVEL_GUEST,     CMD_ACT  },
   { "sling",         cmd_sling,      LEVEL_GUEST,     CMD_ACT  },

@@ -178,16 +178,22 @@ D_EXIT *get_exit_by_name( D_ROOM *room, char *name )
    return exit;
 }
 
-D_MOBILE *spawn_mobile( unsigned int vnum )
+D_MOBILE *get_mobile_by_vnum( unsigned int vnum )
 {
    ITERATOR Iter;
    D_MOBILE *proto;
 
    AttachIterator( &Iter, mobile_protos );
-   while( ( proto = (D_MOBILE *)NextInList(&Iter) ) != NULL )
+   while( ( proto = (D_MOBILE *)NextInList( &Iter ) ) != NULL )
       if( proto->vnum == vnum )
          break;
    DetachIterator( &Iter );
+   return proto;
+}
+
+D_MOBILE *spawn_mobile( unsigned int vnum )
+{
+   D_MOBILE *proto = get_mobile_by_vnum( vnum );
 
    if( proto == NULL )
       return NULL;

@@ -252,3 +252,75 @@ void cmd_redit( D_MOBILE *dMob, char *arg )
    return;
 }
 
+void cmd_savearea( D_MOBILE *dMob, char *arg )
+{
+
+   json_t *rooms = json_array();
+   json_t *objects = json_array();
+   json_t *mobiles = json_array();
+   json_t *resets = json_array();
+   json_t *area = json_object();
+   D_AREA *pArea;
+   D_ROOM *pRoom;
+   D_OBJECT *pObj;
+   D_MOBILE *pMob;
+   D_RESET *pReset;
+   ITERATOR Iter;
+
+   pArea = dMob->room->area;
+
+   for( int i = pArea->r_low; i <= pArea->r_hi; i++ )
+   {
+      pRoom = get_room_by_vnum( i );
+      if( pRoom == NULL )
+         continue;
+      json_array_append_new( rooms, room_to_json( pRoom ) );
+   }
+   json_object_set_new( area, "rooms", rooms );
+
+   for( int i = pArea->o_low; i <= pArea->o_hi; i++ )
+   {
+      pObj = get_object_by_vnum( i );
+      if( pObj == NULL )
+         continue;
+      json_array_append_new( objects, object_to_json( pObj ) );
+   }
+   json_object_set_new( area, "objects", objects );
+
+   for( int i = pArea->m_low; i <= pArea->m_hi; i++ )
+   {
+      pMob = get_mobile_by_vnum( i );
+      if( pMob == NULL )
+         continue;
+      json_array_append_new( mobiles, mobile_to_json( pMob, FALSE ) );
+   }
+   json_object_set_new( area, "mobiles", mobiles );
+
+   AttachIterator( &Iter, pArea->resets );
+   while( ( pReset = (D_RESET *)NextInList( &Iter ) ) != NULL )
+   {
+      json_array_append_new( resets, reset_to_json( pReset ) );
+   }
+   DetachIterator( &Iter );
+   json_object_set_new( area, "resets", resets );
+
+   char filename[MAX_STRING_LENGTH];
+   snprintf( filename, MAX_STRING_LENGTH, "%s.json", pArea->name );
+   if( pArea->filename == NULL )
+      pArea->filename = strdup( filename );
+
+   if( pArea->filename[0] == '.' )
+      pArea->filename[0] = '_';
+   if( pArea->filename[1] == '.' )
+      pArea->filename[1] = '_';
+   for( int i = 0; i < strlen( pArea->filename ); i++ )
+   {
+      if( pArea->filename[i] == '/' || pArea->filename[i] == '\\' || pArea->filename[i] == '*' || pArea->filename[i] == '?' || pArea->filename[i] == '\''
+       || pArea->filename[i] == '\"'|| pArea->filename[i] == '|' || pArea->filename[i] == '<'  || pArea->filename[i] == '>' || pArea->filename[i] == ' ' )
+         pArea->filename[i] = '_';
+   }
+   snprintf( filename, MAX_STRING_LENGTH, "../areas/%s", pArea->filename );
+   json_dump_file( area, filename, JSON_INDENT(3) );
+
+   return;
+}
