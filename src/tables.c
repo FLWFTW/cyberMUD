@@ -166,3 +166,22 @@ const char *ammo_dice[]   = { [AMMO_38SPC]       = "1d6+2", //0
                               [AMMO_20GAUGE]     = "3d6+1", //15
                               [MAX_AMMO]         = 0};
 
+const char *exit_state[]  = { [EXIT_FREE]        = "free",
+                              [EXIT_JAMMED]      = "jammed",
+                              [EXIT_CLOSED]      = "closed",
+                              [EXIT_OPEN]        = "open",
+                              [EXIT_BROKEN_OPEN] = "broken",
+                              [MAX_EXITSTATE]    = 0};
+                  
+const char *lock_state[]  = { [LOCK_FREE]        = "free",
+                              [LOCK_JAMMED]      = "jammed",
+                              [LOCK_LOCKED]      = "locked",
+                              [LOCK_UNLOCKED]    = "unlocked",
+                              [MAX_LOCKSTATE]    = 0};
+
+const char *lock_type[]   = { [LOCK_PINTUMBLER]  = "pintumbler",
+                              [LOCK_COMBO]       = "combo",
+                              [LOCK_ELECTRICPIN] = "electric",
+                              [LOCK_FINGERPRINT] = "fingerprint",
+                              [LOCK_REMOTE]      = "remote",
+                              [MAX_LOCKTYPE]     = 0};

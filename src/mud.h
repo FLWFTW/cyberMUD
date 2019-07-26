@@ -732,6 +732,7 @@ void cmd_astat( D_MOBILE *dMob, char *arg );
  * building.c
  */
 void cmd_oset( D_MOBILE *dMOb, char *arg );
+void cmd_eset( D_MOBILE *dMOb, char *arg );
 void cmd_redit( D_MOBILE *dMob, char *arg );
 void cmd_savearea( D_MOBILE *dMob, char *arg );
 

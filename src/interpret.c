@@ -139,6 +139,7 @@ const struct typCmd tabCmd [] =
   { "east",          cmd_east,       LEVEL_GUEST,     CMD_ACT  },
   { "enter",         cmd_enter,      LEVEL_GUEST,     CMD_ACT  },
   { "equipment",     cmd_equipment,  LEVEL_GUEST,     CMD_OOC  },
+  { "eset",          cmd_eset,       LEVEL_GOD,       CMD_WIZ  },
   { "examine",       cmd_examine,    LEVEL_GUEST,     CMD_ACT  },
   { "fire",          cmd_fire,       LEVEL_GUEST,     CMD_ACT  },
   { "force",         cmd_force,      LEVEL_ADMIN,     CMD_WIZ  },

@@ -120,6 +120,112 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
 
 }
 
+void cmd_eset( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Edit which exit?" );
+      return;
+   }
+
+   char dir[MAX_STRING_LENGTH], what[MAX_STRING_LENGTH];
+
+   arg = one_arg( arg, dir );
+   arg = one_arg( arg, what );
+   
+   D_EXIT *exit = get_exit_by_name( dMob->room, dir );
+   if( exit == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "Can not find exit %s. Create it with 'redit exit %s <vnum>' first.", dir, dir );
+      return;
+   }
+
+   if( is_prefix( what, "door_level" ) )
+   {
+      int level = atoi( arg );
+      if( level < 0 || level > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Door level must be between 0 and 10." );
+         return;
+      }
+      exit->door_level = level;
+      text_to_mobile_j( dMob, "text", "Exit %s door level set to %i.", exit->name, level );
+   }
+   else if( is_prefix( what, "lock_level" ) )
+   {
+      int level = atoi( arg );
+      if( level < 0 || level > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Lock level must be between 0 and 10." );
+         return;
+      }
+      exit->lock_level = level;
+      text_to_mobile_j( dMob, "text", "Exit %s lock level set to %i.", exit->name, level );
+   }
+   else if( is_prefix( what, "lock_type" ) )
+   {
+      enum lock_type_t i = 0;
+      for( i = 0; i < MAX_LOCKTYPE; i++ )
+      {
+         if( is_prefix( arg, lock_type[i] ) )
+         {
+            exit->lock_type = i;
+            break;
+         }
+      }
+      if( i == MAX_LOCKTYPE )
+      {
+         text_to_mobile_j( dMob, "error", "Invalid lock type %s.", arg );
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "text", "Exit %s lock type set to %s.", exit->name, lock_type[i] );
+      }
+   }
+   else if( is_prefix( what, "lock_state" ) )
+   {
+      enum lock_state_t i = 0;
+      for( i = 0; i < MAX_LOCKSTATE; i++ )
+      {
+         if( is_prefix( arg, lock_state[i] ) )
+         {
+            exit->lock = i;
+            break;
+         }
+      }
+      if( i == MAX_LOCKSTATE )
+      {
+         text_to_mobile_j( dMob, "error", "Invalid lock state %s.", arg );
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "text", "Exit %s lock state set to %s.", exit->name, lock_state[i] );
+      }
+   }
+   else if( is_prefix( what, "exit_state" ) )
+   {
+      enum exit_state_t i = 0;
+      for( i = 0; i < MAX_EXITSTATE; i++ )
+      {
+         if( is_prefix( arg, exit_state[i] ) )
+         {
+            exit->exit = i;
+            break;
+         }
+      }
+      if( i == MAX_EXITSTATE )
+      {
+         text_to_mobile_j( dMob, "error", "Invalid exit state %s.", arg );
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "text", "Exit %s state set to %s.", exit->name, exit_state[i] );
+      }
+   }
+
+   return;
+}
+
 void cmd_redit( D_MOBILE *dMob, char *arg )
 {
    if( arg[0] == '\0' )

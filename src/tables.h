@@ -54,9 +54,12 @@ extern const char *wound_trauma[];
 extern const char *blunt_trauma[];
 extern const char *burn_trauma[];
 
-enum exit_state_t { EXIT_FREE = 0, EXIT_JAMMED, EXIT_CLOSED, EXIT_OPEN, EXIT_BROKEN_OPEN };
-enum lock_state_t { LOCK_FREE = 0, LOCK_JAMMED, LOCK_LOCKED, LOCK_UNLOCKED };
-enum lock_type_t  { LOCK_PINTUMBLER = 0, LOCK_DIAL, LOCK_ELECTRICPIN, LOCK_FINGERPRINT, LOCK_REMOTE, MAX_LOCKTYPE };
+enum exit_state_t { EXIT_FREE = 0, EXIT_JAMMED, EXIT_CLOSED, EXIT_OPEN, EXIT_BROKEN_OPEN, MAX_EXITSTATE };
+enum lock_state_t { LOCK_FREE = 0, LOCK_JAMMED, LOCK_LOCKED, LOCK_UNLOCKED, MAX_LOCKSTATE };
+enum lock_type_t  { LOCK_PINTUMBLER = 0, LOCK_COMBO, LOCK_ELECTRICPIN, LOCK_FINGERPRINT, LOCK_REMOTE, MAX_LOCKTYPE };
+extern const char *exit_state[];
+extern const char *lock_state[];
+extern const char *lock_type[];
 
 enum reset_type_t { RESET_EXIT = 0, RESET_MOB, RESET_OBJ, MAX_RESET };
 enum cmd_type_t   { CMD_ACT = 0, CMD_COM, CMD_OOC, CMD_WIZ, MAX_CMD };
