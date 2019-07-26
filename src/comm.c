@@ -135,7 +135,6 @@ void send_json_m( D_MOBILE *dMob, const char *txt2, ... )
    if( dMob->socket )
    {
       text_to_socket( dMob->socket, "%c%s%c", (char)2, txt, (char)3 );
-      dMob->socket->bust_prompt = TRUE;
    }
 }
 
@@ -159,7 +158,6 @@ void text_to_mobile( D_MOBILE *dMob, const char *txt2, ... )
    if( dMob->socket )
    {
       text_to_buffer( dMob->socket, txt );
-      dMob->socket->bust_prompt = TRUE;
    }
 }
 
@@ -186,7 +184,6 @@ void text_to_mobile_j( D_MOBILE *dMob, const char *type, const char *txt2, ... )
       char *dump = json_dumps( json, 0 );
       text_to_socket( dMob->socket, "%c%s%c", (char)2, dump, (char)3 );
       free( dump );
-      dMob->socket->bust_prompt = TRUE;
    }
    json_decref( json );
    return;

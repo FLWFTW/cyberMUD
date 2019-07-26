@@ -266,6 +266,8 @@ struct dSocket
    LIST          * wiz_cmd_list;
 
    char            loginName[MAX_BUFFER];
+
+   char          ** edit_buffer;  /* The buffer the PC is currently editing */
 };
 
 struct skills

@@ -182,7 +182,6 @@ void cmd_force( D_MOBILE *dMob, char *arg )
 
 void cmd_goto( D_MOBILE *dMob, char *arg )
 {
-   ITERATOR Iter;
    D_ROOM *room;
    int vnum = atoi( arg );
    if( vnum < 1 )
@@ -191,21 +190,18 @@ void cmd_goto( D_MOBILE *dMob, char *arg )
       return;
    }
 
-
-   AttachIterator( &Iter, droom_list );
-   while( ( room = (D_ROOM *) NextInList( &Iter ) ) != NULL )
+   if( ( room = get_room_by_vnum( vnum ) ) == NULL )
    {
-      if( room->vnum == vnum )
-      {
-         dMob->room = room;
-         cmd_look( dMob, "" );
-         DetachIterator( &Iter );
-         return;
-      }
+      text_to_mobile_j( dMob, "text", "You type sudo touch room.%i and the room digitizes into existance.", vnum );
+      room = new_room();
+      room->vnum = vnum;
+      room->description = strdup( "A newly created room fresh from /dev/null" );
+      room->name        = strdup( "A newly created room" );
    }
-   DetachIterator( &Iter );
 
-   text_to_mobile_j( dMob, "error", "Room #%i does not exist.\r\n", vnum );
+   mob_to_room( dMob, room );
+   cmd_look( dMob, "" );
+
    return;
 }
 

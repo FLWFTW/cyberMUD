@@ -184,7 +184,8 @@ void GameLoop(int icontrol)
       }
 
       /* Ok, check for a new command */
-      while( next_cmd_from_buffer(dsock) > 0 )
+      next_cmd_from_buffer( dsock );
+      if( dsock->next_command[0] != '\0' )
       {
         /* figure out how to deal with the incoming command */
         switch(dsock->state)
