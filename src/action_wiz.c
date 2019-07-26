@@ -192,11 +192,12 @@ void cmd_goto( D_MOBILE *dMob, char *arg )
 
    if( ( room = get_room_by_vnum( vnum ) ) == NULL )
    {
-      text_to_mobile_j( dMob, "text", "You type sudo touch room.%i and the room digitizes into existance.", vnum );
+      text_to_mobile_j( dMob, "text", "You type sudo touch room.%i and the room digitizes into existance.\r\n", vnum );
       room = new_room();
       room->vnum = vnum;
       room->description = strdup( "A newly created room fresh from /dev/null" );
       room->name        = strdup( "A newly created room" );
+      AppendToList( room, droom_list );
    }
 
    mob_to_room( dMob, room );

@@ -7,6 +7,52 @@
 /* include main header file */
 #include "mud.h"
 
+void handle_edit_input( D_SOCKET *dsock, char *arg )
+{
+   if( !strcasecmp( arg, "/s" ) )
+   {
+      free( *dsock->edit_pointer );
+      *dsock->edit_pointer = strdup( dsock->edit_buffer );
+      free( dsock->edit_buffer );
+      dsock->edit_buffer = NULL;
+      text_to_mobile_j( dsock->player, "text", "Saved." );
+      dsock->state = STATE_PLAYING;
+      return;
+   }
+   else if( !strcasecmp( arg, "/a" ) )
+   {
+      free( dsock->edit_buffer );
+      dsock->edit_buffer = NULL;
+      text_to_mobile_j( dsock->player, "text", "Editing aborted." );
+      dsock->state = STATE_PLAYING;
+      return;
+   }
+   else if( !strcasecmp( arg, "/l" ) )
+   {
+      text_to_mobile_j( dsock->player, "text", "%s", dsock->edit_buffer );
+      return;
+   }
+   else if( !strcasecmp( arg, "/c" ) )
+   {
+      text_to_mobile_j( dsock->player, "text", "Buffer cleared." );
+      free( dsock->edit_buffer );
+      dsock->edit_buffer = NULL;
+      return;
+   }
+   int curLen = 0, newLen = 0;
+   if( dsock->edit_buffer == NULL )
+   {
+      dsock->edit_buffer = calloc( 1, sizeof( char ) );
+   }
+   curLen = strlen( dsock->edit_buffer );
+   newLen = strlen( arg );
+   dsock->edit_buffer = realloc( dsock->edit_buffer, ( curLen + newLen + 3 ) * sizeof( char ) );
+   if( curLen > 0 )
+      strncat( dsock->edit_buffer, "\r\n", curLen + newLen + 2 );
+   strncat( dsock->edit_buffer, arg, curLen + newLen );
+   return;
+}
+
 void handle_cmd_input(D_MOBILE *dMob, char *arg)
 {
   char command[MAX_BUFFER];
@@ -38,22 +84,22 @@ void handle_cmd_input(D_MOBILE *dMob, char *arg)
       {
          case CMD_WIZ:
             {
-               AppendToList( cmd, dMob->socket->wiz_cmd_list );
+               AppendToList( cmd, dMob->wiz_cmd_list );
                break;
             }
          case CMD_ACT:
             {
-               AppendToList( cmd, dMob->socket->act_cmd_list );
+               AppendToList( cmd, dMob->act_cmd_list );
                break;
             }
          case CMD_COM:
             {
-               AppendToList( cmd, dMob->socket->com_cmd_list );
+               AppendToList( cmd, dMob->com_cmd_list );
                break;
             }
          case CMD_OOC:
             {
-               AppendToList( cmd, dMob->socket->ooc_cmd_list );
+               AppendToList( cmd, dMob->ooc_cmd_list );
                break;
             }
          default:
@@ -126,6 +172,7 @@ const struct typCmd tabCmd [] =
   { "prone",         cmd_prone,      LEVEL_GUEST,     CMD_ACT  },
   { "reboo",         cmd_reboo,      LEVEL_GOD,       CMD_WIZ  },
   { "reboot",        cmd_reboot,     LEVEL_GOD,       CMD_WIZ  },
+  { "redit",         cmd_redit,      LEVEL_GOD,       CMD_WIZ  },
   { "rest",          cmd_rest,       LEVEL_GUEST,     CMD_ACT  },
   { "restore",       cmd_restore,    LEVEL_GOD,       CMD_WIZ  },
   { "remove",        cmd_remove,     LEVEL_GUEST,     CMD_ACT  },

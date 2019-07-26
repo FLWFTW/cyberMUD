@@ -260,14 +260,10 @@ struct dSocket
    z_stream      * out_compress;                /* MCCP support */
    unsigned char * out_compress_buf;            /* MCCP support */
 
-   LIST          * com_cmd_list;
-   LIST          * act_cmd_list;
-   LIST          * ooc_cmd_list;
-   LIST          * wiz_cmd_list;
-
    char            loginName[MAX_BUFFER];
 
-   char          ** edit_buffer;  /* The buffer the PC is currently editing */
+   char          * edit_buffer;  /* The PC's text editor */
+   char          **edit_pointer; /* The text the PC is editing */
 };
 
 struct skills
@@ -350,6 +346,12 @@ struct dMobile
  
    char             * citizenship;
    char             * association;
+
+   LIST          * com_cmd_list;
+   LIST          * act_cmd_list;
+   LIST          * ooc_cmd_list;
+   LIST          * wiz_cmd_list;
+
 };
 
 struct help_data
@@ -488,6 +490,7 @@ void  handle_new_connections  ( D_S *dsock, char *arg );
  * interpret.c
  */
 void  handle_cmd_input        ( D_MOBILE *dMob, char *arg );
+void  handle_edit_input       ( D_SOCKET *dsock, char *arg );
 
 /*
  * io.c
@@ -566,6 +569,7 @@ void free_mobile              (D_MOBILE *dMob);
 void free_mobile_proto        (D_MOBILE *dMob);
 void free_room                ( D_ROOM *room );
 void free_reset               ( D_RESET *reset );
+void free_exit                ( D_EXIT *exit );
 D_EXIT *new_exit              ();
 D_ROOM *new_room              ();
 D_AREA *new_area              ();
@@ -725,6 +729,7 @@ void cmd_astat( D_MOBILE *dMob, char *arg );
  * building.c
  */
 void cmd_oset( D_MOBILE *dMOb, char *arg );
+void cmd_redit( D_MOBILE *dMob, char *arg );
 
 /*
  * action_combat.c

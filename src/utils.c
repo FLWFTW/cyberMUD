@@ -80,6 +80,15 @@ D_EXIT *new_exit()
    return exit;
 }
 
+void free_exit( D_EXIT *exit )
+{
+   free( exit->name );
+   free( exit->farside_name );
+   free( exit );
+
+   return;
+}
+
 D_ROOM *new_room()
 {
    D_ROOM *room = calloc( 1, sizeof( D_ROOM ) );
@@ -153,6 +162,10 @@ D_EXIT *get_exit_by_name( D_ROOM *room, char *name )
       return get_exit_by_name( room, "southwest" );
    if( !strcasecmp( name, "nw" ) )
       return get_exit_by_name( room, "northwest" );
+   if( !strcasecmp( name, "u" ) )
+      return get_exit_by_name( room, "up" );
+   if( !strcasecmp( name, "d" ) )
+      return get_exit_by_name( room, "down" );
 
    AttachIterator( &Iter, room->exits );
    while( ( exit = NextInList( &Iter ) ) != NULL )
@@ -244,8 +257,8 @@ void free_room( D_ROOM *room )
 
    ITERATOR Iter;
    D_MOBILE *mob;
-   //D_OBJECT *obj;
-   //D_EXIT *exit;
+   D_OBJECT *obj;
+   D_EXIT *exit;
 
    free( room->name );
    free( room->description );
@@ -253,12 +266,23 @@ void free_room( D_ROOM *room )
    AttachIterator( &Iter, room->mobiles );
    while( ( mob = (D_MOBILE *) NextInList( &Iter ) ) != NULL )
    {
-      free_mobile( mob );
       DetachFromList( mob, dmobile_list );
+      free_mobile( mob );
    }
    DetachIterator( &Iter );
-   //Same for objects
-   //Same for exits
+   AttachIterator( &Iter, room->exits );
+   while( ( exit = (D_EXIT *) NextInList( &Iter ) ) != NULL )
+   {
+      free_exit( exit );
+   }
+   DetachIterator( &Iter );
+   AttachIterator( &Iter, room->objects );
+   while( ( obj = (D_OBJECT *) NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( obj, dobject_list );
+      free_object( obj );
+   }
+   DetachIterator( &Iter );
 
    FreeList( room->mobiles );
    FreeList( room->exits );
@@ -309,6 +333,10 @@ void clear_mobile(D_MOBILE *dMob)
    dMob->hold_left    =  NULL;
    dMob->level        =  LEVEL_PLAYER;
    dMob->events       =  AllocList();
+   dMob->com_cmd_list   =  AllocList();
+   dMob->act_cmd_list   =  AllocList();
+   dMob->ooc_cmd_list   =  AllocList();
+   dMob->wiz_cmd_list   =  AllocList();
    dMob->offer_right  =  calloc( 1, sizeof( D_OFFER ) );
    dMob->offer_left   =  calloc( 1, sizeof( D_OFFER ) );
    dMob->guid         =  gen_guid();
@@ -728,56 +756,56 @@ void check_mobiles()
          pMob->offer_left->to = NULL;
          pMob->offer_left->when = 0;
       }
-      if( IS_PC( pMob ) && SizeOfList( pMob->socket->act_cmd_list ) > 0 )
+      if( SizeOfList( pMob->act_cmd_list ) > 0 )
       {
          ITERATOR cmdIter;
          struct command_data *cmd = NULL;
 
-         AttachIterator( &cmdIter, pMob->socket->act_cmd_list );
+         AttachIterator( &cmdIter, pMob->act_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
          free( cmd );
-         DetachFromList( cmd, pMob->socket->act_cmd_list );
+         DetachFromList( cmd, pMob->act_cmd_list );
          DetachIterator( &cmdIter );
       }
-      if( IS_PC( pMob ) && SizeOfList( pMob->socket->com_cmd_list ) > 0 )
+      if( SizeOfList( pMob->com_cmd_list ) > 0 )
       {
          ITERATOR cmdIter;
          struct command_data *cmd = NULL;
 
-         AttachIterator( &cmdIter, pMob->socket->com_cmd_list );
+         AttachIterator( &cmdIter, pMob->com_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
          free( cmd );
-         DetachFromList( cmd, pMob->socket->com_cmd_list );
+         DetachFromList( cmd, pMob->com_cmd_list );
          DetachIterator( &cmdIter );
       }
-      if( IS_PC( pMob ) && SizeOfList( pMob->socket->ooc_cmd_list ) > 0 )
+      if( SizeOfList( pMob->ooc_cmd_list ) > 0 )
       {
          ITERATOR cmdIter;
          struct command_data *cmd = NULL;
 
-         AttachIterator( &cmdIter, pMob->socket->ooc_cmd_list );
+         AttachIterator( &cmdIter, pMob->ooc_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
          free( cmd );
-         DetachFromList( cmd, pMob->socket->ooc_cmd_list );
+         DetachFromList( cmd, pMob->ooc_cmd_list );
          DetachIterator( &cmdIter );
       }
-      if( IS_PC( pMob ) && SizeOfList( pMob->socket->wiz_cmd_list ) > 0 )
+      if( SizeOfList( pMob->wiz_cmd_list ) > 0 )
       {
          ITERATOR cmdIter;
          struct command_data *cmd = NULL;
 
-         AttachIterator( &cmdIter, pMob->socket->wiz_cmd_list );
+         AttachIterator( &cmdIter, pMob->wiz_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
          free( cmd );
-         DetachFromList( cmd, pMob->socket->wiz_cmd_list );
+         DetachFromList( cmd, pMob->wiz_cmd_list );
          DetachIterator( &cmdIter );
       }
    }

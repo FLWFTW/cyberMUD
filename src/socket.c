@@ -187,39 +187,50 @@ void GameLoop(int icontrol)
       next_cmd_from_buffer( dsock );
       if( dsock->next_command[0] != '\0' )
       {
-        /* figure out how to deal with the incoming command */
-        switch(dsock->state)
-        {
-           default:
-              bug( "Invalid state: %i", dsock->state );
-              break;
-           case STATE_GET_ACCOUNT:
-           case STATE_NEW_ACCOUNT:
-           case STATE_ASK_PASSWORD:
-           case STATE_MAIN_MENU:
-           case STATE_CHOOSE_CHAR:
-           case STATE_CHARGEN_NAME:
-           case STATE_CHARGEN_GENDER:
-           case STATE_NEW_NAME:
-           case STATE_NEW_PASSWORD:
-           case STATE_VERIFY_PASSWORD:
-           case STATE_CHARGEN:
-           case STATE_CHARGEN_RACE:
-           case STATE_CHARGEN_STATS:
-           case STATE_CHARGEN_HEIGHT:
-           case STATE_CHARGEN_WEIGHT:
-           case STATE_CHARGEN_EYECOLOR:
-           case STATE_PRESS_ENTER:
-              handle_new_connections(dsock, dsock->next_command);
-              break;
-          case STATE_PLAYING:
-              if( dsock->player == NULL )
+         /* figure out how to deal with the incoming command */
+         switch(dsock->state)
+         {
+            default:
+            {
+               bug( "Invalid state: %i", dsock->state );
+               break;
+            }
+            case STATE_GET_ACCOUNT:
+            case STATE_NEW_ACCOUNT:
+            case STATE_ASK_PASSWORD:
+            case STATE_MAIN_MENU:
+            case STATE_CHOOSE_CHAR:
+            case STATE_CHARGEN_NAME:
+            case STATE_CHARGEN_GENDER:
+            case STATE_NEW_NAME:
+            case STATE_NEW_PASSWORD:
+            case STATE_VERIFY_PASSWORD:
+            case STATE_CHARGEN:
+            case STATE_CHARGEN_RACE:
+            case STATE_CHARGEN_STATS:
+            case STATE_CHARGEN_HEIGHT:
+            case STATE_CHARGEN_WEIGHT:
+            case STATE_CHARGEN_EYECOLOR:
+            case STATE_PRESS_ENTER:
+            {
+               handle_new_connections(dsock, dsock->next_command);
+               break;
+            }
+            case STATE_PLAYING:
+            {
+               if( dsock->player == NULL )
                  break;
-              handle_cmd_input(dsock->player, dsock->next_command);
-              break;
-        }
+               handle_cmd_input(dsock->player, dsock->next_command);
+               break;
+            }
+            case STATE_WRITING:
+            {
+               handle_edit_input( dsock, dsock->next_command );
+               break;
+            }
+         }
 
-        dsock->next_command[0] = '\0';
+         dsock->next_command[0] = '\0';
       }
 
       /* if the player quits or gets disconnected */
@@ -601,10 +612,6 @@ void clear_socket(D_SOCKET *sock_new, int sock)
    sock_new->player         =  NULL;
    sock_new->top_output     =  0;
    sock_new->events         =  AllocList();
-   sock_new->com_cmd_list   =  AllocList();
-   sock_new->act_cmd_list   =  AllocList();
-   sock_new->ooc_cmd_list   =  AllocList();
-   sock_new->wiz_cmd_list   =  AllocList();
 }
 
 /* does the lookup, changes the hostname, and dies */

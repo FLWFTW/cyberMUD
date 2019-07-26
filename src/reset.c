@@ -48,6 +48,7 @@ void reset_area( D_AREA *pArea )
                      bug( "Reset Error: Bad JSON data." );
                      break;
                   }
+                  AppendToList( dObj, dobject_list );
                   obj_to_room( dObj, room );
                }
                break;
@@ -63,6 +64,7 @@ void reset_area( D_AREA *pArea )
                   }
                   reset->what = dMob;
                   dMob->reset = reset;
+                  AppendToList( dMob, dmobile_list );
                   mob_to_room( dMob, room );
                   break;
                }

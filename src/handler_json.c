@@ -82,7 +82,7 @@ D_EXIT *json_to_exit( json_t *json )
 HELP_DATA *json_to_help( json_t *json )
 {
    if( !json )
-      return NULL;
+   return NULL;
 
    HELP_DATA *hdata = new_help();
    json_t *value;
@@ -125,6 +125,7 @@ json_t *help_to_json( HELP_DATA *help )
 
    return json;
 }
+
 
 
 D_ROOM *json_to_room( json_t *json )

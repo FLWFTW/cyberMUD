@@ -120,3 +120,135 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
 
 }
 
+void cmd_redit( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "See help redit for usage." );
+      return;
+   }
+
+   char arg1[MAX_STRING_LENGTH] = {0};
+   arg = one_arg( arg, arg1 );
+
+   if( !strcasecmp( arg1, "desc" ) || !strcasecmp( arg1, "description" ) )
+   {
+      dMob->socket->state = STATE_WRITING;
+      text_to_mobile_j( dMob, "text", "[------------------------------------------------------------------------------]" );
+      dMob->socket->edit_pointer = &dMob->room->description;
+      dMob->socket->edit_buffer = strdup( dMob->room->description );
+      return;
+   }
+   else if( !strcasecmp( arg1, "name" ) )
+   {
+      if( arg[0] == '\0' )
+      {
+         text_to_mobile_j( dMob, "error", "Set the room name to what?" );
+         return;
+      }
+      if( dMob->room->name )
+         free( dMob->room->name );
+      dMob->room->name = strdup( arg );
+   }
+   else if( !strcasecmp( arg1, "rmexit" ) )
+   {
+      D_EXIT *exit;
+      if( arg[0] == '\0' )
+      {
+         text_to_mobile_j( dMob, "error", "Remove which exit?" );
+         return;
+      }
+
+      if( ( exit = get_exit_by_name( dMob->room, arg ) ) == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "That exit does not exist." );
+         return;
+      }
+      DetachFromList( exit, dMob->room->exits );
+      free_exit( exit );
+   }
+   else if( !strcasecmp( arg1, "exit" ) )
+   {
+      char dir[MAX_STRING_LENGTH];
+      int vnum = 0;
+      arg = one_arg( arg, dir );
+      vnum = atoi( arg );
+      D_ROOM *room;
+      if( !is_prefix( dir, "north" ) && !is_prefix( dir, "south" ) && !is_prefix( dir, "east" ) && !is_prefix( dir, "west" ) &&!is_prefix( dir, "up" ) && !is_prefix( dir, "down" )
+         &&strcasecmp( dir, "ne" ) && strcasecmp( dir, "se" ) && strcasecmp( dir, "sw" ) && strcasecmp( dir, "nw" ) )
+      {
+         text_to_mobile_j( dMob, "error", "Exit direction must be one of n/s/e/w/ne/nw/se/sw/u/d." );
+         return;
+      }
+      if( vnum < 1 || ( ( room = get_room_by_vnum( vnum ) ) == NULL ) )
+      {
+         text_to_mobile_j( dMob, "error", "Invalid vnum." );
+         return;
+      }
+
+      D_EXIT *exit;
+      if( ( exit = get_exit_by_name( dMob->room, dir ) ) != NULL )
+         free_exit( exit );
+      exit = new_exit();
+
+      if( is_prefix( dir,  "north" ) )
+      {
+         exit->name = strdup( "north" );
+         exit->farside_name = strdup( "south" );
+      }
+      else if( is_prefix( dir, "south" ) )
+      {
+         exit->name = strdup( "south" );
+         exit->farside_name = strdup( "north" );
+      }
+      else if( is_prefix( dir, "east" ) )
+      {
+         exit->name = strdup( "east" );
+         exit->farside_name = strdup( "west" );
+      }
+      else if( is_prefix( dir, "west" ) )
+      {
+         exit->name = strdup( "west" );
+         exit->farside_name = strdup( "east" );
+      }
+      else if( !strcasecmp( dir, "ne" ) || is_prefix( dir, "northeast" ) )
+      {
+         exit->name = strdup( "northeast" );
+         exit->farside_name = strdup( "southwest" );
+      }
+      else if( !strcasecmp( dir, "nw" ) || is_prefix( dir, "northwest" ) )
+      {
+         exit->name = strdup( "northwest" );
+         exit->farside_name = strdup( "southeast" );
+      }
+      else if( !strcasecmp( dir, "se" ) || is_prefix( dir, "southeast" ) )
+      {
+         exit->name = strdup( "southeast" );
+         exit->farside_name = strdup( "northwest" );
+      }
+      else if( !strcasecmp( dir, "sw" ) || is_prefix( dir, "southwest" ) )
+      {
+         exit->name = strdup( "southwest" );
+         exit->farside_name = strdup( "northeast" );
+      }
+      else if( is_prefix( dir, "up" ) )
+      {
+         exit->name = strdup( "up" );
+         exit->farside_name = strdup( "down" );
+      }
+      else if( is_prefix( dir, "down" ) )
+      {
+         exit->name = strdup( "down" );
+         exit->farside_name = strdup( "up" );
+      }
+      exit->to_room = room;
+      exit->to_vnum = vnum;
+
+      AppendToList( exit, dMob->room->exits );
+   }
+
+   text_to_mobile_j( dMob, "text", "Ok." );
+
+   return;
+}
+
