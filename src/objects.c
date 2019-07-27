@@ -2,7 +2,7 @@
 
 D_OBJECT *new_object()
 {
-   D_OBJECT *obj = malloc( sizeof( D_OBJECT ) );
+   D_OBJECT *obj = calloc( 1, sizeof( D_OBJECT ) );
 
    obj->name = NULL;
    obj->sdesc = NULL;
@@ -13,6 +13,7 @@ D_OBJECT *new_object()
    obj->volume_cm3 = 0;
    obj->weight_g = 0;
    obj->guid = gen_guid();
+   obj->in_room = NULL;
    obj->type = ITEM_UNKNOWN;
 
    obj->ivar1 = 0;

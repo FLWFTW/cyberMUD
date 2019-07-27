@@ -773,50 +773,6 @@ void cmd_save(D_MOBILE *dMob, char *arg)
   text_to_mobile(dMob, "Saved.\n\r");
 }
 
-void cmd_mspawn( D_MOBILE *dMob, char *arg )
-{
-   D_MOBILE *mob;
-   unsigned long vnum = strtoul( arg, NULL, 10 );
-
-   if( ( mob = spawn_mobile( vnum ) ) == NULL )
-   {
-      text_to_mobile_j( dMob, "error",  "Can not find mobile with vnum '%u'", vnum );
-      return;
-   }
-
-   AppendToList( mob, dMob->room->mobiles );
-   mob->room = dMob->room;
-   text_to_mobile_j( dMob, "text", "The entire world vibrates for a split second and %s appears before you.", mob->sdesc );
-   return;
-}
-
-void cmd_mlist( D_MOBILE *dMob, char *arg )
-{
-   ITERATOR Iter;
-   json_t *json = json_object();
-   json_t *list = json_array();
-   D_MOBILE *m;
-
-   AttachIterator( &Iter, mobile_protos );
-   while( ( m = NextInList( &Iter ) ) != NULL )
-   {
-      json_t *jm = json_object();
-      json_object_set_new( jm, "vnum", json_integer( m->vnum ) );
-      json_object_set_new( jm, "name", json_string( m->name ) );
-      json_array_append_new( list, jm );
-   }
-   DetachIterator( &Iter );
-
-   json_object_set_new( json, "type", json_string( "mlist" ) );
-   json_object_set_new( json, "data", list );
-
-   char *dump = json_dumps( json, 0 );
-   send_json_m( dMob, "%s", dump );
-   free( dump );
-   json_decref( json );
-   return;
-}
-
 void cmd_score( D_MOBILE *dMob, char *arg )
 {
    char buf[MAX_BUFFER];

@@ -60,6 +60,7 @@ D_AREA *new_area()
    area->o_hi  = 0;
 
    area->last_reset = time(NULL);
+   area->reset_interval = 15;
 
    return area;
 }
@@ -118,7 +119,7 @@ void free_reset( D_RESET *reset )
 {
    json_object_clear( reset->data );
    json_decref( reset->data );
-   free( reset->what );
+   free( reset );
 }
 
 void rand_str(char *dest, size_t length) 

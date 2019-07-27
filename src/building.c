@@ -1,5 +1,480 @@
 #include "mud.h"
 
+void cmd_makearea( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Use makearea <filename.json> to make a new area, where <filename.json> is an available filename." );
+      return;
+   }
+   
+   char filename[MAX_STRING_LENGTH];
+   int len = strlen( arg );
+   ITERATOR Iter;
+   D_AREA *area;
+
+   if( arg[0] == '.' )
+      arg[0] = '_';
+   if( arg[1] == '.' )
+      arg[1] = '_';
+   for( int i = 0; i < len; i++ )
+   {
+      if( arg[i] == '/' || arg[i] == '\\' || arg[i] == '*' || arg[i] == '?' || arg[i] == '\''
+       || arg[i] == '\"'|| arg[i] == '|' || arg[i] == '<'  || arg[i] == '>' || arg[i] == ' ' )
+      {
+         arg[i] = '_';
+      }
+   }
+   if( len > 5 && arg[len-1] == 'n' && arg[len-2] == 'o' && arg[len-3] == 's' && arg[len-4] == 'j' && arg[len-5] == '.' )
+   {
+      snprintf( filename, MAX_STRING_LENGTH, "%s", arg );
+   }
+   else
+   {
+      snprintf( filename, MAX_STRING_LENGTH, "%s.json", arg );
+   }
+
+   AttachIterator( &Iter, darea_list );
+   while( ( area = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      if( !strcasecmp( area->filename, filename ) )
+      {
+         text_to_mobile_j( dMob, "error", "Can not make area. Area with filename %s already exists.", filename );
+         DetachIterator( &Iter );
+         return;
+      }
+   }
+   DetachIterator( &Iter );
+
+   area = new_area();
+   area->filename = strdup( filename );
+   AttachToList( area, darea_list );
+   text_to_mobile_j( dMob, "text", "Area %s created and added to global area list.", area->filename );
+
+   //Recreate arealist.json
+   json_t *arealist = json_array();
+   AttachIterator( &Iter, darea_list );
+   while( ( area = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      json_array_append_new( arealist, areaheader_to_json( area ) );
+   }
+   DetachIterator( &Iter );
+   json_dump_file( arealist, "../areas/arealist.json", JSON_INDENT(3) );
+   json_decref( arealist );
+
+   return;
+}
+
+void cmd_instazone( D_MOBILE *dMob, char *arg )
+{
+   ITERATOR Iter;
+   D_RESET *pReset;
+
+   AttachIterator( &Iter, dMob->room->area->resets );
+   while( ( pReset = (D_RESET *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pReset, dMob->room->area->resets );
+      free_reset( pReset );
+   }
+   DetachIterator( &Iter );
+
+   D_AREA *area = dMob->room->area;
+   D_ROOM *room;
+   D_MOBILE *pMob;
+   D_OBJECT *pObj;
+   for( int i = area->r_low; i <= area->r_hi; i++ )
+   {
+      room = get_room_by_vnum( i );
+      if( room == NULL )
+         continue;
+      AttachIterator( &Iter, room->mobiles );
+      while( ( pMob = (D_MOBILE *)NextInList( &Iter ) ) != NULL )
+      {
+         if( IS_PC( pMob ) )
+            continue;
+         pReset = new_reset();
+         pReset->type = RESET_MOB;
+         pReset->location = pMob->room->vnum;
+         pReset->data = mobile_to_reset( pMob );
+         AppendToList( pReset, area->resets );
+      }
+      DetachIterator( &Iter );
+
+      AttachIterator( &Iter, room->objects );
+      while( ( pObj = (D_OBJECT *)NextInList( &Iter ) ) != NULL )
+      {
+         pReset = new_reset();
+         pReset->type = RESET_OBJ;
+         pReset->location = pObj->in_room->vnum;
+         pReset->data = object_to_reset( pObj );
+         AppendToList( pReset, area->resets );
+      }
+      DetachIterator( &Iter );
+   }
+
+   return;
+}
+
+void cmd_ocreate( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Use ocreate <vnum> to create an object, where <vnum> is a valid vnum within an area." );
+      return;
+   }
+   if( dMob->hold_right != NULL && dMob->hold_left != NULL )
+   {
+      text_to_mobile_j( dMob, "error", "Your hands are full!" );
+      return;
+   }
+   int vnum = atoi( arg );
+   if( vnum == 0 )
+   {
+      text_to_mobile_j( dMob, "error", "Invalid vnum %s.", arg );
+      return;
+   }
+
+   D_OBJECT *obj;
+
+   if( ( obj = get_object_by_vnum( vnum ) ) != NULL )
+   {
+      text_to_mobile_j( dMob, "error", "An object already exists with vnum %i.", vnum );
+      return;
+   }
+
+   ITERATOR Iter;
+   AttachIterator( &Iter, darea_list );
+   D_AREA *pArea;
+   while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      if( vnum >= pArea->o_low && vnum <= pArea->o_hi )
+         break;
+   }
+   DetachIterator( &Iter );
+
+   if( pArea == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "That vnum is not in the range of any known areas. Create an area with that vnum range or choose a different vnum." );
+      return;
+   }
+
+   obj = new_object();
+   obj->vnum = vnum;
+   obj->name = strdup( "prototype object new" );
+   obj->sdesc = strdup( "a newly created object" );
+   obj->ldesc = strdup( "A newly created object sits here" );
+   AppendToList( obj, object_protos );
+   AppendToList( obj, dobject_list );
+
+   object_to_mobile( obj, dMob );
+   text_to_mobile_j( dMob, "text", "You sudo touch object.%i and create an object out of thin air.", vnum );
+
+   return;
+}
+
+void cmd_mcreate( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Use mcreate <vnum> to create a mobile, where <vnum> is a valid vnum within an area." );
+      return;
+   }
+   
+   int vnum = atoi( arg );
+   if( vnum == 0 )
+   {
+      text_to_mobile_j( dMob, "error", "Invalid vnum %s.", arg );
+      return;
+   }
+
+   D_MOBILE *mob;
+
+   if( ( mob = get_mobile_by_vnum( vnum ) ) != NULL )
+   {
+      text_to_mobile_j( dMob, "error", "A mobile already exists with vnum %i.", vnum );
+      return;
+   }
+
+   ITERATOR Iter;
+   AttachIterator( &Iter, darea_list );
+   D_AREA *pArea;
+   while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      if( vnum >= pArea->m_low && vnum <= pArea->m_hi )
+         break;
+   }
+   DetachIterator( &Iter );
+
+   if( pArea == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "That vnum is not in the range of any known areas. Create an area with that vnum range or choose a different vnum." );
+      return;
+   }
+
+   mob = new_mobile();
+   mob->vnum = vnum;
+   mob->name = strdup( "prototype mobile new" );
+   mob->sdesc = strdup( "A newly created prototype NPC" );
+   mob->ldesc = strdup( "A newly created prototype NPC is here" );
+   AppendToList( mob, mobile_protos );
+   AppendToList( mob, dmobile_list );
+
+   mob_to_room( mob, dMob->room );
+   text_to_mobile_j( dMob, "text", "You sudo touch mobile.%i and create an NPC out of thin air.", vnum );
+
+   return;
+}
+
+void cmd_mset( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "What mobile do you want to edit?" );
+      return;
+   }
+
+   D_MOBILE *pMob;
+   char mname[MAX_STRING_LENGTH];
+   char action[MAX_STRING_LENGTH];
+
+   arg = one_arg( arg, mname );
+   arg = one_arg( arg, action );
+
+   if( mname[0] == '\0' || action[0] == '\0' || arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Usage: mset <mob> <action> <argument[s]>. See help mset for more info." );
+      return;
+   }
+
+   if( is_number( mname ) )
+   {
+      pMob = get_mobile_by_vnum( atoi( mname ) );
+   }
+   else
+   {
+      pMob = get_mobile_list( mname, dMob->room->mobiles );
+   }
+
+   if( pMob == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find that mobile." );
+      return;
+   }
+
+   if( !strcasecmp( action, "name" ) )
+   {
+      if( pMob->name ) free( pMob->name );
+      pMob->name = strdup( arg );
+   }
+   else if( !strcasecmp( action, "short" ) || !strcasecmp( action, "sdesc" ) )
+   {
+      if( pMob->sdesc ) free( pMob->sdesc );
+      pMob->sdesc = strdup( arg );
+   }
+   else if( !strcasecmp( action, "long" ) || !strcasecmp( action, "ldesc" ) )
+   {
+      if( pMob->ldesc ) free( pMob->ldesc );
+      pMob->ldesc = strdup( arg );
+   }
+   else if( !strcasecmp( action, "position" ) )
+   {
+      enum position_t i;
+      for( i = 0; i < MAX_POS; i++ )
+      {
+         if( is_prefix( arg, positions[i] ) )
+            break;
+      }
+      if( i == MAX_POS )
+      {
+         text_to_mobile_j( dMob, "error", "Invalid mobile position %s.", arg );
+         return;
+      }
+      else
+      {
+         pMob->position = i;
+      }
+
+   }
+   else if( !strcasecmp( action, "cur_hp" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->cur_hp = atoi( arg );
+   }
+   else if( !strcasecmp( action, "max_hp" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->max_hp = atoi( arg );
+   }
+   else if( !strcasecmp( action, "brains" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->brains = atoi( arg );
+   }
+   else if( !strcasecmp( action, "brawn" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->brawn = atoi( arg );
+   }
+   else if( !strcasecmp( action, "senses" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->senses = atoi( arg );
+   }
+   else if( !strcasecmp( action, "stamina" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->stamina = atoi( arg );
+   }
+   else if( !strcasecmp( action, "coordination" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->coordination = atoi( arg );
+   }
+   else if( !strcasecmp( action, "cool" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->cool = atoi( arg );
+   }
+   else if( !strcasecmp( action, "luck" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 || i > 10 )
+      {
+         text_to_mobile_j( dMob, "error", "Base statistics can only be between 1 - 10." );
+         return;
+      }
+      pMob->luck = atoi( arg );
+   }
+   else if( !strcasecmp( action, "race" ) )
+   {
+      if( pMob->race ) free( pMob->race );
+      pMob->race = strdup( arg );
+   }
+   else if( !strcasecmp( action, "eyecolor" ) )
+   {
+      if( pMob->eyecolor ) free( pMob->eyecolor );
+      pMob->eyecolor = strdup( arg );
+   }
+   else if( !strcasecmp( action, "eyeshape" ) )
+   {
+      if( pMob->eyeshape ) free( pMob->eyeshape );
+      pMob->eyeshape = strdup( arg );
+   }
+   else if( !strcasecmp( action, "haircolor" ) )
+   {
+      if( pMob->haircolor ) free( pMob->haircolor );
+      pMob->haircolor = strdup( arg );
+   }
+   else if( !strcasecmp( action, "skincolor" ) )
+   {
+      if( pMob->skincolor ) free( pMob->skincolor );
+      pMob->skincolor = strdup( arg );
+   }
+   else if( !strcasecmp( action, "build" ) )
+   {
+      if( pMob->build ) free( pMob->build );
+      pMob->build = strdup( arg );
+   }
+   else if( !strcasecmp( action, "height" ) )
+   {
+      if( pMob->height ) free( pMob->height );
+      pMob->height = strdup( arg );
+   }
+   else if( !strcasecmp( action, "age" ) )
+   {
+      int i = atoi( arg );
+      if( i < 16 || i > 120 )
+      {
+         text_to_mobile_j( dMob, "error", "Age can only be between 16 - 120." );
+         return;
+      }
+      pMob->age = i;
+   }
+   else if( !strcasecmp( action, "sex" ) || !strcasecmp( action, "gender" ) )
+   {
+      if( !strcasecmp( arg, "male" ) )
+         pMob->gender = MALE;
+      else if( !strcasecmp( arg, "female" ) )
+         pMob->gender = FEMALE;
+      else if( !strcasecmp( arg, "nonbinary" ) || !strcasecmp( arg, "neutral" ) )
+         pMob->gender = NONBINARY;
+      else
+      {
+         text_to_mobile_j( dMob, "error", "Invalid gender. Options are male, female, or nonbinary." );
+         return;
+      }
+      text_to_mobile_j( dMob, "text", "Gender set to %s.", arg );
+   }
+   else if( !strcasecmp( action, "btc" ) || !strcasecmp( action, "bitcoin" ) || !strcasecmp( action, "money" ) )
+   {
+      float f = strtof( arg, NULL );
+      if( f < 0 )
+      {
+         text_to_mobile_j( dMob, "error", "This must be a positive number." );
+         return;
+      }
+      pMob->btc = f;
+   }
+   else if( !strcasecmp( action, "citizenship" ) )
+   {
+      if( pMob->citizenship ) free( pMob->citizenship );
+      pMob->citizenship = strdup( arg );
+   }
+   else if( !strcasecmp( action, "association" ) )
+   {
+      if( pMob->association ) free( pMob->association );
+      pMob->association = strdup( arg );
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "error", "See help mset for usage." );
+      return;
+   }
+
+   text_to_mobile_j( dMob, "text", "Ok." );
+   return;
+}
+
 void cmd_oset( D_MOBILE *dMob, char *arg )
 {
    if( arg[0] == '\0' )
@@ -35,7 +510,7 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
       return;
    }
 
-   if( !strcasecmp( action, "short" ) )
+   if( !strcasecmp( action, "short" )  || !strcasecmp( action, "sdesc" ) )
    {
       if( arg[0] == '\0' )
       {
@@ -45,7 +520,7 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
       if( obj->sdesc ) free( obj->sdesc );
       obj->sdesc = strdup( arg );
    }
-   else if( !strcasecmp( action, "long" ) )
+   else if( !strcasecmp( action, "long" ) || !strcasecmp( action, "ldesc" ) )
    {
       if( arg[0] == '\0' )
       {
@@ -415,6 +890,13 @@ void cmd_savearea( D_MOBILE *dMob, char *arg )
    if( pArea->filename == NULL )
       pArea->filename = strdup( filename );
 
+   if( !strcmp( pArea->filename, "arealist.json" ) )
+   {
+      log_string( "%s tried to save over the arealist.json file..... Naughty!!!", pMob->name );
+      json_decref( area );
+      return;
+   }
+
    if( pArea->filename[0] == '.' )
       pArea->filename[0] = '_';
    if( pArea->filename[1] == '.' )
@@ -427,6 +909,302 @@ void cmd_savearea( D_MOBILE *dMob, char *arg )
    }
    snprintf( filename, MAX_STRING_LENGTH, "../areas/%s", pArea->filename );
    json_dump_file( area, filename, JSON_INDENT(3) );
+   json_decref( area );
+
+   //Recreate arealist.json
+   json_t *arealist = json_array();
+   AttachIterator( &Iter, darea_list );
+   while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      json_array_append_new( arealist, areaheader_to_json( pArea ) );
+   }
+   DetachIterator( &Iter );
+   json_dump_file( arealist, "../areas/arealist.json", JSON_INDENT(3) );
+   json_decref( arealist );
 
    return;
 }
+
+void cmd_astat( D_MOBILE *dMob, char *arg )
+{
+   D_AREA *area = NULL;
+
+   if( arg[0] == '\0' )
+   {
+      area = dMob->room->area;
+   }
+   else
+   {
+      ITERATOR Iter;
+      D_AREA *pArea;
+
+      AttachIterator( &Iter, darea_list );
+      while( (pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( !strcasecmp( pArea->filename, arg ) )
+         {
+            area = pArea;
+         }
+      }
+      DetachIterator( &Iter );
+   }
+   
+   if( area == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "Can't find area %s.", arg );
+      return;
+   }
+
+   text_to_mobile_j( dMob, "text", "Name: %s\nFilename: %s\nAuthor: %s\nReset Interval: %i minutes\nRoom Range:    %i - %i\nObject Range:  %i - %i\nMobile Range:  %i - %i",
+         area->name, area->filename, area->author, area->reset_interval, area->r_low, area->r_hi, area->o_low, area->o_hi, area->m_low, area->m_hi );
+}
+
+void cmd_aset( D_MOBILE *dMob, char *arg )
+{
+   D_AREA *area = NULL;
+
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Usage: aset <filename> <action> <arg>. See help aset for more info." );
+      return;
+   }
+
+   char filename[MAX_STRING_LENGTH];
+   char action[MAX_STRING_LENGTH];
+   
+   arg = one_arg( arg, filename );
+   arg = one_arg( arg, action );
+
+   if( filename[0] == '\0' || action[0] == '\0' || arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Usage: aset <filename> <action> <arg>. See help aset for more info." );
+      return;
+   }
+
+   ITERATOR Iter;
+   AttachIterator( &Iter, darea_list );
+   while( ( area = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      if( !strcasecmp( filename, area->filename ) )
+         break;
+   }
+   DetachIterator( &Iter );
+
+   if( area == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "Can not find area %s.", filename );
+      return;
+   }
+
+   if( !strcasecmp( action, "name" ) )
+   {
+      if( area->name ) free( area->name );
+      area->name = strdup( arg );
+   }
+   else if( !strcasecmp( action, "author" ) )
+   {
+      if( area->author ) free( area->author );
+      area->author = strdup( arg );
+   }
+   else if( !strcasecmp( action, "reset_interval" ) )
+   {
+      int i = atoi( arg );
+      if( i < 5 || i > 60 )
+      {
+         text_to_mobile_j( dMob, "error", "Reset interval must be betwen 5 and 60 minutes." );
+         return;
+      }
+      area->reset_interval = i;
+   }
+   else if( !strcasecmp( action, "o_low" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->o_hi && i >= pArea->o_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->o_low, pArea->o_hi );
+         return;
+      }
+      area->o_low = i;
+   }
+   else if( !strcasecmp( action, "m_low" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->m_hi && i >= pArea->m_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->m_low, pArea->m_hi );
+         return;
+      }
+      area->m_low = i;
+   }
+   else if( !strcasecmp( action, "r_low" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->r_hi && i >= pArea->r_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->r_low, pArea->r_hi );
+         return;
+      }
+      area->r_low = i;
+   }
+   else if( !strcasecmp( action, "r_hi" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->r_hi && i >= pArea->r_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->r_low, pArea->r_hi );
+         return;
+      }
+      area->r_hi = i;
+   }
+   else if( !strcasecmp( action, "m_hi" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->m_hi && i >= pArea->m_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->m_low, pArea->m_hi );
+         return;
+      }
+      area->m_hi = i;
+   }
+   else if( !strcasecmp( action, "o_hi" ) )
+   {
+      int i = atoi( arg );
+      if( i < 1 )
+      {
+         text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
+         return;
+      }
+      D_AREA *pArea;
+      AttachIterator( &Iter, darea_list );
+      while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+      {
+         if( i <= pArea->o_hi && i >= pArea->o_low )
+            break;
+      }
+      DetachIterator( &Iter );
+      if( pArea && pArea != area )
+      {
+         text_to_mobile_j( dMob, "error", "Requested low vnum overlaps with area %s ( %i - %i ).", pArea->filename, pArea->o_low, pArea->o_hi );
+         return;
+      }
+      area->o_hi = i;
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "error", "See help aset for information on how to use this command." );
+      return;
+   }
+
+   text_to_mobile_j( dMob, "text", "Ok." );
+   return;
+}
+
+void cmd_mspawn( D_MOBILE *dMob, char *arg )
+{
+   D_MOBILE *mob;
+   unsigned long vnum = strtoul( arg, NULL, 10 );
+
+   if( ( mob = spawn_mobile( vnum ) ) == NULL )
+   {
+      text_to_mobile_j( dMob, "error",  "Can not find mobile with vnum '%u'", vnum );
+      return;
+   }
+
+   AppendToList( mob, dMob->room->mobiles );
+   mob->room = dMob->room;
+   text_to_mobile_j( dMob, "text", "The entire world vibrates for a split second and %s appears before you.", mob->sdesc );
+   return;
+}
+
+void cmd_mlist( D_MOBILE *dMob, char *arg )
+{
+   ITERATOR Iter;
+   json_t *json = json_object();
+   json_t *list = json_array();
+   D_MOBILE *m;
+
+   AttachIterator( &Iter, mobile_protos );
+   while( ( m = NextInList( &Iter ) ) != NULL )
+   {
+      json_t *jm = json_object();
+      json_object_set_new( jm, "vnum", json_integer( m->vnum ) );
+      json_object_set_new( jm, "name", json_string( m->name ) );
+      json_array_append_new( list, jm );
+   }
+   DetachIterator( &Iter );
+
+   json_object_set_new( json, "type", json_string( "mlist" ) );
+   json_object_set_new( json, "data", list );
+
+   char *dump = json_dumps( json, 0 );
+   send_json_m( dMob, "%s", dump );
+   free( dump );
+   json_decref( json );
+   return;
+}
+

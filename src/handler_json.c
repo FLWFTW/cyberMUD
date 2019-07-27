@@ -722,6 +722,7 @@ json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )
    json_t *json = json_object();
    
    json_object_set_new( json, "name", json_string( dMob->name ) );
+   json_object_set_new( json, "vnum", json_integer( dMob->vnum ) );
    json_object_set_new( json, "race", json_string( dMob->race ) );
    json_object_set_new( json, "citizenship", json_string( dMob->citizenship ) );
    json_object_set_new( json, "association", json_string( dMob->association ) );
@@ -825,5 +826,23 @@ json_t *json_from_keys( json_t *parent, int n, ... )
    json_object_update_existing( result, parent ); //updates only existing keys
 
    return result;
+}
+
+
+json_t *areaheader_to_json( D_AREA *area )
+{
+   json_t *json = json_object();
+   json_object_set_new( json, "name", json_string( area->name ) );
+   json_object_set_new( json, "filename", json_string( area->filename ) );
+   json_object_set_new( json, "author", json_string( area->author ) );
+   json_object_set_new( json, "reset_interval", json_integer( area->reset_interval ) );
+   json_object_set_new( json, "reset_script", json_string( area->reset_script ) );
+   json_object_set_new( json, "o_low", json_integer( area->o_low ) );
+   json_object_set_new( json, "o_hi",  json_integer( area->o_hi ) );
+   json_object_set_new( json, "m_low", json_integer( area->m_low ) );
+   json_object_set_new( json, "m_hi",  json_integer( area->m_hi ) );
+   json_object_set_new( json, "r_low", json_integer( area->r_low ) );
+   json_object_set_new( json, "r_hi",  json_integer( area->r_hi ) );
+   return json;
 }
 

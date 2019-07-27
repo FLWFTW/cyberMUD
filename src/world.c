@@ -30,6 +30,7 @@ void load_area_file( D_AREA *area )
             D_ROOM *room = json_to_room( array );
             room->area = area;
             AttachToList( room, area->rooms );
+            AttachToList( room, droom_list );
          }
       }
       else if( !strcmp( key, "mobiles" ) )

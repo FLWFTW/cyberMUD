@@ -709,6 +709,7 @@ json_t *object_to_json_cli( D_OBJECT *obj );
 json_t *json_from_keys( json_t *parent, int n, ... );
 json_t *room_to_json( D_ROOM *room );
 json_t *reset_to_json( D_RESET *reset );
+json_t *areaheader_to_json( D_AREA *area );
 
 /*
  * comm.c
@@ -720,6 +721,10 @@ void echo_around_two( D_MOBILE *one, D_MOBILE *two, char *type, char *txt, ... )
 /*
  * reset.c
  */
+json_t *object_to_reset( D_OBJECT *obj );
+json_t *mobile_to_reset( D_MOBILE *dMob );
+D_OBJECT *reset_to_object( json_t *data );
+D_MOBILE *reset_to_mobile( json_t *data );
 void reset_area( D_AREA *pArea );
 
 /*
@@ -731,10 +736,16 @@ void cmd_astat( D_MOBILE *dMob, char *arg );
 /*
  * building.c
  */
+void cmd_instazone( D_MOBILE *dMob, char *arg );
 void cmd_oset( D_MOBILE *dMOb, char *arg );
 void cmd_eset( D_MOBILE *dMOb, char *arg );
 void cmd_redit( D_MOBILE *dMob, char *arg );
 void cmd_savearea( D_MOBILE *dMob, char *arg );
+void cmd_ocreate( D_MOBILE *dMob, char *arg );
+void cmd_mcreate( D_MOBILE *dMob, char *arg );
+void cmd_mset( D_MOBILE *dMob, char *arg );
+void cmd_makearea( D_MOBILE *dMob, char *arg );
+void cmd_aset( D_MOBILE *dMob, char *arg );
 
 /*
  * action_combat.c

@@ -39,40 +39,6 @@ void cmd_restore( D_MOBILE *dMob, char *arg )
    return;
 }
 
-void cmd_astat( D_MOBILE *dMob, char *arg )
-{
-   D_AREA *area = NULL;
-
-   if( arg[0] == '\0' )
-   {
-      area = dMob->room->area;
-   }
-   else
-   {
-      ITERATOR Iter;
-      D_AREA *pArea;
-
-      AttachIterator( &Iter, darea_list );
-      while( (pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
-      {
-         if( !strcasecmp( pArea->filename, arg ) )
-         {
-            area = pArea;
-         }
-      }
-      DetachIterator( &Iter );
-   }
-   
-   if( area == NULL )
-   {
-      text_to_mobile_j( dMob, "error", "Can't find area %s.", arg );
-      return;
-   }
-
-   text_to_mobile_j( dMob, "text", "Name: %s\nFilename: %s\nAuthor: %s\nReset Interval: %i minutes\nRoom Range:    %i - %i\nObject Range:  %i - %i\nMobile Range:  %i - %i",
-         area->name, area->filename, area->author, area->reset_interval, area->r_low, area->r_hi, area->o_low, area->o_hi, area->m_low, area->m_hi );
-}
-
 void cmd_resetarea( D_MOBILE *dMob, char *arg )
 {
    if( arg[0] == '\0' )
