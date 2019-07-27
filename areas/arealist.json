@@ -1,15 +1,27 @@
 [
    {
+      "name": "San Francisco General Hospital",
+      "o_low": 100,
+      "m_low": 100,
+      "r_low": 100,
+      "author": "Raze",
+      "filename": "aa.json",
+      "reset_interval": 15,
+      "r_hi": 150,
+      "o_hi": 150,
+      "m_hi": 150
+   },
+   {
       "name": "The City",
-      "author": "Will",
-      "filename": "city.json",
-      "reset_script":"lplogstring(\"Resetting The City!\");",
-      "reset_interval":15,
-      "r_low": 1,
-      "r_hi": 10,
+      "reset_script": "lplogstring(\"Resetting The City!\");",
       "o_low": 1,
-      "o_hi": 20,
       "m_low": 1,
+      "r_low": 1,
+      "author": "Raze",
+      "filename": "city.json",
+      "reset_interval": 20,
+      "r_hi": 10,
+      "o_hi": 30,
       "m_hi": 10
    }
 ]

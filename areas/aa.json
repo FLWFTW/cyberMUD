@@ -1,0 +1,13 @@
+{
+   "objects": [],
+   "rooms": [
+      {
+         "vnum": 100,
+         "name": "The lobby of San Francisco General Hospital",
+         "description": "The linoleum floors are dingy and worn. The whole lobby smells strongy of antiseptic mixed with piss, vomit, and blood. There's an empty check-in desk along the northern wall. The nurses that would normally sit behind the bulletproof glass have been replaced with an electronic speaker-box. A security camera records everything going on in the lobby. Automatic doors lead out to the street along the southern wall. Several rows of chairs are available for potential patients to sit on. A door labeled 'EMERGENCY' is on the western wall and a bank of elevators are on the eastern wall.",
+         "exits": []
+      }
+   ],
+   "resets": [],
+   "mobiles": []
+}
