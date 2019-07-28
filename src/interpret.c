@@ -12,7 +12,8 @@ void handle_edit_input( D_SOCKET *dsock, char *arg )
    if( !strcasecmp( arg, "/s" ) )
    {
       free( *dsock->edit_pointer );
-      *dsock->edit_pointer = strdup( dsock->edit_buffer );
+      if( dsock->edit_buffer != NULL )
+         *dsock->edit_pointer = strdup( dsock->edit_buffer );
       free( dsock->edit_buffer );
       dsock->edit_buffer = NULL;
       text_to_mobile_j( dsock->player, "text", "Saved." );
@@ -68,6 +69,10 @@ void handle_cmd_input(D_MOBILE *dMob, char *arg)
      if( arg[i] < 32 ) //control characters
         arg[i] = ' ';
   }//Prevent people from sneaking in control characters
+
+  /*
+   * Check for room programs, mob programs, and object programs, then for scripted skills, then socials
+   */
 
   for (i = 0; tabCmd[i].cmd_name[0] != '\0' && !found_cmd; i++)
   {
@@ -147,6 +152,7 @@ const struct typCmd tabCmd [] =
   { "get",           cmd_get,        LEVEL_GUEST,     CMD_ACT  },
   { "give",          cmd_give,       LEVEL_GUEST,     CMD_ACT  },
   { "goto",          cmd_goto,       LEVEL_GOD,       CMD_WIZ  },
+  { "gui-redit",     cmd_guiredit,   LEVEL_GOD,       CMD_WIZ  },
   { "help",          cmd_help,       LEVEL_GUEST,     CMD_OOC  },
   { "hedit",         cmd_hedit,      LEVEL_GOD,       CMD_WIZ  },
   { "holster",       cmd_holster,    LEVEL_GUEST,     CMD_ACT  },
@@ -162,6 +168,7 @@ const struct typCmd tabCmd [] =
   { "mcreate",       cmd_mcreate,    LEVEL_GOD,       CMD_WIZ  },
   { "mspawn",        cmd_mspawn,     LEVEL_GOD,       CMD_WIZ  },
   { "mset",          cmd_mset,       LEVEL_GOD,       CMD_WIZ  },
+  { "mstat",         cmd_mstat,      LEVEL_GOD,       CMD_WIZ  },
   { "n",             cmd_north,      LEVEL_GUEST,     CMD_ACT  },
   { "north",         cmd_north,      LEVEL_GUEST,     CMD_ACT  },
   { "ne",            cmd_northeast,  LEVEL_GUEST,     CMD_ACT  },

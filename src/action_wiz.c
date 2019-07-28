@@ -27,7 +27,7 @@ void cmd_restore( D_MOBILE *dMob, char *arg )
    target->cur_hp = target->max_hp;
    for( enum bodyparts_t i = BODY_HEAD; i < MAX_BODY; i++ )
    {
-      target->body[i]->health = 100;
+      target->body[i]->cur_hp = target->body[i]->max_hp;
       target->body[i]->wound_trauma = TRAUMA_NONE;
       target->body[i]->blunt_trauma = TRAUMA_NONE;
       target->body[i]->burn_trauma = TRAUMA_NONE;

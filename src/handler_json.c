@@ -184,6 +184,19 @@ json_t *room_to_json( D_ROOM *room )
       json_array_append_new( exits, exit_to_json( exit ) );
    }
    DetachIterator( &Iter );
+   if( SizeOfList( room->scripts ) > 0 )
+   {
+      json_t *scripts = json_array();
+      char *script;
+      AttachIterator( &Iter, room->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+      {
+         json_array_append_new( scripts, json_string( script ) );
+      }
+      DetachIterator( &Iter );
+      json_object_set_new( json, "scripts", scripts );
+   }
+
    json_object_set_new( json, "exits", exits );
    return json;
 }
@@ -313,7 +326,6 @@ D_OBJECT *json_to_object( json_t *json )
       {
          obj->repair = json_integer_value( value );
          if( obj->repair > 100 ) obj->repair = 100;
-         if( obj->repair < 0 )   obj->repair = 0;
       }
       else
       {
@@ -342,6 +354,25 @@ json_t *object_to_json_cli( D_OBJECT *obj )
    json_object_set_new( json, "type", json_string( item_type[obj->type] ) );
    json_object_set_new( json, "type_string", json_string( item_type[obj->type] ) );
    json_object_set_new( json, "repair", json_integer( obj->repair ) );
+
+   json_object_set_new( json, "ivar1", json_integer( obj->ivar1 ) );
+   json_object_set_new( json, "ivar2", json_integer( obj->ivar2 ) );
+   json_object_set_new( json, "ivar3", json_integer( obj->ivar3 ) );
+   json_object_set_new( json, "ivar4", json_integer( obj->ivar4 ) );
+   json_object_set_new( json, "ivar5", json_integer( obj->ivar5 ) );
+   json_object_set_new( json, "ivar6", json_integer( obj->ivar6 ) );
+   if( obj->svar1 )
+      json_object_set_new( json, "svar1", json_string( obj->svar1 ) );
+   if( obj->svar2 )
+      json_object_set_new( json, "svar2", json_string( obj->svar2 ) );
+   if( obj->svar3 )
+      json_object_set_new( json, "svar3", json_string( obj->svar3 ) );
+   if( obj->svar4 )
+      json_object_set_new( json, "svar4", json_string( obj->svar4 ) );
+   if( obj->svar5 )
+      json_object_set_new( json, "svar5", json_string( obj->svar5 ) );
+   if( obj->svar6 )
+      json_object_set_new( json, "svar6", json_string( obj->svar6 ) );
 
 
    return json;
@@ -394,6 +425,21 @@ json_t *object_to_json( D_OBJECT *obj )
       DetachIterator( &Iter );
       json_object_set_new( json, "contents", contents );
    }
+
+   if( SizeOfList( obj->scripts ) > 0 )
+   {
+      json_t *scripts = json_array();
+      ITERATOR Iter;
+      char *script;
+      AttachIterator( &Iter, obj->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+      {
+         json_array_append_new( scripts, json_string( script ) );
+      }
+      DetachIterator( &Iter );
+      json_object_set_new( json, "scripts", scripts );
+   }
+
    return json;
 }
 
@@ -482,7 +528,8 @@ void load_body( D_MOBILE *dMob, json_t *json )
       json_t *part = json_object_get( json, body_parts[i] );
       if( part == NULL )
          continue;
-      dMob->body[i]->health = json_integer_value( json_object_get( part, "health" ) );
+      dMob->body[i]->cur_hp = json_integer_value( json_object_get( part, "cur_hp" ) );
+      dMob->body[i]->max_hp = json_integer_value( json_object_get( part, "max_hp" ) );
       dMob->body[i]->wound_trauma = json_integer_value( json_object_get( part, "wound_trauma" ) );
       dMob->body[i]->blunt_trauma = json_integer_value( json_object_get( part, "blunt_trauma" ) );
       dMob->body[i]->burn_trauma  = json_integer_value( json_object_get( part, "burn_trauma"  ) );
@@ -717,6 +764,15 @@ json_t *skills_to_json( SKILLS *skills )
    return json;
 }
 
+json_t *mobile_to_json_cli( D_MOBILE *dMob )
+{
+   json_t *json = mobile_to_json( dMob, FALSE );
+   json_object_del( json, "scripts" );
+   json_object_del( json, "equipment" );
+
+   return json;
+}
+
 json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )
 {
    json_t *json = json_object();
@@ -765,7 +821,8 @@ json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )
    for( size_t i = BODY_HEAD; i < MAX_BODY; i++ )
    {
       json_t *part = json_object();
-      json_object_set_new( part, "health", json_integer( dMob->body[i]->health ) );
+      json_object_set_new( part, "cur_hp", json_integer( dMob->body[i]->cur_hp ) );
+      json_object_set_new( part, "max_hp", json_integer( dMob->body[i]->max_hp ) );
       json_object_set_new( part, "wound_trauma", json_integer( dMob->body[i]->wound_trauma ) );
       json_object_set_new( part, "blunt_trauma", json_integer( dMob->body[i]->blunt_trauma ) );
       json_object_set_new( part, "burn_trauma",  json_integer( dMob->body[i]->burn_trauma  ) );
@@ -797,6 +854,21 @@ json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )
       json_object_set_new( json, "equipment", equipment);
 
    }
+
+   if( SizeOfList( dMob->scripts ) > 0 )
+   {
+      json_t *scripts = json_array();
+      ITERATOR Iter;
+      char *script;
+      AttachIterator( &Iter, dMob->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+      {
+         json_array_append_new( scripts, json_string( script ) );
+      }
+      DetachIterator( &Iter );
+      json_object_set_new( json, "scripts", scripts );
+   }
+
    return json;
 }
 json_t *player_to_json( D_MOBILE *dMob, bool showEquipment )

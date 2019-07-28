@@ -1,5 +1,12 @@
 #include "mud.h"
 
+void cmd_guiredit( D_MOBILE *dMob, char *arg )
+{
+   if( IS_NPC( dMob ) )
+      return;
+   text_to_socket( dMob->socket, "%c{\"type\":\"build_room_data\", \"data\":{\"room\":%s}}%c", (char)2, json_dumps( room_to_json( dMob->room ), 0 ), (char)3 );
+   return;
+}
 void cmd_makearea( D_MOBILE *dMob, char *arg )
 {
    if( arg[0] == '\0' )
@@ -581,6 +588,57 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
       if( !is_prefix( arg, "none" ) && i == WEAR_NONE )
       {
          text_to_mobile_j( dMob, "error", "Invalid wear position." );
+         return;
+      }
+   }
+   else if( !strcasecmp( action, "capacity" ) )
+   {
+      int cap = atoi( arg );
+      if( cap < 0 || cap > 10000000 )
+      {
+         text_to_mobile_j( dMob, "error", "Capacity must be between 0 and 10,000,000 cubic centimeters (0-10,000 cubic liters, or 0-350 cubic feet)." );
+         return;
+      }
+      obj->capacity_cm3 = cap;
+      text_to_mobile_j( dMob, "text", "Item capacity set to %i cubic centimeters.", cap );
+   }
+   else if( !strcasecmp( action, "volume" ) )
+   {
+      int vol = atoi( arg );
+      if( vol < 0 || vol > 10000000 )
+      {
+         text_to_mobile_j( dMob, "error", "Item volume (length x width x height in centimeters) must be between 0 and 10,000,000 cubic centimeters (0-10,000 cubic liters, or 0-350 cubic feet)." );
+         return;
+      }
+      obj->volume_cm3 = vol;
+      text_to_mobile_j( dMob, "text", "Item volume set to %i cubic centimeters.", vol );
+   }
+   else if( !strcasecmp( action, "weight" ) )
+   {
+      int weight = atoi( arg );
+      if( weight < 0 || weight > 100000 )
+      {
+         text_to_mobile_j( dMob, "error", "Item weight must be between 0 and 100,000 kilograms (0-100 metric tons, 0-22,000 pounds)." );
+         return;
+      }
+      obj->weight_g = weight * 1000;
+      text_to_mobile_j( dMob, "text", "Item weight set to %i kilograms.", weight );
+   }
+   else if( !strcasecmp( action, "get" ) )
+   {
+      if( !strcasecmp( arg, "true" ) )
+      {
+         text_to_mobile_j( dMob, "text", "Item now able to be taken." );
+         obj->can_get = TRUE;
+      }
+      else if( !strcasecmp( arg, "false" ) )
+      {
+         text_to_mobile_j( dMob, "text", "Item now not able to be taken." );
+         obj->can_get = FALSE;
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "error", "Syntax: oset <object> get [true/false] -- to allow or disallow players from getting the object." );
          return;
       }
    }
@@ -1208,3 +1266,136 @@ void cmd_mlist( D_MOBILE *dMob, char *arg )
    return;
 }
 
+void cmd_ostat( D_MOBILE *dMob, char *arg )
+{
+   D_OBJECT *obj;
+
+   if( is_number( arg ) )
+   {
+      obj = get_object_by_vnum( atoi( arg ) );
+   }
+   else
+   {
+      if( dMob->hold_right && ( is_name( arg, dMob->hold_right->name ) || !strcmp( dMob->hold_right->guid, arg ) ) )
+         obj = dMob->hold_right;
+      else if( dMob->hold_left && ( is_name( arg, dMob->hold_left->name ) || !strcmp( dMob->hold_left->guid, arg ) ) )
+         obj = dMob->hold_left;
+      else
+      {
+         obj = get_object_list( arg, dMob->room->objects );
+      }
+   }
+
+   if( obj == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find that here." );
+      return;
+   }
+
+   json_t *json = json_object();
+   json_object_set_new( json, "type", json_string( "ostat" ) );
+   json_object_set_new( json, "data", object_to_json_cli( obj ) );
+   char *dump = json_dumps( json, 0 );
+   send_json_m( dMob, "%s", dump );
+   json_decref( json );
+   free( dump );
+   return;
+}
+
+void cmd_mstat( D_MOBILE *dMob, char *arg )
+{
+   D_MOBILE *pMob;
+
+   if( is_number( arg ) )
+   {
+      pMob = get_mobile_by_vnum( atoi( arg ) );
+   }
+   else
+   {
+      pMob = get_mobile_list( arg, dMob->room->mobiles );
+   }
+
+   if( pMob == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find that.\r\n" );
+      return;
+   }
+
+   json_t *json = json_object();
+   json_object_set_new( json, "type", json_string( "mstat" ) );
+   json_object_set_new( json, "data", mobile_to_json( pMob, FALSE ) );
+   char *dump = json_dumps( json, 0 );
+   send_json_m( dMob, "%s", dump );
+   json_decref( json );
+   free( dump );
+
+   return;
+}
+/*
+ * olist
+ * usage: olist [area name]
+ *    lists objects assigned to a specific area.
+ *    If area name is not supplied defaults to area player is in.
+ */
+void cmd_olist( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+      snprintf( arg, MAX_BUFFER, "%s", dMob->room->area->name );
+
+   //For now we will just list all object prototypes in the game.
+   //Support for the above will come later.
+
+   ITERATOR Iter;
+   D_OBJECT *pObj;
+   json_t *olist = json_array();
+   json_t *json = json_object();
+
+   AttachIterator( &Iter, object_protos );
+   while( ( pObj = NextInList( &Iter ) ) != NULL )
+      json_array_append_new( olist, object_to_json( pObj ) );
+   DetachIterator( &Iter );
+
+   json_object_set_new( json, "type", json_string( "olist" ) );
+   json_object_set_new( json, "data", olist );
+
+   char *dump = json_dumps( json, 0 );
+   send_json_m( dMob, "%s", dump );
+   json_decref( json );
+   free( dump );
+
+   return;
+}
+
+void cmd_mpedit( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "Edit which mob's scripts?" );
+      return;
+   }
+
+   char type[MAX_STRING_LENGTH];
+   char mname[MAX_STRING_LENGTH];
+   D_MOBILE *pMob;
+
+   arg = one_arg( arg, mname );
+   arg = one_arg( arg, type );
+
+   if( is_number( mname ) )
+   {
+      pMob = get_mobile_by_vnum( atoi( mname ) );
+   }
+   else
+   {
+      pMob = get_mobile_list( mname, dMob->room->mobiles );
+      pMob = get_mobile_by_vnum( pMob->vnum );
+   }
+
+   if( pMob == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You can't find that mobile." );
+      return;
+   }
+
+   return;
+}

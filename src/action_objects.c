@@ -162,7 +162,7 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
       else
       {
 
-         text_to_mobile_j( dMob, "text", "You remove %s %s and hold it in your left hand.",
+         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your left hand.",
                obj->sdesc );
          echo_around( dMob, "text", "%s removes %s and holds it in %s left hand.",
                MOBNAME(dMob), obj->sdesc,
@@ -216,7 +216,7 @@ void cmd_give( D_MOBILE *dMob, char *arg )
 
    if( dMob->hold_right && dMob->hold_right == what )
    {
-      text_to_mobile_j( dMob, "text", "You offer the %s in your right hand to %s.", what->sdesc, MOBNAME(to) );
+      text_to_mobile_j( dMob, "text", "You offer %s in your right hand to %s.", what->sdesc, MOBNAME(to) );
       text_to_mobile_j( to, "text", "%s offers you %s.", MOBNAME(dMob),  what->sdesc );
       dMob->offer_right->to = to;
       dMob->offer_right->what = what;
@@ -224,7 +224,7 @@ void cmd_give( D_MOBILE *dMob, char *arg )
    }
    else if( dMob->hold_left && dMob->hold_left == what )
    {
-      text_to_mobile_j( dMob, "text", "You offer the %s in your left hand to %s.", what->sdesc, MOBNAME(to) );
+      text_to_mobile_j( dMob, "text", "You offer %s in your left hand to %s.", what->sdesc, MOBNAME(to) );
       text_to_mobile_j( to, "text", "%s offers you %s.", MOBNAME(dMob), what->sdesc );
       dMob->offer_left->to = to;
       dMob->offer_left->what = what;
@@ -541,64 +541,6 @@ void cmd_wear( D_MOBILE *dMob, char *arg )
    }
 }
 
-void cmd_ostat( D_MOBILE *dMob, char *arg )
-{
-   D_OBJECT *obj;
-   if( dMob->hold_right && ( is_name( arg, dMob->hold_right->name ) || !strcmp( dMob->hold_right->guid, arg ) ) )
-      obj = dMob->hold_right;
-   else if( dMob->hold_left && ( is_name( arg, dMob->hold_left->name ) || !strcmp( dMob->hold_left->guid, arg ) ) )
-      obj = dMob->hold_left;
-   else if( ( obj = get_object_list( arg, dMob->room->objects ) ) == NULL )
-   {
-      text_to_mobile_j( dMob, "error", "You can't find that.\r\n" );
-      return;
-   }
-
-   json_t *json = json_object();
-   json_object_set_new( json, "type", json_string( "ostat" ) );
-   json_object_set_new( json, "data", object_to_json_cli( obj ) );
-   char *dump = json_dumps( json, 0 );
-   send_json_m( dMob, "%s", dump );
-   json_decref( json );
-   free( dump );
-   return;
-}
-
-/*
- * olist
- * usage: olist [area name]
- *    lists objects assigned to a specific area.
- *    If area name is not supplied defaults to area player is in.
- */
-void cmd_olist( D_MOBILE *dMob, char *arg )
-{
-   if( arg[0] == '\0' )
-      snprintf( arg, MAX_BUFFER, "%s", dMob->room->area->name );
-
-   //For now we will just list all object prototypes in the game.
-   //Support for the above will come later.
-
-   ITERATOR Iter;
-   D_OBJECT *pObj;
-   json_t *olist = json_array();
-   json_t *json = json_object();
-
-   AttachIterator( &Iter, object_protos );
-   while( ( pObj = NextInList( &Iter ) ) != NULL )
-      json_array_append_new( olist, object_to_json( pObj ) );
-   DetachIterator( &Iter );
-
-   json_object_set_new( json, "type", json_string( "olist" ) );
-   json_object_set_new( json, "data", olist );
-
-   char *dump = json_dumps( json, 0 );
-   send_json_m( dMob, "%s", dump );
-   json_decref( json );
-   free( dump );
-
-   return;
-}
-
 void cmd_equipment( D_MOBILE *dMob, char *arg )
 {
    json_t *json = json_object();
@@ -718,6 +660,11 @@ void cmd_stow( D_MOBILE *dMob, char *arg )
 
    if( ( obj = get_object_list( arg, dMob->room->objects ) ) != NULL )
    {
+      if( !can_lift( dMob, obj ) )
+      {
+         text_to_mobile_j( dMob, "error", "You're not strong enough to lift it." );
+         return;
+      }
       for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
       {
          con = dMob->equipment[i]->worn[0];
@@ -1001,6 +948,11 @@ void cmd_get( D_MOBILE *dMob, char *arg )
       {
          if( ( obj = get_object_list( arg1, con->contents ) ) != NULL )
          {
+            if( !can_lift( dMob, obj ) )
+            {
+               text_to_mobile_j( dMob, "error", "You're not strong enough to lift it." );
+               return;
+            }
             text_to_mobile_j( dMob, "text", "You get %s from %s and hold it in your %s hand.",
                   obj->sdesc, con->sdesc,
                   dMob->hold_right == NULL ? "right" : "left" );
@@ -1032,6 +984,11 @@ void cmd_get( D_MOBILE *dMob, char *arg )
    }
    else
    {
+      if( !can_lift( dMob, obj ) )
+      {
+         text_to_mobile_j( dMob, "error", "You're not strong enough to lift it." );
+         return;
+      }
       text_to_mobile_j( dMob, "text", "You pick up %s and hold it in your %s hand.",
             obj->sdesc, dMob->hold_right == NULL ? "right" : "left" );
       echo_around( dMob, "text", "%s picks up %s and holds it in %s %s hand.",
@@ -1073,13 +1030,19 @@ void cmd_put( D_MOBILE *dMob, char *arg )
    //First check if they're holding the container, then check if they're wearing the container, then check if the container
    //is in the same room as them.
    if( ( dMob->hold_right && ( is_name( arg2, dMob->hold_right->name ) || !strcmp( dMob->hold_right->guid, arg2 ) ) ) )
+   {
       con = dMob->hold_right;
+   }
    else if( ( dMob->hold_left && ( is_name( arg2, dMob->hold_left->name ) || !strcmp( dMob->hold_left->guid, arg2 ) ) ) )
+   {
       con = dMob->hold_left;
+   }
    else if( ( con = get_object_mob( dMob,  arg2 ) ) != NULL )
-      con = con;//AKA do nothing since assignment occurred during evaluation
+   {
+   }
    else if( my == FALSE && ( con = get_object_list( arg2, dMob->room->objects ) ) != NULL )
-      con = con;
+   {
+   }
    else
    {
       if( my == TRUE )
@@ -1160,14 +1123,14 @@ void cmd_drop( D_MOBILE *dMob, char *arg )
    }
    if( dMob->hold_right && ( is_name( arg, dMob->hold_right->name ) || !strcmp( dMob->hold_right->guid, arg ) ) )
    {
-      text_to_mobile_j( dMob, "text", "You drop the %s from your right hand.\r\n", dMob->hold_right->sdesc );
+      text_to_mobile_j( dMob, "text", "You drop %s from your right hand.\r\n", dMob->hold_right->sdesc );
       object_from_mobile( dMob->hold_right, dMob );
       object_to_room( dMob->hold_right, dMob->room );
       dMob->hold_right = NULL;
    }
    else if( dMob->hold_left && ( is_name( arg, dMob->hold_left->name ) || !strcmp( dMob->hold_left->guid, arg ) ) )
    {
-      text_to_mobile_j( dMob, "text", "You drop the %s from your left hand.\r\n", dMob->hold_left->sdesc );
+      text_to_mobile_j( dMob, "text", "You drop %s from your left hand.\r\n", dMob->hold_left->sdesc );
       object_from_mobile( dMob->hold_left, dMob );
       object_to_room( dMob->hold_left, dMob->room );
       dMob->hold_left = NULL;

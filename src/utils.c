@@ -98,6 +98,7 @@ D_ROOM *new_room()
    room->mobiles = AllocList();
    room->objects = AllocList();
    room->exits   = AllocList();
+   room->scripts = AllocList();
 
    AttachToList( room, droom_list );
 
@@ -266,6 +267,7 @@ void free_room( D_ROOM *room )
    D_MOBILE *mob;
    D_OBJECT *obj;
    D_EXIT *exit;
+   char *script;
 
    free( room->name );
    free( room->description );
@@ -290,10 +292,17 @@ void free_room( D_ROOM *room )
       free_object( obj );
    }
    DetachIterator( &Iter );
+   AttachIterator( &Iter, room->scripts );
+   while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+   {
+      free( script );
+   }
+   DetachIterator( &Iter );
 
    FreeList( room->mobiles );
    FreeList( room->exits );
    FreeList( room->objects );
+   FreeList( room->scripts );
 
    free( room );
    return;
@@ -344,6 +353,7 @@ void clear_mobile(D_MOBILE *dMob)
    dMob->act_cmd_list   =  AllocList();
    dMob->ooc_cmd_list   =  AllocList();
    dMob->wiz_cmd_list   =  AllocList();
+   dMob->scripts        =  AllocList();
    dMob->offer_right  =  calloc( 1, sizeof( D_OFFER ) );
    dMob->offer_left   =  calloc( 1, sizeof( D_OFFER ) );
    dMob->guid         =  gen_guid();
@@ -358,7 +368,8 @@ void clear_mobile(D_MOBILE *dMob)
    for( size_t pos = BODY_HEAD; pos < MAX_BODY; pos++ )
    {
       dMob->body[pos] = calloc( 1, sizeof( D_BODYPART ) );
-      dMob->body[pos]->health = 100;
+      dMob->body[pos]->cur_hp = 100;
+      dMob->body[pos]->max_hp = 100;
       dMob->body[pos]->wound_trauma = TRAUMA_NONE;
       dMob->body[pos]->blunt_trauma = TRAUMA_NONE;
       dMob->body[pos]->burn_trauma  = TRAUMA_NONE;
@@ -451,8 +462,19 @@ void free_mobile_proto( D_MOBILE *dMob )
      free( dMob->equipment[i] );
   }
 
-  DetachFromList( dMob, mobile_protos );
+   if( SizeOfList( dMob->scripts ) > 0 )
+   {
+      char *script;
+      AttachIterator( &Iter, dMob->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+      {
+         free( script );
+      }
+      DetachIterator( &Iter );
+   }
+   FreeList( dMob->scripts );
 
+  DetachFromList( dMob, mobile_protos );
   PushStack( dMob, dmobile_free );
   free( dMob );
 }
@@ -493,17 +515,78 @@ void free_mobile(D_MOBILE *dMob)
   free( dMob->guid );
   free( dMob->skills );
 
-  for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
-  {
-     if( dMob->equipment[i]->worn[0] )
+   for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
+   {
+      if( dMob->equipment[i]->worn[0] )
         free_object( dMob->equipment[i]->worn[0] );
-     if( dMob->equipment[i]->worn[1] )
+      if( dMob->equipment[i]->worn[1] )
         free_object( dMob->equipment[i]->worn[1] );
-     free( dMob->equipment[i] );
-  }
+      free( dMob->equipment[i] );
+   }
 
-  PushStack( dMob, dmobile_free );
-  free( dMob );
+   if( SizeOfList( dMob->com_cmd_list ) > 0 )
+   {
+      D_COMMAND *pCmd;
+      AttachIterator( &Iter, dMob->com_cmd_list );
+      while( ( pCmd = (D_COMMAND *)NextInList( &Iter ) ) != NULL )
+      {
+        free( pCmd->arg );
+        free( pCmd );
+      }
+      DetachIterator( &Iter );
+
+   }
+   FreeList( dMob->com_cmd_list );
+   if( SizeOfList( dMob->act_cmd_list ) > 0 )
+   {
+      D_COMMAND *pCmd;
+      AttachIterator( &Iter, dMob->act_cmd_list );
+      while( ( pCmd = (D_COMMAND *)NextInList( &Iter ) ) != NULL )
+      {
+        free( pCmd->arg );
+        free( pCmd );
+      }
+      DetachIterator( &Iter );
+   }
+   FreeList( dMob->act_cmd_list );
+   if( SizeOfList( dMob->ooc_cmd_list ) > 0 )
+   {
+      D_COMMAND *pCmd;
+      AttachIterator( &Iter, dMob->ooc_cmd_list );
+      while( ( pCmd = (D_COMMAND *)NextInList( &Iter ) ) != NULL )
+      {
+        free( pCmd->arg );
+        free( pCmd );
+      }
+      DetachIterator( &Iter );
+   }
+   FreeList( dMob->ooc_cmd_list );
+   if( SizeOfList( dMob->wiz_cmd_list ) > 0 )
+   {
+     D_COMMAND *pCmd;
+     AttachIterator( &Iter, dMob->wiz_cmd_list );
+     while( ( pCmd = (D_COMMAND *)NextInList( &Iter ) ) != NULL )
+     {
+        free( pCmd->arg );
+        free( pCmd );
+     }
+     DetachIterator( &Iter );
+   } 
+   FreeList( dMob->wiz_cmd_list );
+
+   if( SizeOfList( dMob->scripts ) > 0 )
+   {
+      char *script;
+      AttachIterator( &Iter, dMob->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+      {
+         free( script );
+      }
+      DetachIterator( &Iter );
+   }
+   FreeList( dMob->scripts );
+   PushStack( dMob, dmobile_free );
+   free( dMob );
 }
 
 
@@ -702,36 +785,6 @@ D_ROOM *mob_to_room( D_MOBILE *dMob, D_ROOM *to )
    return to;
 }
 
-D_ROOM *obj_to_room( D_OBJECT *dObj, D_ROOM *to )
-{
-   if( to == NULL )
-      return NULL;
-
-   if( dObj->in_room )
-      DetachFromList( dObj, dObj->in_room->objects );
-   dObj->in_room = to;
-   AppendToList( dObj, to->objects );
-
-   return to;
-}
-
-size_t total_volume( D_OBJECT *obj )
-{
-   if( !obj )
-      return 0;
-
-   size_t size = 0;
-   ITERATOR Iter;
-   D_OBJECT *pObj;
-
-   AttachIterator( &Iter, obj->contents );
-   while( ( pObj = NextInList( &Iter ) ) != NULL )
-      size += total_volume( pObj );
-   DetachIterator( &Iter );
-
-   return size + obj->volume_cm3;
-}
-
 void check_mobiles()
 {
    ITERATOR Iter;
@@ -916,7 +969,6 @@ size_t dice( char *str2 )
          result = pow( result, mod );
          break;
       default:
-         result = result;
          break;
    }
 
@@ -932,4 +984,39 @@ D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos )
    else
       return NULL;
 }
-   
+
+unsigned int calc_brawn( D_MOBILE *dMob )
+{
+   return dMob->brawn;
+}
+
+unsigned int calc_brains( D_MOBILE *dMob )
+{
+   return dMob->brains;
+}
+
+unsigned int calc_senses( D_MOBILE *dMob )
+{
+   return dMob->senses;
+}
+
+unsigned int calc_stamina( D_MOBILE *dMob )
+{
+   return dMob->stamina;
+}
+
+unsigned int calc_cool( D_MOBILE *dMob )
+{
+   return dMob->cool;
+}
+
+unsigned int calc_coordination( D_MOBILE *dMob )
+{
+   return dMob->coordination;
+}
+
+unsigned int calc_luck( D_MOBILE *dMob )
+{
+   return dMob->luck;
+}
+

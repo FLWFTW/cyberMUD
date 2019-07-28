@@ -47,6 +47,7 @@ void reset_area( D_AREA *pArea )
                      bug( "Reset Error: Bad JSON data." );
                      break;
                   }
+                  reset->what = dObj;
                   AppendToList( dObj, dobject_list );
                   obj_to_room( dObj, room );
                }
@@ -109,6 +110,9 @@ D_OBJECT *reset_to_object( json_t *data )
 {
    D_OBJECT *obj;
 
+   if( data == NULL )
+      return NULL;
+
    int vnum = json_integer_value( json_object_get( data, "vnum" ) );
    obj = spawn_object( vnum );
    if( obj == NULL )
@@ -159,6 +163,9 @@ json_t *mobile_to_reset( D_MOBILE *dMob )
 D_MOBILE *reset_to_mobile( json_t *data )
 {
    D_MOBILE *dMob;
+
+   if( data == NULL )
+      return NULL;
 
    int vnum = json_integer_value( json_object_get( data, "vnum" ) );
    dMob = spawn_mobile( vnum );

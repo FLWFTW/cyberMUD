@@ -31,6 +31,7 @@ D_OBJECT *new_object()
    obj->svar6 = NULL;
 
    obj->contents = AllocList();
+   obj->scripts  = AllocList();
 
    return obj;
 }
@@ -71,6 +72,17 @@ void free_object( D_OBJECT *obj )
       DetachIterator( &Iter );
    }
    FreeList( obj->contents );
+
+   if( SizeOfList( obj->scripts ) > 0 )
+   {
+      ITERATOR Iter;
+      char *script;
+      AttachIterator( &Iter, obj->scripts );
+      while( ( script = (char *)NextInList( &Iter ) ) != NULL )
+         free( script );
+      DetachIterator( &Iter );
+   }
+   FreeList( obj->scripts );
    
 }
 
@@ -182,6 +194,17 @@ void object_to_mobile( D_OBJECT *object, D_MOBILE *dMob )
    return;
 }
 
+bool can_lift( D_MOBILE *dMob, D_OBJECT *dObj )
+{
+   if( dMob->level > LEVEL_PLAYER ) //Immortals/admins can carry anything
+      return TRUE;
+   if( dObj->can_get == FALSE )
+      return FALSE;
+   if( calc_brawn( dMob ) * 100 > dObj->weight_g )
+      return TRUE;
+   return FALSE;
+}
+
 bool equip_object( D_MOBILE *dMob, D_OBJECT *obj )
 {
    if( dMob->equipment[obj->wear_pos]->worn[1] == NULL )
@@ -252,5 +275,35 @@ void object_from_mobile( D_OBJECT *object, D_MOBILE *dMob )
    object->in_room = NULL;
    object->in_object = NULL;
    object->carried_by = NULL;
+}
+
+size_t total_volume( D_OBJECT *obj )
+{
+   if( !obj )
+      return 0;
+
+   size_t size = 0;
+   ITERATOR Iter;
+   D_OBJECT *pObj;
+
+   AttachIterator( &Iter, obj->contents );
+   while( ( pObj = NextInList( &Iter ) ) != NULL )
+      size += total_volume( pObj );
+   DetachIterator( &Iter );
+
+   return size + obj->volume_cm3;
+}
+
+D_ROOM *obj_to_room( D_OBJECT *dObj, D_ROOM *to )
+{
+   if( to == NULL )
+      return NULL;
+
+   if( dObj->in_room )
+      DetachFromList( dObj, dObj->in_room->objects );
+   dObj->in_room = to;
+   AppendToList( dObj, to->objects );
+
+   return to;
 }
 

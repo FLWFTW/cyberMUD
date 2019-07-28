@@ -96,18 +96,15 @@ typedef  short int         sh_int;
 #define POSSESSIVE(x)           ((x->gender) == MALE ? "his"  : (x->gender) == FEMALE ? "her"    : "their")
 #define SUBJECTIVE(x)           ((x->gender) == MALE ? "he"   : (x->gender) == FEMALE ? "she"    : "they")
 #define OBJECTIVE(x)            ((x->gender) == MALE ? "him"  : (x->gender) == FEMALE ? "her"    : "them")
-#define AORAN(x)                (((toupper((x[0]))=='A'||toupper((x[0]))=='E'||toupper((x[0]))=='I'||\
-                                   toupper((x[0]))=='O'||toupper((x[0]))=='U')?"an":"a"))
 #define MOBNAME(x)              ((x->socket) == NULL ? (x->sdesc) : (x->name) )
 #define GENDERTERN(x, m, f, n)  (( (x->gender) == MALE ? (m) : (x->gender) == FEMALE ? (f) : (n) ))
-#define NEEDTHE(x)              (((toupper((x[0]))=='T'&&toupper((x[1]))=='H'&&toupper((x[2]))=='E'&&\
-                                   toupper((x[3]))==' ')?"":"the"))
 #define ISCONTAINER(x)          (((x->type) == ITEM_CONTAINER || (x->type) == ITEM_CORPSE ||\
                                 (x->type) == ITEM_HOLSTER || (x->type) == ITEM_SHEATH ||\
                                 (x->type) == ITEM_MAGAZINE) ? TRUE : FALSE)
 #define ISGUN(x)                ((x->type) == ITEM_FIREARM)
 #define b_to_e( b )             (((b)>=BODY_HEAD && (b)<MAX_BODY)?b_to_e_table[(b)]:WEAR_NONE)
 #define IS_FIGHTING( x )        (((x)->fighting) == NULL ? FALSE : TRUE )
+#define atoi(x)                 (strtol((x), NULL, 10))
 /***********************
  * End of Macros       *
  ***********************/
@@ -132,6 +129,7 @@ typedef struct  skills        SKILLS;
 typedef struct  dBodypart     D_BODYPART;
 typedef struct  dEquipment    D_EQUIPMENT;
 typedef struct  dReset        D_RESET;
+typedef struct  command_data  D_COMMAND;
 
 /* the actual structures */
 struct dRoom
@@ -140,11 +138,13 @@ struct dRoom
    unsigned int       vnum;
    char             * name;
    char             * description;
+   unsigned int       sectortype;
+   unsigned int       light;
 
+   LIST             * scripts;
    LIST             * mobiles;
    LIST             * objects;
    LIST             * exits; 
-   LIST             * scripts;
 };
 
 struct dReset
@@ -201,6 +201,7 @@ struct dObject
    unsigned int      volume_cm3;
    unsigned int      weight_g;//weight in grams
    unsigned int      repair;//percent/100
+   bool              can_get;
 
    int               ivar1, ivar2, ivar3, ivar4, ivar5, ivar6;
    char             *svar1, *svar2, *svar3, *svar4, *svar5, *svar6;
@@ -209,6 +210,7 @@ struct dObject
    enum item_type_t  type;
 
    LIST            * contents;
+   LIST            * scripts;
 };
 
 struct dArea
@@ -277,7 +279,8 @@ struct skills
 
 struct dBodypart
 {
-   int          health;
+   int cur_hp;
+   int max_hp;
    enum trauma_level_t wound_trauma;
    enum trauma_level_t blunt_trauma;
    enum trauma_level_t burn_trauma;
@@ -351,6 +354,7 @@ struct dMobile
    LIST          * act_cmd_list;
    LIST          * ooc_cmd_list;
    LIST          * wiz_cmd_list;
+   LIST          * scripts;
 
 };
 
@@ -549,10 +553,18 @@ size_t total_volume           ( D_OBJECT *obj );
 bool object_can_fit           ( D_OBJECT *object, D_OBJECT *container );
 void check_objects            ();
 D_OBJECT *get_object_mob      ( D_MOBILE *dMob, char *name );
+bool can_lift                 ( D_MOBILE *dMob, D_OBJECT *dObj );
 
 /*
  * utils.c
  */
+unsigned int calc_brains      ( D_MOBILE *dMob );
+unsigned int calc_brawn       ( D_MOBILE *dMob );
+unsigned int calc_stamina     ( D_MOBILE *dMob );
+unsigned int calc_senses      ( D_MOBILE *dMob );
+unsigned int calc_cool        ( D_MOBILE *dMob );
+unsigned int calc_coordination( D_MOBILE *dMob );
+unsigned int calc_luck        ( D_MOBILE *dMob );
 D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos );
 char *gen_guid();
 D_EXIT *get_exit_by_name      ( D_ROOM *room, char *name );
@@ -703,6 +715,7 @@ HELP_DATA *json_to_help( json_t *json );
 json_t *help_to_json( HELP_DATA *help );
 json_t *exit_to_json( D_EXIT *exit );
 json_t *mobile_to_json( D_MOBILE *dMob, bool equipment );
+json_t *mobile_to_json_cli( D_MOBILE *dMob );
 json_t *player_to_json( D_MOBILE *dMob, bool equipment );
 json_t *object_to_json( D_OBJECT *dObj );
 json_t *object_to_json_cli( D_OBJECT *obj );
@@ -736,6 +749,8 @@ void cmd_astat( D_MOBILE *dMob, char *arg );
 /*
  * building.c
  */
+void cmd_mstat( D_MOBILE *dMob, char *arg );
+void cmd_guiredit( D_MOBILE *dMob, char *arg );
 void cmd_instazone( D_MOBILE *dMob, char *arg );
 void cmd_oset( D_MOBILE *dMOb, char *arg );
 void cmd_eset( D_MOBILE *dMOb, char *arg );

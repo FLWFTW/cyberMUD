@@ -688,26 +688,59 @@ void cmd_sleep( D_MOBILE *dMob, char *arg )
 
 void cmd_who(D_MOBILE *dMob, char *arg)
 {
-  D_MOBILE *xMob;
-  D_SOCKET *dsock;
-  ITERATOR Iter;
-  BUFFER *buf = buffer_new(MAX_BUFFER);
+   D_MOBILE *xMob;
+   D_SOCKET *dsock;
+   ITERATOR Iter;
+   BUFFER *buf = buffer_new(MAX_BUFFER);
+   int count = 0;
 
-  bprintf(buf, " - - - - ----==== Who's Online ====---- - - - -\n\r");
+   bprintf(buf, "\r\n+--------------+" );
 
-  AttachIterator(&Iter, dsock_list);
-  while ((dsock = (D_SOCKET *) NextInList(&Iter)) != NULL)
-  {
-    if (dsock->state != STATE_PLAYING) continue;
-    if ((xMob = dsock->player) == NULL) continue;
+   AttachIterator(&Iter, dsock_list);
+   while ((dsock = (D_SOCKET *) NextInList(&Iter)) != NULL)
+   {
+      count++;
+      if (dsock->state != STATE_PLAYING) continue;
+      if ((xMob = dsock->player) == NULL) continue;
 
-    bprintf(buf, " %-12s   %s\n\r", xMob->name, dsock->hostname);
-  }
-  DetachIterator(&Iter);
+      if( dsock->player->level == LEVEL_GOD )
+         bprintf(buf, "\r\n| Sys.  Admin. | %s", xMob->name);
+   }
+   DetachIterator(&Iter);
+   if( count < 0 )
+     bprintf( buf, "\r\n+--------------+" );
+   count = 0;
 
-  bprintf(buf, " - - - - ----======================---- - - - -\n\r");
-  text_to_mobile(dMob, buf->data);
-  buffer_free(buf);
+   AttachIterator( &Iter, dsock_list );
+   while( ( dsock = (D_SOCKET *)NextInList( &Iter ) ) != NULL )
+   {
+      count++;
+      if( dsock->state < STATE_PLAYING )
+        continue;
+      if( ( xMob = dsock->player ) == NULL )
+        continue;
+      if( dsock->player->level == LEVEL_ADMIN )
+        bprintf( buf, "\r\n|    Admin.    | %s", xMob->name );
+   }
+   DetachIterator( &Iter );
+   if( count < 0 )
+     bprintf( buf, "\r\n+--------------+" );
+
+   AttachIterator( &Iter, dsock_list );
+   while( ( dsock = (D_SOCKET *)NextInList( &Iter ) ) != NULL )
+   {
+      if( dsock->state < STATE_PLAYING )
+        continue;
+      if( ( xMob = dsock->player ) == NULL )
+        continue;
+      if( dsock->player->level < LEVEL_ADMIN )
+        bprintf( buf, "\r\n|    Player    | %s", xMob->name );
+   }
+   DetachIterator( &Iter );
+   bprintf( buf, "\r\n+--------------+\r\n" );
+
+   text_to_mobile(dMob, buf->data);
+   buffer_free(buf);
 }
 
 void cmd_help(D_MOBILE *dMob, char *arg)
@@ -775,9 +808,9 @@ void cmd_save(D_MOBILE *dMob, char *arg)
 
 void cmd_score( D_MOBILE *dMob, char *arg )
 {
+/*
    char buf[MAX_BUFFER];
    arg[0] = '\0';//just so we don't get a warning about 'arg' not being used...
-
    snprintf( buf, MAX_BUFFER,
          "&W.-------------------[&B^W IdentiCorp Identification System &W]--------------------.&0\r\n"
          "&W|              WARNING: FALSE OR FRAUDULENT USAGE IS A CRIME.               |&0\r\n"
@@ -816,6 +849,7 @@ void cmd_score( D_MOBILE *dMob, char *arg )
          dMob->body[BODY_LLEG]->health, dMob->body[BODY_RLEG]->health );
 
    text_to_buffer( dMob->socket, buf );
+   */
    return;
 }
 

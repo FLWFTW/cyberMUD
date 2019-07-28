@@ -27,6 +27,7 @@ enum bodyparts_t { BODY_HEAD = 0, BODY_EYES, BODY_FACE, BODY_NECK, BODY_LARM,
                    MAX_BODY };
 extern const char *body_parts[];
 extern size_t      body_aim_mod[];
+extern size_t      body_hp_mod[];
 
 enum gender_t { FEMALE=0, MALE, NONBINARY };
 
@@ -35,10 +36,10 @@ enum position_t { POS_UNCONSCIOUS = 0, POS_SLEEPING, POS_RESTRAINED, POS_RESTING
                   MAX_POS };
 extern const char *positions[];
 
-enum item_type_t { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_ELECTRONICS, ITEM_COMPUTER,
+enum item_type_t { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_ELECTRONICS, ITEM_COMPUTER, ITEM_MACHINE,
                    ITEM_SCRAP, ITEM_FURNITURE, ITEM_LOCKPICK, ITEM_SHEATH, ITEM_HOLSTER,
-                   ITEM_CONTAINER, ITEM_MAGAZINE, ITEM_BULLET, ITEM_BOOK, ITEM_MEMORY,
-                   ITEM_CHIP, ITEM_KEY, ITEM_CORPSE, ITEM_FIREARM, ITEM_BLADE, ITEM_BLUDGEON,
+                   ITEM_CONTAINER, ITEM_BEVERAGE, ITEM_MAGAZINE, ITEM_BULLET, ITEM_BOOK, ITEM_MEMORY,
+                   ITEM_CHIP, ITEM_KEY, ITEM_CORPSE, ITEM_FIREARM, ITEM_BLADE, ITEM_BLUDGEON, ITEM_DRUG,
                    ITEM_UNKNOWN, MAX_ITEM };
 extern const char *item_type[];
 

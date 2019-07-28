@@ -235,7 +235,7 @@ void *NthFromList( LIST *pList, size_t n )
    void *ptr;
    if( !pList )
       return NULL;
-   if( n < 0 || n > SizeOfList( pList ) )
+   if( n > SizeOfList( pList ) )
       return NULL;
 
    ITERATOR iter;

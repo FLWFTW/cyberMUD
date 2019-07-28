@@ -319,8 +319,13 @@ static void state_chargen( D_SOCKET *dsock, char *arg )
       dsock->player = dMob;
       dMob->socket = dsock;
       dsock->player->level    =   LEVEL_GOD;
-      dsock->player->cur_hp   = 100;
-      dsock->player->max_hp   = 100;
+      dsock->player->cur_hp   = 100 + ( dsock->player->brawn * 10 );
+      dsock->player->max_hp   = 100 + ( dsock->player->brawn * 10 );
+      for( int i = BODY_HEAD; i < MAX_BODY; i++ )
+      {
+         dsock->player->body[i]->max_hp = ( body_hp_mod[i] * dsock->player->max_hp ) / 100;
+         dsock->player->body[i]->cur_hp = dsock->player->body[i]->max_hp;
+      }
       dsock->player->btc      = 0;
       dsock->player->position = POS_STANDING;
 

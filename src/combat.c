@@ -61,7 +61,7 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage
    }
 
    //damage the bodypart hit
-   target->body[location]->health -= amount;
+   target->body[location]->cur_hp -= amount;
    if( type == DAMAGE_BURN && target->body[location]->burn_trauma < MAX_TRAUMA )
    {
       target->body[location]->burn_trauma++;
