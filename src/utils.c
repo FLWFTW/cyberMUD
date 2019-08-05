@@ -334,6 +334,7 @@ void clear_mobile(D_MOBILE *dMob)
    dMob->sdesc        =  NULL;
    dMob->ldesc        =  NULL;
    dMob->fighting     =  NULL;
+   dMob->quit         =  FALSE;
 
    dMob->race         =  strdup("human");
    dMob->eyecolor     =  strdup("brown");
@@ -825,8 +826,8 @@ void check_mobiles()
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
-         free( cmd );
          DetachFromList( cmd, pMob->act_cmd_list );
+         free( cmd );
          DetachIterator( &cmdIter );
       }
       if( SizeOfList( pMob->com_cmd_list ) > 0 )
@@ -838,8 +839,8 @@ void check_mobiles()
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
-         free( cmd );
          DetachFromList( cmd, pMob->com_cmd_list );
+         free( cmd );
          DetachIterator( &cmdIter );
       }
       if( SizeOfList( pMob->ooc_cmd_list ) > 0 )
@@ -851,8 +852,8 @@ void check_mobiles()
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
-         free( cmd );
          DetachFromList( cmd, pMob->ooc_cmd_list );
+         free( cmd );
          DetachIterator( &cmdIter );
       }
       if( SizeOfList( pMob->wiz_cmd_list ) > 0 )
@@ -864,9 +865,20 @@ void check_mobiles()
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
          free( cmd->arg );
-         free( cmd );
          DetachFromList( cmd, pMob->wiz_cmd_list );
+         free( cmd );
          DetachIterator( &cmdIter );
+      }
+      if( pMob->quit == TRUE )
+      {
+
+         pMob->socket->player = NULL;
+         pMob->socket->state = STATE_MAIN_MENU;
+         extern const char *mainMenu;
+         text_to_buffer( pMob->socket, mainMenu );
+         text_to_mobile_j( pMob, "ui_command", "hide_all_windows" );
+         free_mobile(pMob);
+         return;
       }
    }
    DetachIterator( &Iter );
@@ -975,7 +987,7 @@ size_t dice( char *str2 )
    return result;
 }
 
-D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos )
+D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_tb pos )
 {
    if( dMob->equipment[pos]->worn[0] != NULL && dMob->equipment[pos]->worn[0]->type == ITEM_ARMOR )
       return dMob->equipment[pos]->worn[0];
@@ -1018,5 +1030,25 @@ unsigned int calc_coordination( D_MOBILE *dMob )
 unsigned int calc_luck( D_MOBILE *dMob )
 {
    return dMob->luck;
+}
+
+void save_skill_list()
+{
+   json_t *skill_table = json_array(), *skill = NULL;
+   size_t i;
+
+   for( i = 0; *tabCmd[i].cmd_funct != NULL; i++ )
+   {
+      skill = json_object();
+      json_object_set_new( skill, "name", json_string( tabCmd[i].cmd_name ) );
+      json_object_set_new( skill, "function", json_string( tabCmd[i].cmd_name ) );
+      json_object_set_new( skill, "level", json_integer( tabCmd[i].level ) );
+      json_object_set_new( skill, "type", json_string( command_types[tabCmd[i].type] ) );
+      json_array_append_new( skill_table, skill );
+   }
+
+   json_dump_file( skill_table, "../scripts/skill_list.json", JSON_INDENT(3) );
+
+   return;
 }
 

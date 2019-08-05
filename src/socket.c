@@ -32,7 +32,9 @@ LIST      * darea_list = NULL;     /* linked list of loaded rooms       */
 LIST      * dobject_list = NULL;   /* linked list of loaded objects     */
 LIST      * object_protos = NULL;
 LIST      * mobile_protos = NULL;
+LIST      * skill_list = NULL;
 lua_State * globalLuaState;
+D_MOBILE  * current_mob = NULL;
 
 /* mccp support */
 const unsigned char compress_will   [] = { IAC, WILL, TELOPT_COMPRESS,  '\0' };
@@ -69,6 +71,7 @@ int main(int argc, char **argv)
   dobject_list =  AllocList();
   object_protos =  AllocList();
   mobile_protos =  AllocList();
+  skill_list    =  AllocList();
 
   globalLuaState = init_lua();
 
@@ -218,6 +221,7 @@ void GameLoop(int icontrol)
             }
             case STATE_PLAYING:
             {
+               current_mob = dsock->player;
                if( dsock->player == NULL )
                  break;
                handle_cmd_input(dsock->player, dsock->next_command);
@@ -225,6 +229,7 @@ void GameLoop(int icontrol)
             }
             case STATE_WRITING:
             {
+               current_mob = dsock->player;
                handle_edit_input( dsock, dsock->next_command );
                break;
             }

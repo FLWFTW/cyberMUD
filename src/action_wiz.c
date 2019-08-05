@@ -25,7 +25,7 @@ void cmd_restore( D_MOBILE *dMob, char *arg )
    }
 
    target->cur_hp = target->max_hp;
-   for( enum bodyparts_t i = BODY_HEAD; i < MAX_BODY; i++ )
+   for( enum bodyparts_tb i = BODY_HEAD; i < MAX_BODY; i++ )
    {
       target->body[i]->cur_hp = target->body[i]->max_hp;
       target->body[i]->wound_trauma = TRAUMA_NONE;
@@ -268,6 +268,27 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
    }
 
       text_to_mobile_j( dMob, "text", "Ok." );
+
+   return;
+}
+
+void cmd_skillset( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
+   {
+      text_to_mobile_j( dMob, "error", "skillset <skill> <action> <argument> or skillset save to save the skill list to disk." );
+      return;
+   }
+
+   if( !strcasecmp( arg, "save" ) )
+   {
+      save_skill_list();
+   }
+   else
+   {
+   }
+
+   text_to_mobile_j( dMob, "text", "Ok." );
 
    return;
 }

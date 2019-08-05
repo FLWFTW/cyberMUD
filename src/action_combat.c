@@ -86,7 +86,7 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
    else
    {
       bool valid_aim = FALSE;
-      for( enum bodyparts_t i = BODY_HEAD; i < MAX_BODY; i++ )
+      for( enum bodyparts_tb i = BODY_HEAD; i < MAX_BODY; i++ )
       {
          if( is_prefix( arg, body_parts[i] ) )
          {

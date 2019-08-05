@@ -232,7 +232,7 @@ void cmd_give( D_MOBILE *dMob, char *arg )
    }
    else
    {
-      bug( "Should not have gotten here..." );
+      bug( "Should not have gotten here...( %s %s %i )", __FILE__, __func__, __LINE__ );
    }
    return;
 }
@@ -275,9 +275,9 @@ void cmd_draw( D_MOBILE *dMob, char *arg )
       {
          if( dMob->hold_right && dMob->hold_left ) //If they type draw with no argument and fill their hands
             return;
-         text_to_mobile_j( dMob, "text", "You draw %s %s from %s %s and wield it in your %s hand.",
+         text_to_mobile_j( dMob, "text", "You draw %s from %s and wield it in your %s hand.",
                obj->sdesc, con->sdesc, dMob->hold_right == NULL ? "right" : "left" );
-         echo_around( dMob, "text", "%s draws %s %s from %s %s and wields it in %s %s hand.",
+         echo_around( dMob, "text", "%s draws %s from %s and wields it in %s %s hand.",
                MOBNAME(dMob), obj->sdesc, con->sdesc, POSSESSIVE( dMob ), dMob->hold_right == NULL ? "right" : "left" );
          object_from_object( obj, con );
          object_to_mobile( obj, dMob );

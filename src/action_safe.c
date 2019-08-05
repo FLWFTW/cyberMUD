@@ -121,8 +121,11 @@ void cmd_open( D_MOBILE *dMob, char *arg )
    {
       text_to_mobile_j( dMob, "text", "You open the door to the %s.", exit->name );
       echo_around( dMob, "text", "%s opens the door to the %s.", MOBNAME(dMob), exit->name );
-      echo_room( exit->to_room, "The door to the %s opens.", exit->farside_exit->name );
-      exit->exit = EXIT_OPEN;
+      if( exit->farside_exit )
+      {
+         echo_room( exit->to_room, "The door to the %s opens.", exit->farside_exit->name );
+         exit->exit = EXIT_OPEN;
+      }
       exit->farside_exit->exit = EXIT_OPEN;
       return;
    }
@@ -152,9 +155,12 @@ void cmd_close( D_MOBILE *dMob, char *arg )
    {
       text_to_mobile_j( dMob, "text", "You close the door to the %s.", exit->name );
       echo_around( dMob, "text", "%s closes the door to the %s.", MOBNAME(dMob), exit->name );
-      echo_room( exit->to_room, "The door to the %s closes.", exit->farside_exit->name );
+      if( exit->farside_exit )
+      {
+         echo_room( exit->to_room, "The door to the %s closes.", exit->farside_exit->name );
+         exit->farside_exit->exit = EXIT_CLOSED;
+      }
       exit->exit = EXIT_CLOSED;
-      exit->farside_exit->exit = EXIT_CLOSED;
       return;
    }
 
@@ -445,14 +451,8 @@ void cmd_quit(D_MOBILE *dMob, char *arg)
    snprintf(buf, MAX_BUFFER, "%s has left the game.", dMob->name);
    log_string(buf);
 
-   save_player(dMob);
-
-   dMob->socket->player = NULL;
-   dMob->socket->state = STATE_MAIN_MENU;
-   extern const char *mainMenu;
-   text_to_buffer( dMob->socket, mainMenu );
-   text_to_mobile_j( dMob, "ui_command", "hide_all_windows" );
-   free_mobile(dMob);
+   dMob->quit = TRUE;
+   return;
 }
 
 void cmd_commands(D_MOBILE *dMob, char *arg)

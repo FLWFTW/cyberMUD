@@ -194,6 +194,7 @@ const struct typCmd tabCmd [] =
   { "s",             cmd_south,      LEVEL_GUEST,     CMD_ACT  },
   { "savearea",      cmd_savearea,   LEVEL_GOD,       CMD_WIZ  },
   { "sheath",        cmd_sheath,     LEVEL_GUEST,     CMD_ACT  },
+  { "skillset",      cmd_skillset,   LEVEL_GOD,       CMD_WIZ  },
   { "sleep",         cmd_sleep,      LEVEL_GUEST,     CMD_ACT  },
   { "sling",         cmd_sling,      LEVEL_GUEST,     CMD_ACT  },
   { "south",         cmd_south,      LEVEL_GUEST,     CMD_ACT  },

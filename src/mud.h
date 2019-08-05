@@ -149,7 +149,7 @@ struct dRoom
 
 struct dReset
 {
-   enum reset_type_t  type;
+   enum reset_type_tb type;
    int                location; //room vnum
    json_t           * data;
    void             * what; //pointer to what is reset, if NULL then the reset needs to be fired again.
@@ -165,10 +165,10 @@ struct dExit
 
    unsigned int       door_level; //Ranging from a hollow wood bedroom door (0) to a reinforced steel/kevlar blast vault whatever door (10)
    unsigned int       lock_level; //Ranging from the littl push-button lock on a bathroom door (0) to something you would find on a bank safe (10)
-   enum lock_type_t   lock_type;  //Pin-tumbler, combo/dial, electric pin, fingerprint, remote
+   enum lock_type_tb  lock_type;  //Pin-tumbler, combo/dial, electric pin, fingerprint, remote
    
-   enum lock_state_t   lock;
-   enum exit_state_t   exit;
+   enum lock_state_tb  lock;
+   enum exit_state_tb  exit;
 };
 
 /**
@@ -206,8 +206,8 @@ struct dObject
    int               ivar1, ivar2, ivar3, ivar4, ivar5, ivar6;
    char             *svar1, *svar2, *svar3, *svar4, *svar5, *svar6;
 
-   enum wear_pos_t   wear_pos;
-   enum item_type_t  type;
+   enum wear_pos_tb  wear_pos;
+   enum item_type_tb type;
 
    LIST            * contents;
    LIST            * scripts;
@@ -255,7 +255,7 @@ struct dSocket
    char            next_command[MAX_BUFFER];
    bool            bust_prompt;
    sh_int          lookup_status;
-   enum state_t    state;
+   enum state_tb   state;
    sh_int          control;
    sh_int          top_output;
    unsigned char   compressing;                 /* MCCP support */
@@ -281,9 +281,9 @@ struct dBodypart
 {
    int cur_hp;
    int max_hp;
-   enum trauma_level_t wound_trauma;
-   enum trauma_level_t blunt_trauma;
-   enum trauma_level_t burn_trauma;
+   enum trauma_level_tb wound_trauma;
+   enum trauma_level_tb blunt_trauma;
+   enum trauma_level_tb burn_trauma;
 };
 
 struct dEquipment
@@ -301,11 +301,12 @@ struct dMobile
    char             * password;
    char             * prompt;
    sh_int             level;
-   enum gender_t      gender;
+   enum gender_tb      gender;
    unsigned int       vnum;
-   enum position_t    position;
+   enum position_tb    position;
    SKILLS           * skills;
    D_MOBILE         * fighting;
+   bool               quit;
 
    int                cur_hp;
    int                max_hp;
@@ -377,7 +378,7 @@ struct typCmd
   char              * cmd_name;
   void             (* cmd_funct)(D_MOBILE *dMOb, char *arg);
   sh_int              level;
-  enum cmd_type_t     type;
+  enum cmd_type_tb     type;
 };
 
 struct command_data
@@ -432,6 +433,7 @@ extern  int             control;          /* boot control socket thingy         
 extern  time_t          current_time;     /* let's cut down on calls to time()  */
 extern  time_t          boot_time;        /* What time the MUD booted up        */
 extern  const int       b_to_e_table[];   /* bodypart to equipment wear position */
+extern  D_MOBILE    *   current_mob;      /* the mobile currently being worked on */
 
 /*************************** 
  * End of Global Variables *
@@ -558,6 +560,7 @@ bool can_lift                 ( D_MOBILE *dMob, D_OBJECT *dObj );
 /*
  * utils.c
  */
+void save_skill_list();
 unsigned int calc_brains      ( D_MOBILE *dMob );
 unsigned int calc_brawn       ( D_MOBILE *dMob );
 unsigned int calc_stamina     ( D_MOBILE *dMob );
@@ -565,7 +568,7 @@ unsigned int calc_senses      ( D_MOBILE *dMob );
 unsigned int calc_cool        ( D_MOBILE *dMob );
 unsigned int calc_coordination( D_MOBILE *dMob );
 unsigned int calc_luck        ( D_MOBILE *dMob );
-D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_t pos );
+D_OBJECT *get_armor_pos( D_MOBILE *dMob, enum wear_pos_tb pos );
 char *gen_guid();
 D_EXIT *get_exit_by_name      ( D_ROOM *room, char *name );
 bool  check_name              ( const char *name );
@@ -615,6 +618,7 @@ void  cmd_draw                ( D_M *dMob, char *arg );
 void  cmd_unsling             ( D_M *dMob, char *arg );
 void  cmd_holster             ( D_M *dMob, char *arg );
 void  cmd_sheath              ( D_M *dMob, char *arg );
+void  cmd_skillset            ( D_M *dMob, char *arg );
 void  cmd_sling               ( D_M *dMob, char *arg );
 void  cmd_areas               ( D_M *dMob, char *arg );
 void  cmd_say                 ( D_M *dMob, char *arg );
@@ -770,9 +774,16 @@ void cmd_fire( D_MOBILE *dMob, char *arg );
 /*
  * combat.c
  */
-void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim );
-int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage_type_t type );
+void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_tb aim );
+int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damage_type_tb type );
 void kill( D_MOBILE *dMob );
+
+/*
+ * table translation functions
+ */
+
+size_t get_bodypart_code( const char *str );
+size_t get_damagetype_code( const char *str );
 
 /*******************************
  * End of prototype declartion *

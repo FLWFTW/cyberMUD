@@ -172,6 +172,35 @@ static int l_force( lua_State *l )
    return 1;
 }
 
+static int l_get_mob_room( lua_State *l )
+{
+   D_ROOM *room = current_mob->room;
+   const char *name = luaL_checkstring( l, 1 );
+
+   D_MOBILE *dMob = get_mobile_list( name, room->mobiles );
+   lua_pushlightuserdata( l, dMob );
+   return 1;
+}
+
+static int l_get_mob_global( lua_State *l )
+{
+   const char *name = luaL_checkstring( l, 1 );
+   D_MOBILE *dMob = get_mobile_list( name, dmobile_list );
+   lua_pushlightuserdata( l, dMob );
+   return 1;
+}
+
+static int l_damage( lua_State *l )
+{
+   D_MOBILE *dMob = lua_touserdata( l, 1 );
+   int dam = luaL_checknumber( l, 2 );
+   int loc = get_bodypart_code( luaL_checkstring( l, 3 ) );
+   int type = get_damagetype_code( luaL_checkstring( l, 4 ) );
+
+   lua_pushnumber( l, damage( dMob, dam, loc, type ) );
+   return 1;
+}   
+
 static lua_CFunction stackDump (lua_State *L) //useful for debugging purposes
 {
    int i;
@@ -224,6 +253,9 @@ static const struct luaL_Reg mudLib[] =
    {"lpobj2room", l_objtoroom},
    {"lpmequip", l_mequip},
    {"lpforce", l_force},
+   {"get_mob_room", l_get_mob_room},
+   {"get_mob_global", l_get_mob_global},
+   {"lpdamage", l_damage},
    {NULL, NULL}
 };
 

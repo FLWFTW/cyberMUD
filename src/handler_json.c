@@ -67,11 +67,11 @@ D_EXIT *json_to_exit( json_t *json )
      }
      else if( !strcmp( key, "lock_state" ) )
       {
-         exit->lock = (enum lock_state_t)json_integer_value( value );
+         exit->lock = (enum lock_state_tb)json_integer_value( value );
       }
       else if( !strcmp( key, "exit_state" ) )
       {
-         exit->exit = (enum exit_state_t)json_integer_value( value );
+         exit->exit = (enum exit_state_tb)json_integer_value( value );
       }
 
    }
@@ -151,6 +151,23 @@ D_ROOM *json_to_room( json_t *json )
       {
          room->vnum = json_integer_value( value );
       }
+      else if( !strcmp( key, "sector" ) )
+      {
+         int i;
+         char s[MAX_STRING_LENGTH];
+         strncpy( s, json_string_value( value ), MAX_STRING_LENGTH );
+         for( i = 0; i < MAX_SECTOR; i++ )
+         {
+            if( !strcasecmp( s, sector_types[i] ) )
+               break;
+         }
+         if( i == MAX_SECTOR )
+         {
+            bug( "Room with invalid sector %s.", s );
+            i = 0;
+         }
+         room->sectortype = i;
+      }
       else if( !strcmp( key, "exits" ) )
       {
          if( json_array_size( value ) > 0 )
@@ -175,6 +192,7 @@ json_t *room_to_json( D_ROOM *room )
    json_object_set_new( json, "name", json_string( room->name ) );
    json_object_set_new( json, "description", json_string( room->description ) );
    json_object_set_new( json, "vnum", json_integer( room->vnum ) );
+   json_object_set_new( json, "sector", json_string( sector_types[room->sectortype] ) );
    json_t *exits = json_array();
    ITERATOR Iter;
    D_EXIT *exit = NULL;
@@ -505,6 +523,8 @@ SKILLS *json_to_skills( json_t *json )
    return skills;
 }
 
+
+
 void load_equipment( D_MOBILE *dMob, json_t *json )
 {
    for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
@@ -576,42 +596,42 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "race" ) )
       {
-         if( dMob->race[0] != '\0') free( dMob->race );
+         if( dMob->race != NULL ) free( dMob->race );
          dMob->race = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "eyecolor" ) )
       {
-         if( dMob->eyecolor[0] != '\0') free( dMob->eyecolor );
+         if( dMob->eyecolor != NULL ) free( dMob->eyecolor );
          dMob->eyecolor = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "haircolor" ) )
       {
-         if( dMob->haircolor[0] != '\0') free( dMob->haircolor );
+         if( dMob->haircolor != NULL ) free( dMob->haircolor );
          dMob->haircolor = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "eyeshape" ) )
       {
-         if( dMob->eyeshape[0] != '\0') free( dMob->eyeshape );
+         if( dMob->eyeshape != NULL ) free( dMob->eyeshape );
          dMob->eyeshape = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "hairstyle" ) )
       {
-         if( dMob->hairstyle[0] != '\0') free( dMob->hairstyle );
+         if( dMob->hairstyle != NULL ) free( dMob->hairstyle );
          dMob->hairstyle = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "skincolor" ) )
       {
-         if( dMob->skincolor[0] != '\0') free( dMob->skincolor );
+         if( dMob->skincolor != NULL ) free( dMob->skincolor );
          dMob->skincolor = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "build" ) )
       {
-         if( dMob->build[0] != '\0') free( dMob->build );
+         if( dMob->build != NULL ) free( dMob->build );
          dMob->build = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "height" ) )
       {
-         if( dMob->height[0] != '\0') free( dMob->height );
+         if( dMob->height != NULL ) free( dMob->height );
          dMob->height = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "age" ) )
@@ -638,7 +658,7 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "position" ) )
       {
-         dMob->position = (enum position_t)json_integer_value( value );
+         dMob->position = (enum position_tb)json_integer_value( value );
       }
       else if( !strcmp( key, "position_string" ) )
       {

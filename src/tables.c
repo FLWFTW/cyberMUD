@@ -73,6 +73,18 @@ const char *body_parts[] = {   [BODY_HEAD]    = "head",
                                [BODY_RFOOT]   = "right foot",
                                [MAX_BODY]     = 0 };
 
+size_t get_bodypart_code( const char *str )
+{
+   size_t i;
+   for( i = 0; i < MAX_BODY; i++ )
+   {
+      if( !strcasecmp( body_parts[i], str ) )
+         break;
+   }
+
+   return i;
+}
+
 const char *wound_trauma[] = { [TRAUMA_NONE]     = "none",
                                [TRAUMA_MILD]     = "leaking",
                                [TRAUMA_MODERATE] = "bleeding",
@@ -101,6 +113,15 @@ const char *damage_type[]  = { [DAMAGE_PIERCE]      = "piercing",
                                [DAMAGE_PROJECTILE]  = "projectile",
                                [DAMAGE_OTHER]       = "other",
                                [MAX_DT]             = 0};
+
+size_t get_damagetype_code( const char *str )
+{
+   size_t i;
+   for( i = 0; i < MAX_DT; i++ )
+      if( !strcasecmp( str, damage_type[i] ) )
+         break;
+   return i;
+}
 
 const char *reset_types[]  = { [RESET_EXIT]      = "exit",
                                [RESET_MOB]       = "mob",
@@ -204,4 +225,33 @@ size_t body_hp_mod[]     = {   [BODY_HEAD]    = 15,
                                [BODY_LFOOT]   = 3,
                                [BODY_RFOOT]   = 3,
                                [MAX_BODY]     = 100 };
+
+const char *command_types[] = {[CMD_ACT]      = "action",
+                               [CMD_COM]      = "communication",
+                               [CMD_OOC]      = "ooc",
+                               [CMD_WIZ]      = "wiz",
+                               [MAX_CMD]      = 0};
+
+const char *sector_types[] = { [SECTOR_INSIDE]     = "inside",
+                               [SECTOR_CITY]       = "city",
+                               [SECTOR_STREET]     = "street",
+                               [SECTOR_ROOFTOP]    = "rooftop",
+                               [SECTOR_SEWER]      = "sewer",
+                               [SECTOR_TUNNEL]     = "tunnel",
+                               [SECTOR_GRASS]      = "grass",
+                               [SECTOR_FIELD]      = "field",
+                               [SECTOR_DIRT]       = "dirt",
+                               [SECTOR_GRAVEL]     = "gravel",
+                               [SECTOR_FOREST]     = "forest",
+                               [SECTOR_MOUNTAIN]   = "mountain",
+                               [SECTOR_OCEAN]      = "ocean",
+                               [SECTOR_SWAMP]      = "swamp",
+                               [SECTOR_JUNKYARD]   = "junkyard",
+                               [SECTOR_SNOW]       = "snow",
+                               [SECTOR_DESERT]     = "desert",
+                               [SECTOR_BEACH]      = "beach",
+                               [SECTOR_WATER]      = "water",
+                               [SECTOR_UNDERWATER] = "underwater",
+                               [SECTOR_FLYING]     = "flying",
+                               [MAX_SECTOR]        = 0};
 

@@ -3,7 +3,7 @@
  */
 #include "mud.h"
 
-static enum bodyparts_t random_part()
+static enum bodyparts_tb random_part()
 {
    size_t part = roll( 1, 100 );
 
@@ -41,7 +41,7 @@ static enum bodyparts_t random_part()
    return BODY_TORSO;
 }
 
-int damage( D_MOBILE *target, int amount, enum bodyparts_t location, enum damage_type_t type )
+int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damage_type_tb type )
 {
    if( target == NULL )
    {
@@ -92,7 +92,7 @@ void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
    return;
 }
 
-void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_t aim )
+void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_tb aim )
 {
    int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, stopping_power = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
