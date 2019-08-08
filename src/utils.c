@@ -825,7 +825,7 @@ void check_mobiles()
          AttachIterator( &cmdIter, pMob->act_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
-         free( cmd->arg );
+         //free( cmd->arg );
          DetachFromList( cmd, pMob->act_cmd_list );
          free( cmd );
          DetachIterator( &cmdIter );
@@ -851,7 +851,7 @@ void check_mobiles()
          AttachIterator( &cmdIter, pMob->ooc_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
-         free( cmd->arg );
+         //free( cmd->arg );
          DetachFromList( cmd, pMob->ooc_cmd_list );
          free( cmd );
          DetachIterator( &cmdIter );
@@ -864,7 +864,7 @@ void check_mobiles()
          AttachIterator( &cmdIter, pMob->wiz_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
-         free( cmd->arg );
+         //free( cmd->arg );
          DetachFromList( cmd, pMob->wiz_cmd_list );
          free( cmd );
          DetachIterator( &cmdIter );

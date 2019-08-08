@@ -39,5 +39,5 @@ void  DetachIterator     ( ITERATOR *pIter );
 void  FreeList           ( LIST *pList );
 int   SizeOfList         ( LIST *pList );
 void *NthFromList        ( LIST *pList, size_t n );
-
+void  MergeList          ( LIST *listA, LIST *listB );
 #endif

@@ -385,7 +385,7 @@ struct command_data
 {
    void           (* func)(D_MOBILE *dMob, char *arg);
    D_MOBILE        * dMob;
-   char            * arg;
+   char            arg[MAX_STRING_LENGTH];
 };
 
 struct dOffer
@@ -677,6 +677,8 @@ void  cmd_sleep               ( D_M *dMob, char *arg );
 void  cmd_sit                 ( D_M *dMob, char *arg );
 void  cmd_stand               ( D_M *dMob, char *arg );
 
+
+void  cmd_fill                ( D_M *dMob, char *arg );
 /*
  * accounts.c
  */

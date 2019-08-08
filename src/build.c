@@ -1407,3 +1407,21 @@ void cmd_mpedit( D_MOBILE *dMob, char *arg )
 
    return;
 }
+      
+void cmd_ospawn( D_MOBILE *dMob, char *arg )
+{
+   D_OBJECT *obj;
+   unsigned long vnum = strtoul( arg, NULL, 10 );
+
+   if( ( obj = spawn_object( vnum ) ) == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "Can not find object with vnum '%u'", vnum );
+      return;
+   }
+
+   AppendToList( obj, dMob->room->objects );
+   text_to_mobile( dMob, "The entire world vibrates for a split second and %s appears before you.\r\n",
+         obj->sdesc );
+   return;
+}
+

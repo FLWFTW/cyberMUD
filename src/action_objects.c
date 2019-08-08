@@ -1140,21 +1140,58 @@ void cmd_drop( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "error", "You aren't holding that.\r\n" );
    }
 }
-      
-void cmd_ospawn( D_MOBILE *dMob, char *arg )
-{
-   D_OBJECT *obj;
-   unsigned long vnum = strtoul( arg, NULL, 10 );
 
-   if( ( obj = spawn_object( vnum ) ) == NULL )
+void cmd_fill( D_MOBILE *dMob, char *arg )
+{
+   if( arg[0] == '\0' )
    {
-      text_to_mobile_j( dMob, "error", "Can not find object with vnum '%u'", vnum );
+      text_to_mobile_j( dMob, "error", "Fill what from where?" );
       return;
    }
 
-   AppendToList( obj, dMob->room->objects );
-   text_to_mobile( dMob, "The entire world vibrates for a split second and %s appears before you.\r\n",
-         obj->sdesc );
-   return;
+   char what_name[MAX_STRING_LENGTH];
+   D_OBJECT *what = NULL;
+   D_OBJECT *where = NULL;
+
+   arg = one_arg( arg, what_name );
+
+   if( dMob->hold_right == NULL && dMob->hold_left == NULL )
+   {
+      text_to_mobile_j( dMob, "error", "You need to be holding the container you wish to fill." );
+      return;
+   }
+
+   if( dMob->hold_right && is_name( what_name, dMob->hold_right->name ) )
+   {
+      what = dMob->hold_right;
+   }
+   else if( dMob->hold_left && is_name( what_name, dMob->hold_left->name ) )
+   {
+      what = dMob->hold_left;
+   }
+   else
+   {
+      text_to_mobile_j( dMob, "error", "You aren't holding that." );
+      return;
+   }
+
+   if( arg[0] == '\0' ) //filling from the ground
+   {
+      MergeList( dMob->room->objects, what->contents );
+      text_to_mobile_j( dMob, "text", "You fill %s from the ground.", what->sdesc );
+      echo_around( dMob, "text", "%s fills %s from the ground.", MOBNAME( dMob ), what->sdesc );
+   }
+   else //filling from another object
+   {
+      if( ( where = get_object_list( arg, dMob->room->objects ) ) == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "You can't find that here." );
+         return;
+      }
+      MergeList( where->contents, what->contents );
+      text_to_mobile_j( dMob, "text", "You fill %s from %s", what->sdesc, where->sdesc );
+      echo_around( dMob, "text", "%s fills %s from %s.", MOBNAME( dMob ), what->sdesc, where->sdesc );
+   }
+
 }
 

@@ -118,6 +118,25 @@ void AttachToList(void *pContent, LIST *pList)
   pList->_size++;
 }
 
+/**
+ * Merges listA into listB, empties listA 
+ */
+void MergeList( LIST *listA, LIST *listB )
+{
+   ITERATOR Iter;
+   void *item;
+
+   AttachIterator( &Iter, listA );
+   while( ( item = NextInList( &Iter ) ) != NULL )
+   {
+      AttachToList( item, listB );
+      DetachFromList( item, listA );
+   }
+   DetachIterator( &Iter );
+
+   return;
+}
+
 void DetachFromList(void *pContent, LIST *pList)
 {
   CELL *pCell;

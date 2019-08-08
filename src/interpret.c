@@ -84,7 +84,7 @@ void handle_cmd_input(D_MOBILE *dMob, char *arg)
       struct command_data *cmd = calloc( 1, sizeof( struct command_data ) );
       cmd->func = tabCmd[i].cmd_funct;
       cmd->dMob = dMob;
-      cmd->arg  = strdup( arg );
+      strncpy( cmd->arg, arg, MAX_STRING_LENGTH );
       switch( tabCmd[i].type)
       {
          case CMD_WIZ:
@@ -147,6 +147,7 @@ const struct typCmd tabCmd [] =
   { "equipment",     cmd_equipment,  LEVEL_GUEST,     CMD_OOC  },
   { "eset",          cmd_eset,       LEVEL_GOD,       CMD_WIZ  },
   { "examine",       cmd_examine,    LEVEL_GUEST,     CMD_ACT  },
+  { "fill",          cmd_fill,       LEVEL_GUEST,     CMD_ACT  },
   { "fire",          cmd_fire,       LEVEL_GUEST,     CMD_ACT  },
   { "force",         cmd_force,      LEVEL_ADMIN,     CMD_WIZ  },
   { "get",           cmd_get,        LEVEL_GUEST,     CMD_ACT  },
