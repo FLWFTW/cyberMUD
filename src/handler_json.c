@@ -10,14 +10,17 @@ D_ACCOUNT *json_to_account( json_t *json )
    {
       if( !strcmp( key, "email" ) )
       {
+         if( account->email ) free( account->email );
          account->email = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "name" ) )
       {
+         if( account->name ) free( account->name );
          account->name = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "password" ) )
       {
+         if( account->password ) free( account->password );
          account->password = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "characters" ) )
@@ -59,10 +62,12 @@ D_EXIT *json_to_exit( json_t *json )
      }
      else if( !strcmp( key, "name" ) )
      {
+        if( exit->name ) free( exit->name );
         exit->name = strdup( json_string_value( value ) );
      }
      else if( !strcmp( key, "farside_name" ) )
      {
+        if( exit->farside_name ) free( exit->farside_name );
         exit->farside_name = strdup( json_string_value( value ) );
      }
      else if( !strcmp( key, "lock_state" ) )
@@ -92,10 +97,12 @@ HELP_DATA *json_to_help( json_t *json )
    {
       if( !strcmp( key, "keyword" ) )
       {
+         if( hdata->keyword ) free( hdata->keyword );
          hdata->keyword = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "text" ) )
       {
+         if( hdata->text ) free( hdata->text );
          hdata->text = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "level" ) )
@@ -141,10 +148,12 @@ D_ROOM *json_to_room( json_t *json )
    {
       if( !strcmp( key, "name" ) )
       {
+         if( room->name ) free( room->name );
          room->name = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "description" ) )
       {
+         if( room->description ) free( room->description );
          room->description = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "vnum" ) )
@@ -231,6 +240,7 @@ D_OBJECT *json_to_object( json_t *json )
    {
       if( !strcmp( key, "name" ) )
       {
+         if( obj->name ) free( obj->name );
          obj->name = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "vnum" ) )
@@ -239,10 +249,12 @@ D_OBJECT *json_to_object( json_t *json )
       }
       else if( !strcmp( key, "sdesc" ) )
       {
+         if( obj->sdesc ) free( obj->sdesc );
          obj->sdesc = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "ldesc" ) )
       {
+         if( obj->ldesc ) free( obj->ldesc );
          obj->ldesc = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "wear_pos" ) )
@@ -318,26 +330,32 @@ D_OBJECT *json_to_object( json_t *json )
       }
       else if( !strcmp( key, "svar1" ) )
       {
+         if( obj->svar1 ) free( obj->svar1 );
          obj->svar1 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "svar2" ) )
       {
+         if( obj->svar2 ) free( obj->svar2 );
          obj->svar2 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "svar3" ) )
       {
+         if( obj->svar3 ) free( obj->svar3 );
          obj->svar3 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "svar4" ) )
       {
+         if( obj->svar4 ) free( obj->svar4 );
          obj->svar4 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "svar5" ) )
       {
+         if( obj->svar5 ) free( obj->svar5 );
          obj->svar5 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "svar6" ) )
       {
+         if( obj->svar6 ) free( obj->svar6 );
          obj->svar6 = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "repair" ) )
@@ -576,22 +594,27 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "prompt" ) )
       {
+         if( dMob->prompt != NULL ) free( dMob->prompt );
          dMob->prompt = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "sdesc" ) )
       {
+         if( dMob->sdesc != NULL ) free( dMob->sdesc );
          dMob->sdesc = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "ldesc" ) )
       {
+         if( dMob->ldesc != NULL ) free( dMob->ldesc );
          dMob->ldesc = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "association" ) )
       {
+         if( dMob->association != NULL ) free( dMob->association );
          dMob->association = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "citizenship" ) )
       {
+         if( dMob->citizenship != NULL ) free( dMob->citizenship );
          dMob->citizenship = strdup( json_string_value( value ) );
       }
       else if( !strcmp( key, "race" ) )
@@ -644,6 +667,7 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "skills" ) )
       {
+         if( dMob->skills ) free( dMob->skills );
          dMob->skills = json_to_skills( value );
       }
       else if( !strcmp( key, "room" ) )

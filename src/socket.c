@@ -116,6 +116,11 @@ int main(int argc, char **argv)
   /* close down the socket */
   close(control);
   log_string( "Socket closed" );
+  area_cleanup( darea_list );
+  mobile_cleanup( dmobile_list );
+  object_cleanup( dobject_list );
+  room_cleanup( droom_list );
+  socket_cleanup( dsock_list );
 
   /* terminated without errors */
   log_string("Program terminated without errors.");
@@ -615,6 +620,7 @@ void clear_socket(D_SOCKET *sock_new, int sock)
    sock_new->state          =  STATE_GET_ACCOUNT;
    sock_new->lookup_status  =  TSTATE_LOOKUP;
    sock_new->player         =  NULL;
+   sock_new->account        =  NULL;
    sock_new->top_output     =  0;
    sock_new->events         =  AllocList();
 }

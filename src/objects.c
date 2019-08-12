@@ -83,6 +83,10 @@ void free_object( D_OBJECT *obj )
       DetachIterator( &Iter );
    }
    FreeList( obj->scripts );
+
+   DetachFromList( obj, dobject_list );
+   DetachFromList( obj, object_protos );
+   free( obj );
    
 }
 

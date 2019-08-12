@@ -169,7 +169,7 @@ static void handle_reconnect( D_MOBILE *dMob )
    AttachIterator( &Iter, dmobile_list );
    while( ( old = NextInList( &Iter ) ) != NULL )
    {
-      if( !strcasecmp( old->name, dMob->name ) )
+      if( IS_PC( old ) && !strcasecmp( old->name, dMob->name ) )
       {
          text_to_socket( old->socket, "\r\nConnection booted and/or hijacked. Goodbye!\r\n" );
          save_player(old);

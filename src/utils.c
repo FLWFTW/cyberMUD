@@ -65,6 +65,53 @@ D_AREA *new_area()
    return area;
 }
 
+void free_area( D_AREA *area )
+{
+   ITERATOR Iter;
+
+   free( area->name );
+   free( area->author );
+   free( area->filename );
+   free( area->reset_script );
+
+   room_cleanup( area->rooms );
+   FreeList( area->rooms );
+
+   D_MOBILE *pMob;
+   AttachIterator( &Iter, area->mobiles );
+   while( ( pMob = (D_MOBILE *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pMob, area->mobiles );
+      DetachFromList( pMob, mobile_protos );
+      free_mobile( pMob );
+   }
+   DetachIterator( &Iter );
+   FreeList( area->mobiles );
+
+   D_OBJECT *pObj;
+   AttachIterator( &Iter, area->objects );
+   while( ( pObj = (D_OBJECT *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pObj, area->objects );
+      DetachFromList( pObj, object_protos );
+      free_object( pObj );
+   }
+   DetachIterator( &Iter );
+   FreeList( area->objects );
+
+   D_RESET *pReset;
+   AttachIterator( &Iter, area->resets );
+   while( ( pReset = (D_RESET *)NextInList( &Iter ) ) != NULL )
+   {
+      free_reset( pReset );
+   }
+   DetachIterator( &Iter );
+   FreeList( area->resets );
+
+   free( area );
+
+   return;
+}
 D_EXIT *new_exit()
 {
    D_EXIT *exit = calloc( 1, sizeof( D_EXIT ) );
@@ -202,18 +249,31 @@ D_MOBILE *spawn_mobile( unsigned int vnum )
 
    D_MOBILE *mob = new_mobile();
    mob->vnum = proto->vnum;
+   if( mob->name ) free( mob->name );
    mob->name = strdup( proto->name ? proto->name : "new mobile" );
+   if( mob->sdesc ) free( mob->sdesc );
    mob->sdesc = strdup( proto->sdesc ? proto->sdesc : "new mobile" );
+   if( mob->ldesc ) free( mob->ldesc );
    mob->ldesc = strdup( proto->ldesc ? proto->ldesc : "a newly created mobile" );
+   if( mob->race ) free( mob->race );
    mob->race = strdup( proto->race ? proto->race : "Human" );
+   if( mob->citizenship ) free( mob->citizenship );
    mob->citizenship = strdup( proto->citizenship ? proto->citizenship : "None" );
+   if( mob->association ) free( mob->association );
    mob->association = strdup( proto->association ? proto->association : "None" );
+   if( mob->eyecolor ) free( mob->eyecolor );
    mob->eyecolor = strdup( proto->eyecolor ? proto->eyecolor : "brown" );
+   if( mob->skincolor ) free( mob->skincolor );
    mob->skincolor = strdup( proto->skincolor ? proto->skincolor : "white" );
+   if( mob->eyeshape ) free( mob->eyeshape );
    mob->eyeshape = strdup( proto->eyeshape ? proto->eyeshape : "round" );
+   if( mob->hairstyle ) free( mob->hairstyle );
    mob->hairstyle = strdup( proto->hairstyle ? proto->hairstyle : "short" );
+   if( mob->haircolor ) free( mob->haircolor );
    mob->haircolor = strdup( proto->haircolor ? proto->haircolor : "brown" );
+   if( mob->build ) free( mob->build );
    mob->build = strdup( proto->build ? proto->build : "thin" );
+   if( mob->height ) free( mob->height );
    mob->height = strdup( proto->height ? proto->height : "average" );
    mob->btc = proto->btc;
    mob->brains = proto->brains;
@@ -276,12 +336,14 @@ void free_room( D_ROOM *room )
    while( ( mob = (D_MOBILE *) NextInList( &Iter ) ) != NULL )
    {
       DetachFromList( mob, dmobile_list );
+      DetachFromList( mob, room->mobiles );
       free_mobile( mob );
    }
    DetachIterator( &Iter );
    AttachIterator( &Iter, room->exits );
    while( ( exit = (D_EXIT *) NextInList( &Iter ) ) != NULL )
    {
+      DetachFromList( exit, room->exits );
       free_exit( exit );
    }
    DetachIterator( &Iter );
@@ -295,6 +357,7 @@ void free_room( D_ROOM *room )
    AttachIterator( &Iter, room->scripts );
    while( ( script = (char *)NextInList( &Iter ) ) != NULL )
    {
+      DetachFromList( script, room->scripts );
       free( script );
    }
    DetachIterator( &Iter );
@@ -303,6 +366,8 @@ void free_room( D_ROOM *room )
    FreeList( room->exits );
    FreeList( room->objects );
    FreeList( room->scripts );
+
+   DetachFromList( room, droom_list );
 
    free( room );
    return;
@@ -325,29 +390,18 @@ D_MOBILE *new_mobile()
 void clear_mobile(D_MOBILE *dMob)
 {
    memset(dMob, 0, sizeof(*dMob));
-
-   dMob->name         =  NULL;
-   dMob->password     =  NULL;
-   dMob->citizenship  =  NULL;
-   dMob->association  =  NULL;
-   dMob->prompt       =  NULL;
-   dMob->sdesc        =  NULL;
-   dMob->ldesc        =  NULL;
-   dMob->fighting     =  NULL;
    dMob->quit         =  FALSE;
 
-   dMob->race         =  strdup("human");
-   dMob->eyecolor     =  strdup("brown");
-   dMob->haircolor    =  strdup("brown");
-   dMob->eyeshape     =  strdup("round");
-   dMob->hairstyle    =  strdup("short");
-   dMob->skincolor    =  strdup("pale");
-   dMob->build        =  strdup("slender");
-   dMob->height       =  strdup("average");
+   dMob->race         =  NULL;
+   dMob->eyecolor     =  NULL;
+   dMob->haircolor    =  NULL;
+   dMob->eyeshape     =  NULL;
+   dMob->hairstyle    =  NULL;
+   dMob->skincolor    =  NULL;
+   dMob->build        =  NULL;
+   dMob->height       =  NULL;
    dMob->age          =  18;
 
-   dMob->hold_right   =  NULL;
-   dMob->hold_left    =  NULL;
    dMob->level        =  LEVEL_PLAYER;
    dMob->events       =  AllocList();
    dMob->com_cmd_list   =  AllocList();
@@ -433,6 +487,9 @@ void free_mobile_proto( D_MOBILE *dMob )
   EVENT_DATA *pEvent;
   ITERATOR Iter;
 
+  free_mobile( dMob );
+  return;
+
   AttachIterator(&Iter, dMob->events);
   while ((pEvent = (EVENT_DATA *) NextInList(&Iter)) != NULL)
     dequeue_event(pEvent);
@@ -508,6 +565,12 @@ void free_mobile(D_MOBILE *dMob)
   free( dMob->citizenship );
   free( dMob->association );
   free( dMob->eyecolor );
+  free( dMob->eyeshape );
+  free( dMob->haircolor );
+  free( dMob->hairstyle );
+  free( dMob->skincolor );
+  free( dMob->build );
+  free( dMob->height );
   free( dMob->prompt );
   free( dMob->offer_right );
   free( dMob->offer_left );
@@ -516,6 +579,10 @@ void free_mobile(D_MOBILE *dMob)
   free( dMob->guid );
   free( dMob->skills );
 
+  if( dMob->hold_left )  free_object( dMob->hold_left );
+  if( dMob->hold_right ) free_object( dMob->hold_right );
+
+
    for( size_t i = WEAR_HEAD; i < WEAR_NONE; i++ )
    {
       if( dMob->equipment[i]->worn[0] )
@@ -523,6 +590,11 @@ void free_mobile(D_MOBILE *dMob)
       if( dMob->equipment[i]->worn[1] )
         free_object( dMob->equipment[i]->worn[1] );
       free( dMob->equipment[i] );
+   }
+
+   for( size_t i = BODY_HEAD; i < MAX_BODY; i++ )
+   {
+      free( dMob->body[i] );
    }
 
    if( SizeOfList( dMob->com_cmd_list ) > 0 )
@@ -1048,6 +1120,105 @@ void save_skill_list()
    }
 
    json_dump_file( skill_table, "../scripts/skill_list.json", JSON_INDENT(3) );
+
+   return;
+}
+
+void mobile_cleanup( LIST *list )
+{
+   ITERATOR Iter;
+
+   AttachIterator( &Iter, list );
+   D_MOBILE *pMob;
+   while( ( pMob = (D_MOBILE *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pMob, list );
+      free_mobile( pMob );
+   }
+   DetachIterator( &Iter );
+}
+
+void object_cleanup( LIST *list )
+{
+
+   ITERATOR Iter;
+
+   AttachIterator( &Iter, list );
+   D_OBJECT *pObj;
+   while( ( pObj = (D_OBJECT *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pObj, dobject_list );
+      free_object( pObj );
+   }
+   DetachIterator( &Iter );
+
+   return;
+}
+
+void exit_cleanup( LIST *list )
+{
+   ITERATOR Iter;
+   D_EXIT *pExit;
+
+   AttachIterator( &Iter, list );
+   while( ( pExit = (D_EXIT*)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pExit, list );
+      free_exit( pExit );
+   }
+   DetachIterator( &Iter );
+
+   return;
+}
+
+void room_cleanup( LIST *list )
+{
+
+   ITERATOR Iter;
+   D_ROOM *pRoom;
+
+   AttachIterator( &Iter, list );
+   while( ( pRoom = (D_ROOM *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pRoom, list );
+      DetachFromList( pRoom, droom_list );
+      free_room( pRoom );
+   }
+   DetachIterator( &Iter );
+
+   return;
+}
+
+void area_cleanup( LIST *list )
+{
+   ITERATOR Iter;
+   D_AREA *pArea;
+
+   AttachIterator( &Iter, list );
+   while( ( pArea = (D_AREA *)NextInList( &Iter ) ) != NULL )
+   {
+      DetachFromList( pArea, list );
+      free_area( pArea );
+   }
+   DetachIterator( &Iter );
+
+   return;
+}
+
+void socket_cleanup( LIST *list )
+{
+   ITERATOR Iter;
+   D_SOCKET *dsock;
+
+   AttachIterator( &Iter, dsock_list );
+   while( ( dsock = (D_SOCKET *)NextInList( &Iter ) ) != NULL )
+   {
+      if( dsock->account )
+         free_account( dsock->account );
+      if( dsock->player )
+         free_mobile( dsock->player );
+   }
+   DetachIterator( &Iter );
 
    return;
 }

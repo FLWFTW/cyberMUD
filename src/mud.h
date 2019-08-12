@@ -560,6 +560,13 @@ bool can_lift                 ( D_MOBILE *dMob, D_OBJECT *dObj );
 /*
  * utils.c
  */
+void socket_cleanup( LIST *list );
+void account_cleanup( LIST *list );
+void mobile_cleanup( LIST *list );
+void object_cleanup( LIST *list );
+void exit_cleanup( LIST *list );
+void room_cleanup( LIST *list );
+void area_cleanup( LIST *list );
 void save_skill_list();
 unsigned int calc_brains      ( D_MOBILE *dMob );
 unsigned int calc_brawn       ( D_MOBILE *dMob );

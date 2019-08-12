@@ -114,6 +114,8 @@ void load_areas()
       AttachToList( area, darea_list );
       load_area_file( area );
    }
+
+   json_decref( json );
       
    return;
 }
