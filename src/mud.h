@@ -130,6 +130,7 @@ typedef struct  dBodypart     D_BODYPART;
 typedef struct  dEquipment    D_EQUIPMENT;
 typedef struct  dReset        D_RESET;
 typedef struct  command_data  D_COMMAND;
+typedef struct  mAffects      D_MAFFECT;
 
 /* the actual structures */
 struct dRoom
@@ -291,6 +292,14 @@ struct dEquipment
    D_OBJECT   * worn[2];
 };
 
+struct mAffects
+{
+   bool               blind;
+   bool               deaf;
+   bool               mute;
+   bool               poisoned;
+};
+
 struct dMobile
 {
    D_SOCKET         * socket;
@@ -306,6 +315,7 @@ struct dMobile
    enum position_tb    position;
    SKILLS           * skills;
    D_MOBILE         * fighting;
+   D_MAFFECT          affects;
    bool               quit;
 
    int                cur_hp;
@@ -560,6 +570,7 @@ bool can_lift                 ( D_MOBILE *dMob, D_OBJECT *dObj );
 /*
  * utils.c
  */
+bool is_crippled( D_MOBILE *dMob, enum bodyparts_tb loc );
 void socket_cleanup( LIST *list );
 void account_cleanup( LIST *list );
 void mobile_cleanup( LIST *list );

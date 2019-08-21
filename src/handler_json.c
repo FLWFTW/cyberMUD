@@ -568,6 +568,11 @@ void load_body( D_MOBILE *dMob, json_t *json )
          continue;
       dMob->body[i]->cur_hp = json_integer_value( json_object_get( part, "cur_hp" ) );
       dMob->body[i]->max_hp = json_integer_value( json_object_get( part, "max_hp" ) );
+      int calc_max = ( dMob->max_hp * body_hp_mod[i] ) / 100;
+      if( dMob->body[i]->max_hp != calc_max )
+      {
+         dMob->body[i]->max_hp = calc_max;
+      }
       dMob->body[i]->wound_trauma = json_integer_value( json_object_get( part, "wound_trauma" ) );
       dMob->body[i]->blunt_trauma = json_integer_value( json_object_get( part, "blunt_trauma" ) );
       dMob->body[i]->burn_trauma  = json_integer_value( json_object_get( part, "burn_trauma"  ) );
@@ -739,7 +744,6 @@ D_MOBILE *json_to_mobile( json_t *json )
       }
       else if( !strcmp( key, "body" ) )
       {
-         load_body( dMob, value );
       }
       else if( !strcmp( key, "btc" ) )
       {
@@ -776,6 +780,9 @@ D_MOBILE *json_to_mobile( json_t *json )
          bug( "Unknown JSON key '%s'.", key );
       }
    }
+
+   
+   load_body( dMob, json_object_get( json, "body" ) ); //we do this so when we calculate limb max_hp player's HP is definitely loaded and not 0
 
    return dMob;
 

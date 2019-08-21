@@ -41,6 +41,34 @@ static enum bodyparts_tb random_part()
    return BODY_TORSO;
 }
 
+void cripple( D_MOBILE *target, enum bodyparts_tb location )
+{
+
+   text_to_mobile_j( target, "combat", "Your %s %s crippled!", body_parts[location], location == BODY_EYES ? "are" : "is" );
+   if( ( location == BODY_RARM || location == BODY_RHAND ) && target->hold_right != NULL )
+   {
+      text_to_mobile_j( target, "combat", "You lose your grip on %s and it falls to the ground!", target->hold_right->sdesc );
+      echo_around( target, "combat", "%s loses %s grip on %s and it clatters to the ground!", MOBNAME( target ), POSSESSIVE( target ), target->hold_right->sdesc );
+      object_from_mobile( target->hold_right, target );
+      object_to_room( target->hold_right, target->room );
+      target->hold_right = NULL;
+   }
+   else if( ( location == BODY_LARM || location == BODY_LHAND ) && target->hold_left != NULL )
+   {
+      text_to_mobile_j( target, "combat", "You lose your grip on %s and it falls to the ground!", target->hold_left->sdesc );
+      echo_around( target, "combat", "%s loses %s grip on %s and it clatters to the ground!", MOBNAME( target ), POSSESSIVE( target ), target->hold_left->sdesc );
+      object_from_mobile( target->hold_left, target );
+      object_to_room( target->hold_left, target->room );
+      target->hold_left = NULL;
+   }
+   else if( location == BODY_EYES )
+   {
+      text_to_mobile_j( target, "combat", "You have been blinded!" );
+   }
+
+   return;
+}
+
 int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damage_type_tb type )
 {
    if( target == NULL )
@@ -48,6 +76,7 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damag
       bug( "damage called with NULL target" );
       return 0;
    }
+   bool already_crippled = is_crippled( target, location );
 
    D_OBJECT *armor = get_armor_pos( target, b_to_e(location) );
 
@@ -62,17 +91,25 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damag
 
    //damage the bodypart hit
    target->body[location]->cur_hp -= amount;
-   if( type == DAMAGE_BURN && target->body[location]->burn_trauma < MAX_TRAUMA )
+   if( is_crippled( target, location ) && already_crippled == FALSE )
    {
-      target->body[location]->burn_trauma++;
+      cripple( target, location );
    }
-   else if( type == DAMAGE_BLUNT && target->body[location]->blunt_trauma < MAX_TRAUMA )
+
+   if( amount > target->max_hp / 10 ) //If the damage is over 10% of the target's max health we increase the trauma to wherever they're hit.
    {
-      target->body[location]->blunt_trauma++;
-   }
-   else if( target->body[location]->wound_trauma < MAX_TRAUMA )
-   {
-      target->body[location]->wound_trauma++;
+      if( type == DAMAGE_BURN && target->body[location]->burn_trauma < MAX_TRAUMA )
+      {
+         target->body[location]->burn_trauma ++;
+      }
+      else if( type == DAMAGE_BLUNT && target->body[location]->blunt_trauma < MAX_TRAUMA )
+      {
+         target->body[location]->blunt_trauma ++;
+      }
+      else if( target->body[location]->wound_trauma < MAX_TRAUMA )
+      {
+         target->body[location]->wound_trauma ++;
+      }
    }
 
    return amount;
@@ -89,6 +126,15 @@ void init_combat( D_MOBILE *aggressor, D_MOBILE *target )
    aggressor->fighting = target;
    target->fighting = aggressor;
 
+   return;
+}
+
+void remove_combat( D_MOBILE *aggressor )
+{
+   if( aggressor->fighting == NULL )
+      return;
+   aggressor->fighting->fighting = NULL;
+   aggressor->fighting = NULL;
    return;
 }
 
@@ -240,4 +286,20 @@ void kill( D_MOBILE *dMob )
    {
       free_mobile( dMob );
    }
+}
+
+bool is_crippled( D_MOBILE *dMob, enum bodyparts_tb loc )
+{
+   int cur = dMob->body[loc]->cur_hp;
+   int max = dMob->body[loc]->max_hp;
+
+   if( max == 0 )
+      return TRUE;
+
+   int percent = ( cur * 100 ) / max;
+
+   if( percent < 25 )
+      return TRUE;
+
+   return FALSE;
 }

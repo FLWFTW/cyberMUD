@@ -247,6 +247,14 @@ void cmd_draw( D_MOBILE *dMob, char *arg )
       return;
    }
 
+   if( ( dMob->hold_right != NULL && ( is_crippled( dMob, BODY_LARM ) || is_crippled( dMob, BODY_LHAND ) ) )
+    || ( dMob->hold_left  != NULL && ( is_crippled( dMob, BODY_RARM ) || is_crippled( dMob, BODY_RHAND ) ) ) )
+   {
+      text_to_mobile_j( dMob, "error", "Your crippled limb prevents you from holding anything." );
+      return;
+   }
+
+
    for( size_t i = 0; i < WEAR_NONE; i++ )
    {
       con = dMob->equipment[i]->worn[0];
@@ -305,6 +313,14 @@ void cmd_unsling( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "error", "You don't have anything slung." );
       return;
    }
+
+   if( ( dMob->hold_right != NULL && ( is_crippled( dMob, BODY_LARM ) || is_crippled( dMob, BODY_LHAND ) ) )
+    || ( dMob->hold_left  != NULL && ( is_crippled( dMob, BODY_RARM ) || is_crippled( dMob, BODY_RHAND ) ) ) )
+   {
+      text_to_mobile_j( dMob, "error", "Your crippled limb prevents you from holding anything." );
+      return;
+   }
+
    if( arg[0] == '\0' )
    {
       if( dMob->equipment[WEAR_SLUNG]->worn[0] )
@@ -374,6 +390,13 @@ void cmd_accept( D_MOBILE *dMob, char *arg )
    if( dMob->hold_right != NULL && dMob->hold_left != NULL )
    {
       text_to_mobile_j( dMob, "error", "Your hands are full." );
+      return;
+   }
+
+   if( ( dMob->hold_right != NULL && ( is_crippled( dMob, BODY_LARM ) || is_crippled( dMob, BODY_LHAND ) ) )
+    || ( dMob->hold_left  != NULL && ( is_crippled( dMob, BODY_RARM ) || is_crippled( dMob, BODY_RHAND ) ) ) )
+   {
+      text_to_mobile_j( dMob, "error", "Your crippled limb prevents you from holding anything." );
       return;
    }
 
@@ -926,6 +949,13 @@ void cmd_get( D_MOBILE *dMob, char *arg )
    if( dMob->hold_right != NULL && dMob->hold_left != NULL )
    {
       text_to_mobile_j( dMob, "error", "Your hands are full!" );
+      return;
+   }
+
+   if( ( dMob->hold_right != NULL && ( is_crippled( dMob, BODY_LARM ) || is_crippled( dMob, BODY_LHAND ) ) )
+    || ( dMob->hold_left  != NULL && ( is_crippled( dMob, BODY_RARM ) || is_crippled( dMob, BODY_RHAND ) ) ) )
+   {
+      text_to_mobile_j( dMob, "error", "Your limb is crippled and you can't pick it up." );
       return;
    }
 
