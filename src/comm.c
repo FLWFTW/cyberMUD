@@ -10,7 +10,6 @@
  * will compress the data if needed.
  */
  
-static char *parse_prompt( D_MOBILE *dMob );
 
 bool text_to_socket( D_SOCKET *dsock, const char *txt2, ... )
 {
@@ -322,11 +321,10 @@ bool flush_output( D_SOCKET *dsock )
       return TRUE;
 
    /* bust a prompt */
-   /* if( dsock->state == STATE_PLAYING && dsock->bust_prompt ) */
+   if( dsock->state == STATE_PLAYING )
    {
       json_t *json = json_object();
 
-      parse_prompt( dsock->player ); //Does nothing, except get rid of the 'unused function' error
       /* text_to_buffer( dsock, "\n%s", parse_prompt( dsock->player ) ); */ /* Get rid of the traditional prompt */
       dsock->bust_prompt = FALSE;
       json_object_set_new( json, "type", json_string( "prompt" ) );
@@ -354,6 +352,7 @@ bool flush_output( D_SOCKET *dsock )
    return TRUE;
 }
 
+/*
 static char *parse_prompt( D_MOBILE *dMob )
 {
    static char result[MAX_BUFFER * 2 ];
@@ -393,3 +392,5 @@ static char *parse_prompt( D_MOBILE *dMob )
    
    return result;
 }
+*/
+

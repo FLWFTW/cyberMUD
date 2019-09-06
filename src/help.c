@@ -51,7 +51,14 @@ bool check_help(D_MOBILE *dMob, char *helpfile)
   }
   DetachIterator(&Iter);
 
-  text_to_mobile_j(dMob, "help", "[%i] %s\r\n\r\n%s", pHelp->level, pHelp->keyword, pHelp->text );
+  if( pHelp == NULL )
+  {
+     text_to_mobile_j( dMob, "error", "No manual entry for %s.", helpfile );
+  }
+  else
+  {
+     text_to_mobile_j(dMob, "help", "[%i] %s\r\n\r\n%s", pHelp->level, pHelp->keyword, pHelp->text );
+  }
 
   return found;
 }
