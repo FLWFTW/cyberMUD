@@ -112,6 +112,11 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damag
       }
    }
 
+   target->cur_hp -= amount;
+   if( target->cur_hp < 0 )
+      kill( target );
+
+
    return amount;
 }
 

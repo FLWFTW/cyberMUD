@@ -79,6 +79,9 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
       return;
    }
 
+   text_to_mobile_j( dMob, "combat", "You fire your %s at %s!", gun->sdesc, MOBNAME(target) );
+   text_to_mobile_j( target, "combat", "%s fires %s %s at you!", MOBNAME( dMob ), POSSESSIVE( dMob ), gun->sdesc );
+   echo_around_two( dMob, target, "combat", "%s fires %s %s at %s!", MOBNAME( dMob ), POSSESSIVE( dMob ), gun->sdesc, MOBNAME( target ) );
    if( arg[0] == '\0' )
    {
       fire( dMob, target, gun, MAX_BODY );
@@ -101,8 +104,5 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
          return;
       }
    }
-   text_to_mobile_j( dMob, "combat", "You fire your %s at %s!", gun->sdesc, MOBNAME(target) );
-   text_to_mobile_j( target, "combat", "%s fires %s %s at you!", MOBNAME( dMob ), POSSESSIVE( dMob ), gun->sdesc );
-   echo_around_two( dMob, target, "combat", "%s fires %s %s at %s!", MOBNAME( dMob ), POSSESSIVE( dMob ), gun->sdesc, MOBNAME( target ) );
 }
 
