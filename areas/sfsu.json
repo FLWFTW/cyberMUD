@@ -1,0 +1,14 @@
+{
+   "rooms": [
+      {
+         "name": "The Center of Malcolm X Plaza",
+         "description": "The student center rises steeply above the plaza to the west, its stadium seating providing an amphitheater effect. The main campus extends east of here across a grassy park. The library is to the southeast, the science and engineering colleges are to the east and north, and the fine arts, theater, and liberal arts colleges are to the south and west.",
+         "vnum": 200,
+         "exits": [],
+         "sector": "inside"
+      }
+   ],
+   "objects": [],
+   "mobiles": [],
+   "resets": []
+}

@@ -1066,25 +1066,28 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    {
       if( area->name ) free( area->name );
       area->name = strdup( arg );
+      text_to_mobile_j( dMob, "text", "Area name set to: %s.", area->name );
    }
    else if( !strcasecmp( action, "author" ) )
    {
       if( area->author ) free( area->author );
       area->author = strdup( arg );
+      text_to_mobile_j( dMob, "text", "Area author set to: %s.", area->author );
    }
    else if( !strcasecmp( action, "reset_interval" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 5 || i > 60 )
       {
          text_to_mobile_j( dMob, "error", "Reset interval must be betwen 5 and 60 minutes." );
          return;
       }
       area->reset_interval = i;
+      text_to_mobile_j( dMob, "text", "Area reset interval set to %ud minutes.", area->reset_interval );
    }
    else if( !strcasecmp( action, "o_low" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
@@ -1107,7 +1110,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    }
    else if( !strcasecmp( action, "m_low" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
@@ -1130,7 +1133,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    }
    else if( !strcasecmp( action, "r_low" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
@@ -1153,7 +1156,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    }
    else if( !strcasecmp( action, "r_hi" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
@@ -1176,7 +1179,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    }
    else if( !strcasecmp( action, "m_hi" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );
@@ -1199,7 +1202,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg )
    }
    else if( !strcasecmp( action, "o_hi" ) )
    {
-      int i = atoi( arg );
+      unsigned int i = (unsigned int)strtoul( arg, NULL, 0 );
       if( i < 1 )
       {
          text_to_mobile_j( dMob, "error", "Area vnums must be greater than zero." );

@@ -1,0 +1,262 @@
+{
+   "rooms": [
+      {
+         "name": "The lobby of San Francisco General Hospital",
+         "description": "The linoleum floors are dingy and worn. The whole lobby smells strongy of antiseptic mixed with piss, vomit, and blood. There's an empty check-in desk along the northern wall. The nurses that would normally sit behind the bulletproof glass have been replaced with an electronic speaker-box. Automatic doors lead out to the street along the southern wall. A door labeled 'EMERGENCY ROOM' lies to the west and a bank of elevators can be seen to the east.",
+         "vnum": 100,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "south",
+               "to_vnum": 8,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "north"
+            },
+            {
+               "name": "east",
+               "to_vnum": 109,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "west"
+            }
+         ]
+      },
+      {
+         "name": "The cloning lab",
+         "description": "Synthetic wombs holding human embryos in various stages of development hang from rows upon rows of racks. Tubes, wires, and sensors monitor the growth of the fetuses, and an air sterilizer creates a slight breeze through the hanging sacks. To the north, a secure access door controls entrance into the cloning facility. A glowing red sign labeled 'Morgue' sits above a secure access door to the east.",
+         "vnum": 101,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "east",
+               "to_vnum": 102,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "west"
+            },
+            {
+               "name": "north",
+               "to_vnum": 105,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "south"
+            }
+         ]
+      },
+      {
+         "name": "The morgue",
+         "description": "Rows upon rows of refrigerated units house the recently deceased of the city. Several corpses rest under sheets on gurneys. Two large slabs sit in the center of the room, ready to hold a new corpse for autopsy. A large computer with a NervJack reader sits in the corner, ready to read, digitize, and re-encode the deceased's consciousness, assuming their stack is still intact. Several computers line the wall to the east. A glowing red sign labeled 'Cloning' sits above a secure access door to the west.",
+         "vnum": 102,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "west",
+               "to_vnum": 101,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "east"
+            },
+            {
+               "name": "north",
+               "to_vnum": 104,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "south"
+            }
+         ]
+      },
+      {
+         "name": "The eastern end of the basement hallway",
+         "description": "A hallway of halogen lights, buffed linoleum floors, and nauseating antiseptic extends to the west. A dingy elevator sits to the east. Painted lines on the floor run from the elevator west down the hallway. A blue line is labeled 'Morgue', a green line is labeled 'Cloning', and a red line is labeled 'Incinerator'.",
+         "vnum": 103,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "west",
+               "to_vnum": 104,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "east"
+            },
+            {
+               "name": "east",
+               "to_vnum": 108,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "west"
+            }
+         ]
+      },
+      {
+         "name": "The basement hallway, outside the morgue",
+         "description": "The linoleum tiles and halogen lights continue east towards the elevators and west towards the incinerator. The blue floor-line, labeled 'Morgue' turns sharply south. The green and red lines continue west. A glowing red sign sits above a secure access door to the south.",
+         "vnum": 104,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "east",
+               "to_vnum": 103,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "west"
+            },
+            {
+               "name": "south",
+               "to_vnum": 102,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "north"
+            },
+            {
+               "name": "west",
+               "to_vnum": 105,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "east"
+            }
+         ]
+      },
+      {
+         "name": "The basement hallway, outside the cloning facility",
+         "description": "The green line on the floor turns abruptly to the south, ending at a secure access door labeled 'Cloning'. The smell of stale ozone and antiseptic is strong here, likely attributed to the strict sterilization protocols of the cloning chambers. The red painted line continues west, leading to the incinerator.",
+         "vnum": 105,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "east",
+               "to_vnum": 104,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "west"
+            },
+            {
+               "name": "south",
+               "to_vnum": 101,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "north"
+            },
+            {
+               "name": "west",
+               "to_vnum": 106,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "east"
+            }
+         ]
+      },
+      {
+         "name": "The western end of the basement hallway, outside the incinerator.",
+         "description": "A large, reinforced secure access door sits to the west. Thermoinsulative concrete prevents the heat from the massive incinerator within from escaping into the rest of the hallway. The red painted line leads back east towards the elevator. A glowing red sign sits above the door to the rest, reading \"Incinerator\".",
+         "vnum": 106,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "east",
+               "to_vnum": 105,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "west"
+            },
+            {
+               "name": "west",
+               "to_vnum": 107,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "east"
+            }
+         ]
+      },
+      {
+         "name": "The incinerator",
+         "description": "A gargantuan steel and concrete incinerator is built into the wall to the east. Multiple gas burners quickly turn anything pushed into it into ash and carbon. A large conveyor belt runs constantly, feeding the burning machine. Thermoinsulative concrete lines the floor, walls, and ceiling. A reinforced secure access door controls access to the room to the east.",
+         "vnum": 107,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "east",
+               "to_vnum": 106,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "west"
+            }
+         ]
+      },
+      {
+         "name": "Inside the service elevator",
+         "description": "Wood panel walls, linoleum floors, and an array of buttons make up a majority of this elevator. There are two doors, one on the east side and one on the west. An analog dial above the doors points to the current floor.",
+         "vnum": 108,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "south",
+               "to_vnum": 109,
+               "lock_level": 0,
+               "exit_state": 3,
+               "lock_state": 0,
+               "farside_name": "north"
+            },
+            {
+               "name": "west",
+               "to_vnum": 103,
+               "lock_level": 0,
+               "exit_state": 2,
+               "lock_state": 0,
+               "farside_name": "east"
+            }
+         ]
+      },
+      {
+         "name": "Hospital lobby, by the elevators",
+         "description": "Four sets of elevators have been built into the wall to the east. Above each door is an analog dial indicating the floor its on. A directory has been posted next to each call button showing which floor to go to for which department. At the northern end of the wall is a separate elevator marked 'Service' with a keycard access panel next to it.",
+         "vnum": 109,
+         "sector": "inside",
+         "exits": [
+            {
+               "name": "west",
+               "to_vnum": 100,
+               "lock_level": 0,
+               "exit_state": 0,
+               "lock_state": 0,
+               "farside_name": "east"
+            },
+            {
+               "name": "north",
+               "to_vnum": 108,
+               "lock_level": 0,
+               "exit_state": 3,
+               "lock_state": 0,
+               "farside_name": "south"
+            }
+         ]
+      },
+      {
+         "name": "A newly created room",
+         "description": "A newly created room fresh from /dev/null",
+         "vnum": 110,
+         "sector": "inside",
+         "exits": []
+      }
+   ],
+   "objects": [],
+   "mobiles": [],
+   "resets": []
+}
