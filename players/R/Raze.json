@@ -1,0 +1,421 @@
+{
+   "age": 28,
+   "association": "BitCorp",
+   "body": {
+      "eyes": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 2,
+         "max_hp": 2,
+         "wound_trauma": 0
+      },
+      "face": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 10,
+         "max_hp": 10,
+         "wound_trauma": 0
+      },
+      "groin": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 10,
+         "max_hp": 10,
+         "wound_trauma": 0
+      },
+      "head": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 15,
+         "max_hp": 15,
+         "wound_trauma": 0
+      },
+      "left arm": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 25,
+         "max_hp": 25,
+         "wound_trauma": 0
+      },
+      "left foot": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 3,
+         "max_hp": 3,
+         "wound_trauma": 0
+      },
+      "left hand": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 3,
+         "max_hp": 3,
+         "wound_trauma": 0
+      },
+      "left leg": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 25,
+         "max_hp": 25,
+         "wound_trauma": 0
+      },
+      "neck": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 10,
+         "max_hp": 10,
+         "wound_trauma": 0
+      },
+      "right arm": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 25,
+         "max_hp": 25,
+         "wound_trauma": 0
+      },
+      "right foot": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 3,
+         "max_hp": 3,
+         "wound_trauma": 0
+      },
+      "right hand": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 3,
+         "max_hp": 3,
+         "wound_trauma": 0
+      },
+      "right leg": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 25,
+         "max_hp": 25,
+         "wound_trauma": 0
+      },
+      "torso": {
+         "blunt_trauma": 0,
+         "burn_trauma": 0,
+         "cur_hp": 50,
+         "max_hp": 50,
+         "wound_trauma": 0
+      }
+   },
+   "brains": 5,
+   "brawn": 5,
+   "btc": 0.0,
+   "build": "athletic",
+   "citizenship": "Federation",
+   "cool": 10,
+   "coordination": 5,
+   "cur_bandwidth": 0,
+   "cur_hp": 100,
+   "encumberance": 0,
+   "equipment": {
+      "arms": {},
+      "body": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "MlLQyWzvgxdf1tz8jMDcRRXYMzxzE8UqtGh2CQy",
+            "ivar1": 10,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "some kevlar bodyarmor has been set on the ground",
+            "name": "kevlar body armor bodyarmor armour bodyarmour",
+            "repair": 0,
+            "sdesc": "kevlar bodyarmor",
+            "type": "armor",
+            "vnum": 11,
+            "volume": 9177,
+            "wear_pos": "body"
+         },
+         "worn1": {
+            "capacity": 0,
+            "guid": "ToL8qfIyyucLl3IkQhRpWZknt1EwEv4xTQGk6oT",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a t-shirt with a cartoon pickle shouting \"PICKLE RICK\" sits crumpled on the ground",
+            "name": "pickle rick tshirt shirt",
+            "repair": 0,
+            "sdesc": "Pickle Rick t-shirt",
+            "type": "clothing",
+            "vnum": 3,
+            "volume": 0,
+            "wear_pos": "body"
+         }
+      },
+      "eyes": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "60zMuYjNaZZq9DyHdJRmsKFJ9eKFwzkCzTo3RIR",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a pair of mirror-polished aviators has been set on the ground",
+            "name": "aviators shades sunglasses",
+            "repair": 0,
+            "sdesc": "pair of aviators",
+            "type": "clothing",
+            "vnum": 2,
+            "volume": 0,
+            "wear_pos": "eyes"
+         }
+      },
+      "face": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "2HQsRt1yGLq3daJWjYHZugj6PdvT4dK6VBzM5Al",
+            "ivar1": 4,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a bright red Oni mask sits abandoned here, collecting dust",
+            "name": "oni mask",
+            "repair": 0,
+            "sdesc": "bright red Oni mask",
+            "type": "armor",
+            "vnum": 19,
+            "volume": 0,
+            "wear_pos": "face"
+         }
+      },
+      "feet": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "FotWNkdZ6W19E0gNSy5aLbZjySwrah8PFCMsWZs",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a pair of olive green boot socks have been folded up and discarded here",
+            "name": "socks olive green",
+            "repair": 0,
+            "sdesc": "pair of olive green boot socks",
+            "type": "clothing",
+            "vnum": 14,
+            "volume": 0,
+            "wear_pos": "feet"
+         },
+         "worn1": {
+            "capacity": 0,
+            "guid": "2WtcBusom1twNFw6doCFzTNozqa1matp7XBIr47",
+            "ivar1": 2,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a pair of well worn black combat boots sit here",
+            "name": "combat boots",
+            "repair": 0,
+            "sdesc": "pair of scuffed black combat boots",
+            "type": "armor",
+            "vnum": 15,
+            "volume": 0,
+            "wear_pos": "feet"
+         }
+      },
+      "hands": {},
+      "head": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "ywgJ6IN8ObUGupwibFcgaD8yza99ISihpz0whOE",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a battered black ballcap has been left on the ground",
+            "name": "black battered ballcap",
+            "repair": 0,
+            "sdesc": "battered black ballcap",
+            "type": "clothing",
+            "vnum": 6,
+            "volume": 0,
+            "wear_pos": "head"
+         }
+      },
+      "legs": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "lh4FvnwNnENhoQgcLJ22IY78Riiic5OxnTdShKG",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a pair of baggy blue jeans lay piled on the ground",
+            "name": "baggy blue jeans",
+            "repair": 0,
+            "sdesc": "pair of baggy jeans",
+            "type": "clothing",
+            "vnum": 4,
+            "volume": 0,
+            "wear_pos": "legs"
+         }
+      },
+      "neck": {},
+      "shoulders": {
+         "worn0": {
+            "capacity": 31250,
+            "contents": [
+               {
+                  "capacity": 0,
+                  "guid": "h79HvzsfteFTFzoEnKiwcmyjiFQtXxceFmWaWoq",
+                  "ivar1": 0,
+                  "ivar2": 0,
+                  "ivar3": 0,
+                  "ivar4": 0,
+                  "ivar5": 0,
+                  "ivar6": 0,
+                  "ldesc": "A brown leather belt lies on the ground",
+                  "name": "brown leather belt",
+                  "repair": 0,
+                  "sdesc": "brown leather belt",
+                  "type": "clothing",
+                  "vnum": 8,
+                  "volume": 0,
+                  "wear_pos": "waist"
+               }
+            ],
+            "guid": "ES5qe99y0rqpnqKKTMpqqUvYOlE8s327W7xahGJ",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a small leather satchel has been left here",
+            "name": "small backpack satchel rucksack",
+            "repair": 0,
+            "sdesc": "small leather satchel",
+            "type": "clothing",
+            "vnum": 9,
+            "volume": 2500,
+            "wear_pos": "shoulders"
+         }
+      },
+      "slung": {},
+      "waist": {
+         "worn0": {
+            "capacity": 0,
+            "guid": "qC5jiEIW2sfyFB6YUMPnJmAY2XUcTiDjVIDdnla",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a black kydex pistol holster has been left here",
+            "name": "pistol holster",
+            "repair": 0,
+            "sdesc": "black kydex pistol holster",
+            "type": "holster",
+            "vnum": 16,
+            "volume": 0,
+            "wear_pos": "waist"
+         },
+         "worn1": {
+            "capacity": 0,
+            "contents": [
+               {
+                  "capacity": 0,
+                  "guid": "rX5KxKD5qtykejRiZ7ZUK3YOVtPgYW4pTaaqUNw",
+                  "ivar1": 0,
+                  "ivar2": 0,
+                  "ivar3": 0,
+                  "ivar4": 0,
+                  "ivar5": 0,
+                  "ivar6": 0,
+                  "ldesc": "a cruel looking combat knife, its sharp edge glimmering, has been abandoned here",
+                  "name": "combat knife",
+                  "repair": 0,
+                  "sdesc": "a cruel looking combat knife",
+                  "type": "blade",
+                  "vnum": 18,
+                  "volume": 0,
+                  "wear_pos": "none"
+               }
+            ],
+            "guid": "qOpYt14sVQhiAETyGQsTKLw4GfHUD343Su1lv6N",
+            "ivar1": 0,
+            "ivar2": 0,
+            "ivar3": 0,
+            "ivar4": 0,
+            "ivar5": 0,
+            "ivar6": 0,
+            "ldesc": "a brown leather sheath",
+            "name": "leather sheath",
+            "repair": 0,
+            "sdesc": "brown leather sheath",
+            "type": "sheath",
+            "vnum": 17,
+            "volume": 0,
+            "wear_pos": "waist"
+         }
+      }
+   },
+   "eyecolor": "brown",
+   "eyeshape": "round",
+   "gender": "male",
+   "guid": "Uv9cDv7y0N8bAr316oLSjuQNM8U4uqSoW2BAxI8",
+   "haircolor": "brown",
+   "hairstyle": "short",
+   "height": "tall",
+   "hold_right": {
+      "capacity": 0,
+      "guid": "O6AlTgRZugC9PwXe5np7KzAaGyMp0QwOX7aRn1R",
+      "ivar1": 1,
+      "ivar2": 4,
+      "ivar3": -1,
+      "ivar4": 2,
+      "ivar5": 0,
+      "ivar6": 0,
+      "ldesc": "an 9 millimeter STEN submachine gun has been left here",
+      "name": "STEN submachine gun smg machine 9mm",
+      "repair": 0,
+      "sdesc": "9mm STEN SMG",
+      "type": "firearm",
+      "vnum": 13,
+      "volume": 8900,
+      "wear_pos": "slung"
+   },
+   "level": 4,
+   "luck": 5,
+   "max_bandwidth": 0,
+   "max_hp": 100,
+   "name": "Raze",
+   "position": 7,
+   "position_string": "standing",
+   "prompt": "#>",
+   "race": "human",
+   "room": 200,
+   "senses": 5,
+   "signal": 0,
+   "skills": {
+      "combat": 0,
+      "engineering": 0,
+      "medicine": 0,
+      "personality": 0,
+      "subterfuge": 0
+   },
+   "skincolor": "olive",
+   "stamina": 5,
+   "vnum": 0
+}

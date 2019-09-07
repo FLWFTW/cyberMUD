@@ -1,0 +1,554 @@
+[
+   {
+      "name": "accept",
+      "function": "accept",
+      "level": 1,
+      "type": "wiz"
+   },
+   {
+      "name": "astat",
+      "function": "astat",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "aset",
+      "function": "aset",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "areas",
+      "function": "areas",
+      "level": 4,
+      "type": "ooc"
+   },
+   {
+      "name": "chat",
+      "function": "chat",
+      "level": 1,
+      "type": "communication"
+   },
+   {
+      "name": "close",
+      "function": "close",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "commands",
+      "function": "commands",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "compress",
+      "function": "compress",
+      "level": 1,
+      "type": "wiz"
+   },
+   {
+      "name": "copyover",
+      "function": "copyover",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "draw",
+      "function": "draw",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "drop",
+      "function": "drop",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "e",
+      "function": "e",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "east",
+      "function": "east",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "enter",
+      "function": "enter",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "equipment",
+      "function": "equipment",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "eset",
+      "function": "eset",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "examine",
+      "function": "examine",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "fire",
+      "function": "fire",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "force",
+      "function": "force",
+      "level": 3,
+      "type": "wiz"
+   },
+   {
+      "name": "get",
+      "function": "get",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "give",
+      "function": "give",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "goto",
+      "function": "goto",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "gui-redit",
+      "function": "gui-redit",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "help",
+      "function": "help",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "hedit",
+      "function": "hedit",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "holster",
+      "function": "holster",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "inventory",
+      "function": "inventory",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "instazone",
+      "function": "instazone",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "kneel",
+      "function": "kneel",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "l",
+      "function": "l",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "lock",
+      "function": "lock",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "look",
+      "function": "look",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "linkdead",
+      "function": "linkdead",
+      "level": 3,
+      "type": "wiz"
+   },
+   {
+      "name": "makearea",
+      "function": "makearea",
+      "level": 3,
+      "type": "wiz"
+   },
+   {
+      "name": "mlist",
+      "function": "mlist",
+      "level": 3,
+      "type": "wiz"
+   },
+   {
+      "name": "mcreate",
+      "function": "mcreate",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "mspawn",
+      "function": "mspawn",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "mset",
+      "function": "mset",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "mstat",
+      "function": "mstat",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "n",
+      "function": "n",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "north",
+      "function": "north",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "ne",
+      "function": "ne",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "northeast",
+      "function": "northeast",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "nw",
+      "function": "nw",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "northwest",
+      "function": "northwest",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "ocreate",
+      "function": "ocreate",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "ospawn",
+      "function": "ospawn",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "oset",
+      "function": "oset",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "ostat",
+      "function": "ostat",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "olist",
+      "function": "olist",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "open",
+      "function": "open",
+      "level": 4,
+      "type": "action"
+   },
+   {
+      "name": "put",
+      "function": "put",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "prompt",
+      "function": "prompt",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "prone",
+      "function": "prone",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "reboo",
+      "function": "reboo",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "reboot",
+      "function": "reboot",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "redit",
+      "function": "redit",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "rest",
+      "function": "rest",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "restore",
+      "function": "restore",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "remove",
+      "function": "remove",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "resetarea",
+      "function": "resetarea",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "s",
+      "function": "s",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "savearea",
+      "function": "savearea",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "sheath",
+      "function": "sheath",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "skillset",
+      "function": "skillset",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "sleep",
+      "function": "sleep",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "sling",
+      "function": "sling",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "south",
+      "function": "south",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "southeast",
+      "function": "southeast",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "southwest",
+      "function": "southwest",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "se",
+      "function": "se",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "sw",
+      "function": "sw",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "say",
+      "function": "say",
+      "level": 1,
+      "type": "communication"
+   },
+   {
+      "name": "save",
+      "function": "save",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "sit",
+      "function": "sit",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "slay",
+      "function": "slay",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "stand",
+      "function": "stand",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "stow",
+      "function": "stow",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "shutdow",
+      "function": "shutdow",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "shutdown",
+      "function": "shutdown",
+      "level": 4,
+      "type": "wiz"
+   },
+   {
+      "name": "qui",
+      "function": "qui",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "quit",
+      "function": "quit",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "ungive",
+      "function": "ungive",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "unlock",
+      "function": "unlock",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "unsling",
+      "function": "unsling",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "w",
+      "function": "w",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "wake",
+      "function": "wake",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "west",
+      "function": "west",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "wear",
+      "function": "wear",
+      "level": 1,
+      "type": "action"
+   },
+   {
+      "name": "who",
+      "function": "who",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "score",
+      "function": "score",
+      "level": 1,
+      "type": "ooc"
+   },
+   {
+      "name": "time",
+      "function": "time",
+      "level": 1,
+      "type": "ooc"
+   }
+]
