@@ -221,6 +221,16 @@ void cmd_northeast( D_MOBILE *dMob, char *arg )
    cmd_enter( dMob, "northeast" );
 }
 
+void cmd_up( D_MOBILE *dMob, char *arg )
+{
+   cmd_enter( dMob, "up" );
+}
+
+void cmd_down( D_MOBILE *dMob, char *arg )
+{
+   cmd_enter( dMob, "down" );
+}
+
 static void show_room_to_player( D_MOBILE *dMob )
 {
    ITERATOR Iter;

@@ -987,6 +987,8 @@ void cmd_savearea( D_MOBILE *dMob, char *arg )
    DetachIterator( &Iter );
    json_dump_file( arealist, "../areas/arealist.json", JSON_INDENT(3) );
    json_decref( arealist );
+   text_to_mobile_j( dMob, "text", "Ok." );
+   log_string( "Saved area %s.", pArea->name );
 
    return;
 }

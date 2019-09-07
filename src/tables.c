@@ -253,5 +253,8 @@ const char *sector_types[] = { [SECTOR_INSIDE]     = "inside",
                                [SECTOR_WATER]      = "water",
                                [SECTOR_UNDERWATER] = "underwater",
                                [SECTOR_FLYING]     = "flying",
+                               [SECTOR_ICE]        = "ice",
+                               [SECTOR_MUD]        = "mud",
+                               [SECTOR_CONCRETE]   = "concrete",
                                [MAX_SECTOR]        = 0};
 

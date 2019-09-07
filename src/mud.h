@@ -666,6 +666,8 @@ void  cmd_northwest           ( D_M *dMob, char *arg );
 void  cmd_west                ( D_M *dMob, char *arg );
 void  cmd_southeast           ( D_M *dMob, char *arg );
 void  cmd_southwest           ( D_M *dMob, char *arg );
+void  cmd_up                  ( D_M *dMob, char *arg );
+void  cmd_down                ( D_M *dMob, char *arg );
 void  cmd_prompt              ( D_M *dMob, char *arg );
 void  cmd_ospawn              ( D_M *dMob, char *arg );
 void  cmd_mspawn              ( D_M *dMob, char *arg );
