@@ -1,8 +1,0 @@
-ulimit: Command not found.
-Segmentation fault (core dumped)
-Sep  5 20:13:03: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Segmentation fault (core dumped)
-Sep  5 20:13:10: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Segmentation fault (core dumped)
-Sep  5 20:13:16: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-ulimit: Command not found.

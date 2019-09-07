@@ -1,9 +1,0 @@
-Usage:
-   accept [item name or player name]
-
-   Used to accept an offered item. In the case of multiple offers
-   you can specify which object you are accepting or from which
-   person you are accepting an offer from.
-
-   Note: You must have at leat one free hand available to receive
-   the offered item.

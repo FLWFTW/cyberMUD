@@ -1,6 +1,0 @@
-usage:
-   [direction]
-   enter [direction or exit name]
-
-   Moves your character through the exit specified. Used to
-   travel through the game world.

@@ -1,8 +1,0 @@
-#Ignore object files
-*.o
-#ignore the binary
-cbm
-nohup.out
-*.log
-#ignore the website symlink
-public_html/
