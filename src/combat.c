@@ -143,10 +143,67 @@ void remove_combat( D_MOBILE *aggressor )
    return;
 }
 
+D_OBJECT *next_round( D_OBJECT *firearm )
+{
+   ITERATOR Iter;
+   D_OBJECT *round, *magazine;
+   if( firearm->ivar3 == 0 ) /* magazine */
+   {
+      AttachIterator( &Iter, firearm->contents );
+      magazine = NextInList( &Iter );
+      DetachIterator( &Iter );
+      if( !magazine ) /*No magazine*/
+         return NULL;
+      if( magazine->type != ITEM_MAGAZINE )
+      {
+         bug( "Expected magazine, got %s.", item_type[magazine->type] );
+         return NULL;
+      }
+      AttachIterator( &Iter, magazine->contents );
+      round = NextInList( &Iter );
+      DetachIterator( &Iter );
+      if( !round ) /*Empty magazine*/
+         return NULL;
+      if( round->type != ITEM_BULLET )
+      {
+         bug( "Expected bullet, got %s.", item_type[round->type] );
+         return NULL;
+      }
+      DetachFromList( round, magazine->contents );
+      return round;
+   }
+   else if( firearm->ivar3 >= 1 ) /* Single shot, internal magazine (revolver, pump shotgun, etc) */
+   {
+      if( SizeOfList( firearm->contents ) == 0 )
+      {
+         return NULL; /*Out of ammo*/
+      }
+      AttachIterator( &Iter, firearm->contents );
+      round = NextInList( &Iter );
+      DetachIterator( &Iter );
+      if( round->type != ITEM_BULLET )
+      {
+         bug( "Expected bullet, got %s.", item_type[round->type] );
+         return NULL;
+      }
+      DetachFromList( round, firearm->contents );
+      return round;
+   }
+   else
+   {
+      bug( "Firearm with invalid feed mechanism %d.", firearm->ivar3 );
+      return NULL;
+   }
+
+   return NULL;
+}
+
+
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_tb aim )
 {
    int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, stopping_power = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
+   D_OBJECT *round;
 
    if( shooter == NULL || target == NULL || firearm == NULL )
    {
@@ -155,6 +212,12 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    }
 
    init_combat( shooter, target );
+
+   if( ( round = next_round( firearm ) ) == NULL )
+   {
+      text_to_mobile_j( shooter, "combat", "***CLICK!***" );
+      return;
+   }
 
    if( aim == MAX_BODY ) //lets find a place to hit
    {
@@ -200,6 +263,9 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    size_t check = roll( 1, 100 );
    dam = dice( (char*)ammo_dice[ firearm->ivar1 % MAX_AMMO ] );
 
+   text_to_mobile_j( shooter, "combat", "You fire your %s at %s!", firearm->sdesc, MOBNAME(target) );
+   text_to_mobile_j( target, "combat", "%s fires %s %s at you!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc );
+   echo_around_two( shooter, target, "combat", "%s fires %s %s at %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ) );
    if( check <= chance ) //hit!
    {
       stopping_power = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
@@ -222,7 +288,7 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
    D_OBJECT *corpse = new_object();
    snprintf( buf, MAX_STRING_LENGTH, "corpse %s", MOBNAME( dMob ) );
    corpse->name = strdup( buf );
-   snprintf( buf, MAX_STRING_LENGTH, "corpse of %s", MOBNAME( dMob ) );
+   snprintf( buf, MAX_STRING_LENGTH, "the corpse of %s", MOBNAME( dMob ) );
    corpse->sdesc = strdup( buf );
    snprintf( buf, MAX_STRING_LENGTH, "The corpse of %s lays here.", MOBNAME( dMob ) );
    corpse->ldesc = strdup( buf );

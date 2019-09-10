@@ -646,6 +646,42 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
          return;
       }
    }
+   else if( !strcasecmp( action, "ivar1" ) )
+   {
+      obj->ivar1 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar1 set to %d.", obj->ivar1 );
+      return;
+   }
+   else if( !strcasecmp( action, "ivar2" ) )
+   {
+      obj->ivar2 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar2 set to %d.", obj->ivar2 );
+      return;
+   }
+   else if( !strcasecmp( action, "ivar3" ) )
+   {
+      obj->ivar3 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar3 set to %d.", obj->ivar3 );
+      return;
+   }
+   else if( !strcasecmp( action, "ivar4" ) )
+   {
+      obj->ivar4 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar4 set to %d.", obj->ivar4 );
+      return;
+   }
+   else if( !strcasecmp( action, "ivar5" ) )
+   {
+      obj->ivar5 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar5 set to %d.", obj->ivar5 );
+      return;
+   }
+   else if( !strcasecmp( action, "ivar6" ) )
+   {
+      obj->ivar6 = strtol( arg, NULL, 0 );
+      text_to_mobile_j( dMob, "text", "Item ivar6 set to %d.", obj->ivar6 );
+      return;
+   }
    else
    {
       text_to_mobile_j( dMob, "Error", "Invalid oset command." );
@@ -977,6 +1013,7 @@ void cmd_savearea( D_MOBILE *dMob, char *arg )
    json_dump_file( area, filename, JSON_INDENT(3) );
    json_decref( area );
 
+   log_string( "Saved area %s.", pArea->name );
    //Recreate arealist.json
    json_t *arealist = json_array();
    AttachIterator( &Iter, darea_list );
@@ -988,7 +1025,6 @@ void cmd_savearea( D_MOBILE *dMob, char *arg )
    json_dump_file( arealist, "../areas/arealist.json", JSON_INDENT(3) );
    json_decref( arealist );
    text_to_mobile_j( dMob, "text", "Ok." );
-   log_string( "Saved area %s.", pArea->name );
 
    return;
 }

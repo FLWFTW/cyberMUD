@@ -283,6 +283,8 @@ D_MOBILE *spawn_mobile( unsigned int vnum )
    mob->senses = proto->senses;
    mob->luck = proto->luck;
    mob->cool = proto->cool;
+   mob->cur_hp = proto->max_hp;
+   mob->max_hp = proto->max_hp;
 
    AttachToList( mob, dmobile_list );
    return mob;
@@ -910,7 +912,7 @@ void check_mobiles()
          AttachIterator( &cmdIter, pMob->com_cmd_list );
          cmd = NextInList( &cmdIter );
          cmd->func( cmd->dMob, cmd->arg );
-         free( cmd->arg );
+         //free( cmd->arg );
          DetachFromList( cmd, pMob->com_cmd_list );
          free( cmd );
          DetachIterator( &cmdIter );
@@ -1102,26 +1104,6 @@ unsigned int calc_coordination( D_MOBILE *dMob )
 unsigned int calc_luck( D_MOBILE *dMob )
 {
    return dMob->luck;
-}
-
-void save_skill_list()
-{
-   json_t *skill_table = json_array(), *skill = NULL;
-   size_t i;
-
-   for( i = 0; *tabCmd[i].cmd_funct != NULL; i++ )
-   {
-      skill = json_object();
-      json_object_set_new( skill, "name", json_string( tabCmd[i].cmd_name ) );
-      json_object_set_new( skill, "function", json_string( tabCmd[i].cmd_name ) );
-      json_object_set_new( skill, "level", json_integer( tabCmd[i].level ) );
-      json_object_set_new( skill, "type", json_string( command_types[tabCmd[i].type] ) );
-      json_array_append_new( skill_table, skill );
-   }
-
-   json_dump_file( skill_table, "../scripts/skill_list.json", JSON_INDENT(3) );
-
-   return;
 }
 
 void mobile_cleanup( LIST *list )

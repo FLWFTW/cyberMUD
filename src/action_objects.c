@@ -1082,12 +1082,13 @@ void cmd_put( D_MOBILE *dMob, char *arg )
       return;
    }
    
+   /*
    if( con->capacity_cm3 < 1 )
    {
       text_to_mobile_j( dMob, "error", "%s isn't a container.", con->sdesc );
       return;
    }
-
+   */
    if( dMob->hold_right && ( is_name( arg1, dMob->hold_right->name ) || !strcmp( dMob->hold_right->guid, arg1 ) ) )
       obj = dMob->hold_right;
    else if( dMob->hold_left && ( is_name( arg1, dMob->hold_left->name ) || !strcmp( dMob->hold_left->guid, arg1 ) ) )

@@ -177,8 +177,8 @@ struct dExit
  * armor:    1- stopping power
  *           2- material (0 = leather, 1 = steel, 2 = alloy, 3 = kevlar, 4 = Composite(Carbon Fiber/Graphene composite) 
  * firearms: 1- caliber
- *           2- fire rate 1 is bolt action, 2 is semi-auto, 3 is burst 4 is full auto
- *           3- feed mechanism (-1=magazine, 0=single shot, 1=bolt action, 2+=internal magazine/tube and size)
+ *           2- fire rate 0 is bolt action, 1 is semi-auto, 2 is burst 3 is full auto
+ *           3- feed mechanism (0=magazine, 1=single shot, 2+=internal magazine/tube and size)
  *           4- # of hands (1 or 2)
  * keys:     1- pins
  *           2- lock number
@@ -578,7 +578,6 @@ void object_cleanup( LIST *list );
 void exit_cleanup( LIST *list );
 void room_cleanup( LIST *list );
 void area_cleanup( LIST *list );
-void save_skill_list();
 unsigned int calc_brains      ( D_MOBILE *dMob );
 unsigned int calc_brawn       ( D_MOBILE *dMob );
 unsigned int calc_stamina     ( D_MOBILE *dMob );
@@ -791,6 +790,7 @@ void cmd_aset( D_MOBILE *dMob, char *arg );
 /*
  * action_combat.c
  */
+void cmd_load( D_MOBILE *dMob, char *arg );
 void cmd_fire( D_MOBILE *dMob, char *arg );
 
 /*
@@ -806,6 +806,12 @@ void kill( D_MOBILE *dMob );
 
 size_t get_bodypart_code( const char *str );
 size_t get_damagetype_code( const char *str );
+
+/*
+ * skills.c
+ */
+void load_skill_list();
+void save_skill_list();
 
 /*******************************
  * End of prototype declartion *
