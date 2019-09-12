@@ -247,7 +247,7 @@ void cmd_load( D_MOBILE *dMob, char *arg )
       }
       if( gun->ivar1 != ammo->ivar1 )
       {
-         text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", gun->sdesc, ammo_type[gun->ivar1] );
+         text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", gun->sdesc, ammo_caliber[gun->ivar1] );
          return;
       }
       if( SizeOfList( gun->contents ) == gun->ivar3 )
@@ -273,7 +273,7 @@ void cmd_load( D_MOBILE *dMob, char *arg )
    {
       if( mag->ivar1 != ammo->ivar1 )
       {
-         text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", mag->sdesc, ammo_type[mag->ivar1] );
+         text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", mag->sdesc, ammo_caliber[mag->ivar1] );
          return;
       }
       if( SizeOfList( mag->contents ) == mag->ivar2 )

@@ -27,15 +27,21 @@ void log_string(const char *txt, ...)
   FILE *fp;
   char logfile[MAX_BUFFER];
   char buf[MAX_BUFFER];
-  char *strtime = get_time();
+  char strtime[32];
   va_list args;
 
   va_start(args, txt);
   vsnprintf(buf, MAX_BUFFER, txt, args);
   va_end(args);
 
+  time_t rawtime;
+  struct tm *timeinfo;
+  time( &rawtime );
+  timeinfo = localtime( &rawtime );
+
   /* point to the correct logfile */
-  snprintf(logfile, MAX_BUFFER, "../log/%6.6s.log", strtime);
+  strftime( logfile, MAX_BUFFER, "../log/%F.log", timeinfo );
+  strftime( strtime, 32, "%F @ %T", timeinfo );
 
   /* try to open logfile */
   if ((fp = fopen(logfile, "a")) == NULL)

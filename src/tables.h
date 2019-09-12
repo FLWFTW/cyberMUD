@@ -43,13 +43,17 @@ enum item_type_tb { ITEM_CLOTHING = 0, ITEM_ARMOR, ITEM_ELECTRONICS, ITEM_COMPUT
                    ITEM_UNKNOWN, ITEM_BANDOLIER,  MAX_ITEM };
 extern const char *item_type[];
 
-enum ammo_type_tb { AMMO_38SPC = 0, AMMO_9x19, AMMO_357MAG, AMMO_45APC, AMMO_10MM, AMMO_44MAG, AMMO_50AE,
-                   AMMO_556NATO, AMMO_762x39, AMMO_762x51, AMMO_762x54R, AMMO_127x108, AMMO_145x114,
-                   AMMO_10GAUGE, AMMO_12GAUGE, AMMO_20GAUGE, MAX_AMMO };
-extern const char *ammo_type[];
+enum ammo_caliber_tb { AMMO_38SPC = 0, AMMO_9x19, AMMO_357MAG, AMMO_45APC, AMMO_10MM, AMMO_44MAG, AMMO_50AE,
+                       AMMO_556NATO, AMMO_762x39, AMMO_762x51, AMMO_762x54R, AMMO_127x108, AMMO_145x114,
+                       AMMO_10GAUGE, AMMO_12GAUGE, AMMO_20GAUGE, MAX_AMMO };
+extern const char *ammo_caliber[];
 extern const char *ammo_dice[];
 
-enum damage_type_tb  { DAMAGE_PIERCE = 0, DAMAGE_CUT, DAMAGE_BLUNT, DAMAGE_BURN, DAMAGE_PROJECTILE, DAMAGE_OTHER, MAX_DT };
+extern const char *ammo_type[];
+
+enum amomo_type_tb { AMMO_FMJ = 0, AMMO_JHP, AMMO_AP, AMMO_API, AMMO_EXP, MAX_AMMOTYPE };
+
+enum damage_type_tb  { DAMAGE_PIERCE = 0, DAMAGE_CUT, DAMAGE_BLUNT, DAMAGE_BURN, DAMAGE_PROJECTILE, DAMAGE_EXPLOSIVE, DAMAGE_OTHER, MAX_DT };
 enum trauma_level_tb { TRAUMA_NONE = 0, TRAUMA_MILD, TRAUMA_MODERATE, TRAUMA_SEVERE, TRAUMA_CRITICAL, MAX_TRAUMA };
 extern const char *wound_trauma[];
 extern const char *blunt_trauma[];

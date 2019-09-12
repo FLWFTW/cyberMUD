@@ -155,7 +155,7 @@ const int b_to_e_table[] = {   [BODY_HEAD]       = WEAR_HEAD,
                                [BODY_RFOOT]      = WEAR_FEET,
                                [MAX_BODY]        = WEAR_BODY };
 
-const char *ammo_type[]   = { [AMMO_38SPC]       = "38 Special",
+const char *ammo_caliber[]= { [AMMO_38SPC]       = "38 Special",
                               [AMMO_9x19]        = "9mm Luger",
                               [AMMO_357MAG]      = ".357 Magnum",
                               [AMMO_45APC]       = ".45 APC",
@@ -172,6 +172,13 @@ const char *ammo_type[]   = { [AMMO_38SPC]       = "38 Special",
                               [AMMO_12GAUGE]     = "12 Gauge",
                               [AMMO_20GAUGE]     = "20 Gauge",
                               [MAX_AMMO]         = 0};
+
+const char *ammo_type[] = {   [AMMO_FMJ]         = "FMJ", /* Full Metal Jacket */
+                              [AMMO_JHP]         = "JHP", /* Jacketed Hollow Point */
+                              [AMMO_AP]          = "AP",  /* Armor Piercing */
+                              [AMMO_API]         = "API", /* Armor Piercing, Incindiery */
+                              [AMMO_EXP]         = "EXP", /* Explosive */
+                              [MAX_AMMOTYPE]     = 0};
 
 const char *ammo_dice[]   = { [AMMO_38SPC]       = "1d6+2", //0
                               [AMMO_9x19]        = "2d6+1", //1

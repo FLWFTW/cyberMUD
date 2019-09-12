@@ -69,6 +69,58 @@ void cripple( D_MOBILE *target, enum bodyparts_tb location )
    return;
 }
 
+int bullet_damage( D_MOBILE *target, D_OBJECT *bullet, enum bodyparts_tb location )
+{
+   size_t dam = 0, res = 0;
+   D_OBJECT *armor = get_armor_pos( target, b_to_e( location ) );
+   enum damage_type_tb type = DAMAGE_PROJECTILE;
+
+   if( armor )
+   {
+      res = armor->ivar1;
+   }
+
+   dam = dice( (char*)ammo_dice[ bullet->ivar1 % MAX_AMMO ] );
+
+   /*If HP we double the damage but also double the target's armor resistance*/
+   if( bullet->ivar1 == AMMO_JHP )
+   {
+      res *= 2;
+      dam *= 2;
+   }
+   else if( bullet->ivar1 == AMMO_AP ) /* AP does half damage but armor has half strength */
+   {
+      res /= 2;
+      dam /= 2;
+   }
+   else if( bullet->ivar1 == AMMO_API ) /* Same as API but damage is burning */
+   {
+      res /= 2;
+      dam /= 2;
+      type = DAMAGE_BURN;
+   }
+   else if( bullet->ivar2 == AMMO_EXP ) /* Damage is 1/3 but damage type is explosive, which does double damage to armor */
+   {
+      dam /= 3;
+      type = DAMAGE_EXPLOSIVE;
+   }
+
+   if( armor )
+   {
+      if( armor->ivar1 > 0 )
+      {
+         if( type == DAMAGE_EXPLOSIVE )
+            armor->ivar1 -= 3;
+         else
+            armor->ivar1--;
+      }
+   }
+
+   dam -= res;
+
+   return damage( target, dam, location, type );
+}
+
 int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damage_type_tb type )
 {
    if( target == NULL )
@@ -77,17 +129,6 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damag
       return 0;
    }
    bool already_crippled = is_crippled( target, location );
-
-   D_OBJECT *armor = get_armor_pos( target, b_to_e(location) );
-
-   //do damage
-   if( armor ) //damage the armor (if present)
-   {
-      //ivar1 stores armor's material, (leather = 0, steel=1, alloy=2, kevlar=3, composite=4)
-      amount -= armor->ivar1;
-      if( amount > 0 && armor->ivar1 > 0 )
-         armor->ivar1--;
-   }
 
    //damage the bodypart hit
    target->body[location]->cur_hp -= amount;
@@ -113,9 +154,6 @@ int damage( D_MOBILE *target, int amount, enum bodyparts_tb location, enum damag
    }
 
    target->cur_hp -= amount;
-   if( target->cur_hp < 0 )
-      kill( target );
-
 
    return amount;
 }
@@ -201,7 +239,7 @@ D_OBJECT *next_round( D_OBJECT *firearm )
 
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_tb aim )
 {
-   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, stopping_power = 0;
+   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, aimed = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
    D_OBJECT *round;
 
@@ -227,6 +265,7 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    else
    {
       aimmod = body_aim_mod[aim];
+      aimed = 1;
    }
 
    if( shooter == target ) //100% chance of success
@@ -261,22 +300,42 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
    chance = chance + tpMod + spMod + handMod;
 
    size_t check = roll( 1, 100 );
-   dam = dice( (char*)ammo_dice[ firearm->ivar1 % MAX_AMMO ] );
 
-   text_to_mobile_j( shooter, "combat", "You fire your %s at %s!", firearm->sdesc, MOBNAME(target) );
-   text_to_mobile_j( target, "combat", "%s fires %s %s at you!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc );
-   echo_around_two( shooter, target, "combat", "%s fires %s %s at %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ) );
    if( check <= chance ) //hit!
    {
-      stopping_power = dam - damage( target, dam, aim, DAMAGE_PROJECTILE ); //return the actual amount of damage done after checking for armor resistance
-      text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) HIT %s for %s(%i-%i=%i) damage!",
-            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim], ammo_dice[firearm->ivar1 % MAX_AMMO], dam+stopping_power, stopping_power, dam );
+      dam = bullet_damage( target, round, aim ); //return the actual amount of damage done after checking for armor resistance
+      if( dam > 0 ) /* Armor didn't absorb it all */
+      {
+         if( aimed == 0 )
+         {
+            text_to_mobile_j( shooter, "combat", "You fire %s at %s, hitting %s in the %s for %u damage!", firearm->sdesc, MOBNAME(target), OBJECTIVE( target ), body_parts[aim], dam );
+            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam );
+            echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim] );
+         }
+         else
+         {
+            text_to_mobile_j( shooter, "combat", "You aim %s at %s's %s, hitting %s for %u damage!", firearm->sdesc, MOBNAME(target), body_parts[aim], OBJECTIVE( target ), dam );
+            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam );
+            echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim] );
+         }
+      }
+      else /* Need to come up with a better message for armor absorbing all the damage */
+      {
+         text_to_mobile_j( shooter, "combat", "You fire your %s at %s, hitting %s in the %s armor.", firearm->sdesc, MOBNAME(target), OBJECTIVE( target ), body_parts[aim] );
+         text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s armor.", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim] );
+         echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s.", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim]  );
+      }
+
    }
    else
    {
-      text_to_mobile_j( shooter, "combat", "Skill (%i) * AimMod (%i) = Base (%i) + spMod (%i) + tpMod (%i) + handMod (%i) =  Chance (%i) > Roll (%i) MISS %s!",
-            shooting_skill, aimmod/100, shooting_skill*aimmod/100, spMod, tpMod, handMod, chance, check, body_parts[aim] );
+         text_to_mobile_j( shooter, "combat", "You fire your %s at %s, but miss %s completely!", firearm->sdesc, MOBNAME(target), OBJECTIVE( target ));
+         text_to_mobile_j( target, "combat", "%s fires %s %s at you, missing you completely!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim] );
+         echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, missing %s completely!.", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ) );
    }
+   if( target->cur_hp < 0 )
+      kill( target );
+
 }
 
 D_OBJECT *make_corpse( D_MOBILE *dMob )
@@ -319,12 +378,14 @@ D_OBJECT *make_corpse( D_MOBILE *dMob )
 
 void kill( D_MOBILE *dMob )
 {
+   /* Cease fighting */
    if( dMob->fighting && dMob->fighting->fighting == dMob )
       dMob->fighting->fighting = NULL;
    dMob->fighting = NULL;
    
-   echo_around( dMob, "combat", "%s crumples to the ground, dead.", MOBNAME( dMob ) );
+   echo_around( dMob, "combat", "%s crumples to the ground, dead!", MOBNAME( dMob ) );
    D_OBJECT *corpse = make_corpse( dMob );
+   /* If they're holding anything, send it to the ground */
    if( dMob->hold_right )
    {
       echo_around( dMob, "combat", "%s skitters across the ground as it falls from %s's grasp.",
