@@ -292,3 +292,20 @@ void cmd_skillset( D_MOBILE *dMob, char *arg )
 
    return;
 }
+
+void cmd_peace( D_MOBILE *dMob, char *arg )
+{
+   ITERATOR Iter;
+   D_MOBILE *pMob;
+
+   AttachIterator( &Iter, dMob->room->mobiles );
+   while( ( pMob = NextInList( &Iter ) ) != NULL )
+   {
+      if( pMob->fighting )
+         pMob->fighting->fighting = NULL;
+      pMob->fighting = NULL;
+   }
+   DetachIterator( &Iter );
+   text_to_mobile_j( dMob, "text", "Ok." );
+   return;
+}

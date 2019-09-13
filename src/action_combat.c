@@ -245,7 +245,32 @@ void cmd_load( D_MOBILE *dMob, char *arg )
          text_to_mobile_j( dMob, "error", "%s needs to be loaded with a magazine.", gun->sdesc );
          return;
       }
-      if( gun->ivar1 != ammo->ivar1 )
+      if( ammo->type == ITEM_CONTAINER ) /* Are they loading from a box of ammo or bandolier? */
+      {
+         if( SizeOfList( ammo->contents ) > 0 )
+         {
+            
+            D_OBJECT *pObj = NthFromList( ammo->contents, 0 );
+            if( pObj->type != ITEM_BULLET || pObj->ivar1 != gun->ivar1 )
+            {
+               text_to_mobile_j( dMob, "error", "%s doesn't have the right kind of ammo for %s.", ammo->sdesc, gun->sdesc );
+               return;
+            }
+            size_t count = 0;
+            AttachIterator( &Iter, ammo->contents );
+            while( ( ( pObj = NextInList( &Iter ) ) != NULL ) && pObj->ivar1 == gun->ivar1 && SizeOfList( pObj->contents ) != gun->ivar3 )
+            {
+               object_from_object( pObj, ammo );
+               object_to_object( pObj, gun );
+               count++;
+            }
+            DetachIterator( &Iter );
+            text_to_mobile_j( dMob, "text", "You load %s with %u rounds of %s from %s.", gun->sdesc, count, ammo_caliber[gun->ivar1], ammo->sdesc );
+            echo_around( dMob, "text", "%s loads %s fromm %s.", MOBNAME( dMob ), gun->sdesc, ammo->sdesc );
+            return;
+         }
+      }
+      else if( gun->ivar1 != ammo->ivar1 )
       {
          text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", gun->sdesc, ammo_caliber[gun->ivar1] );
          return;
@@ -271,7 +296,39 @@ void cmd_load( D_MOBILE *dMob, char *arg )
    }
    else if( mag && ammo )
    {
-      if( mag->ivar1 != ammo->ivar1 )
+      if( ammo->type == ITEM_CONTAINER ) /* Are they loading from a box of ammo or bandolier? */
+      {
+         if( SizeOfList( ammo->contents ) > 0 )
+         {
+            
+            D_OBJECT *pObj = NthFromList( ammo->contents, 0 );
+            /* We're just going to say that a box of bullets will only have bullets. If it has anything other than bullets it will
+             * be up to the player to fish them out individually. */
+            if( pObj->type != ITEM_BULLET || pObj->ivar1 != mag->ivar1 )
+            {
+               text_to_mobile_j( dMob, "error", "%s doesn't have the right kind of ammo for %s.", ammo->sdesc, mag->sdesc );
+               return;
+            }
+            if( SizeOfList( mag->contents ) == mag->ivar2 )
+            {
+               text_to_mobile_j( dMob, "error", "%s is loaded to capacity.", mag->sdesc );
+               return;
+            }
+            size_t count = 0;
+            AttachIterator( &Iter, ammo->contents );
+            while( ( ( pObj = NextInList( &Iter ) ) != NULL ) && pObj->ivar1 == mag->ivar1 && SizeOfList( mag->contents ) != mag->ivar2 )
+            {
+               object_from_object( pObj, ammo );
+               object_to_object( pObj, mag );
+               count++;
+            }
+            DetachIterator( &Iter );
+            text_to_mobile_j( dMob, "text", "You load %s with %u rounds of %s from %s.", mag->sdesc, count, ammo_caliber[mag->ivar1], ammo->sdesc );
+            echo_around( dMob, "text", "%s loads %s fromm %s.", MOBNAME( dMob ), mag->sdesc, ammo->sdesc );
+            return;
+         }
+      }
+      else if( mag->ivar1 != ammo->ivar1 )
       {
          text_to_mobile_j( dMob, "error", "%s uses %s ammunition.", mag->sdesc, ammo_caliber[mag->ivar1] );
          return;
@@ -379,3 +436,4 @@ void cmd_load( D_MOBILE *dMob, char *arg )
 
    return;
 }
+

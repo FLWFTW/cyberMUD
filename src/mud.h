@@ -695,6 +695,7 @@ void  cmd_rest                ( D_M *dMob, char *arg );
 void  cmd_sleep               ( D_M *dMob, char *arg );
 void  cmd_sit                 ( D_M *dMob, char *arg );
 void  cmd_stand               ( D_M *dMob, char *arg );
+void  cmd_peace               ( D_M *dMob, char *arg );
 
 
 void  cmd_fill                ( D_M *dMob, char *arg );
