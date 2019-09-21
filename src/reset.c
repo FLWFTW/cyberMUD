@@ -1,3 +1,11 @@
+/**
+ * @file reset.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * MUD reset handler.
+ */
 #include "mud.h"
 
 void reset_area( D_AREA *pArea )

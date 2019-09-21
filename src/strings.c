@@ -1,4 +1,9 @@
-/*
+/**
+ * @file strings.c
+ * @author Brian Graverson
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file handles string copy/search/comparison/etc.
  */
 #include <string.h>

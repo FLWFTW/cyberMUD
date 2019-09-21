@@ -1,5 +1,9 @@
-/* file: stack.h
+/**
+ * @file stack.c
+ * @author Brian Graverson
+ * @version 1.0
  *
+ * @section DESCRIPTION
  * The implementation of a stack
  */
 

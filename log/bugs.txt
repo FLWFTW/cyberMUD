@@ -1,7 +1,0 @@
-Sep  5 20:13:03: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:13:10: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:13:16: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:15:58: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:18:31: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:20:02: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]
-Sep  5 20:20:42: Can't find area file for area '(null)' (sfsu.json) [../areas/sfsu.json]

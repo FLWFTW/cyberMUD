@@ -1,4 +1,9 @@
 /**
+ * @file action_safe.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file handles all the admin commands
  */
 #include "mud.h"
@@ -241,15 +246,13 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
    }
 
    char action[MAX_STRING_LENGTH] = { 0 };
-   char helpname[MAX_STRING_LENGTH] = { 0 };
+   HELP_DATA *pHelp;
 
    arg = one_arg( arg, action );
-   arg = one_arg( arg, helpname );
 
    if( !strcasecmp( action, "save" ) )
    {
       ITERATOR Iter;
-      HELP_DATA *pHelp;
 
       AttachIterator( &Iter, help_list );
       json_t *allhelps = json_array();
@@ -266,9 +269,24 @@ void cmd_hedit( D_MOBILE *dMob, char *arg )
       FreeList( help_list );
       load_helps();
    }
+   else if( !strcasecmp( action, "edit" ) )
+   {
+      if( ( pHelp = get_help( arg ) ) == NULL )
+      {
+         pHelp = new_help();
+         pHelp->keyword = strdup( arg );
+         pHelp->level = dMob->level;
+         pHelp->text = strdup( "" );
+         AppendToList( pHelp, help_list );
+      }
+      dMob->socket->state = STATE_WRITING;
+      text_to_mobile_j( dMob, "text", "[------------------------------------------------------------------------------]" );
+      dMob->socket->edit_pointer = &pHelp->text;
+      dMob->socket->edit_buffer = strdup( pHelp->text );
+      return;
+   }
 
-      text_to_mobile_j( dMob, "text", "Ok." );
-
+   text_to_mobile_j( dMob, "text", "Ok." );
    return;
 }
 

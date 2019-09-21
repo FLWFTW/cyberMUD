@@ -1,3 +1,12 @@
+/**
+ * @file handler_lua.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Lua handler. Defines custom Lua functions and C interface. Used in game
+ * scripting.
+ */
 #include "mud.h"
 
 /**

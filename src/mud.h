@@ -543,6 +543,7 @@ int     bprintf               ( BUFFER *buffer, char *fmt, ... );
  */
 HELP_DATA *new_help           ( void );
 bool  check_help              ( D_M *dMob, char *helpfile );
+HELP_DATA *get_help           ( char *keyword );
 void  load_helps              ( void );
 void  cmd_hedit               ( D_MOBILE *dMob, char *arg );
 

@@ -1,3 +1,12 @@
+/**
+ * @file build.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * This file handles all building code.
+ */
+
 #include "mud.h"
 
 static const char *exit_abbr[]  = { "n",     "s",     "e",    "w",    "ne",        "nw",        "se",        "sw",        "u",  "d",    0 };

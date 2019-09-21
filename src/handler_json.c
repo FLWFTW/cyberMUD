@@ -1,3 +1,12 @@
+/**
+ * @file handler_json.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * JSON handler. Lots of support functions for save.c and world.c,
+ * serializes objects into JSON and turns JSON into objects.
+ */
 #include "mud.h"
 
 D_ACCOUNT *json_to_account( json_t *json )

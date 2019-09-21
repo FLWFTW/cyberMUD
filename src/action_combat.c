@@ -1,5 +1,11 @@
-/*
- * This file handles player combat actions.
+/**
+ * @file action_combat.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * This file handles player combat actions. Combat support code
+ * is in combat.c
  */
 
 #include "mud.h"
@@ -103,6 +109,14 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
    }
 }
 
+void cmd_unload( D_MOBILE *dMob, char *arg )
+{
+
+   return;
+}
+
+/** load and reload use the same code
+ */
 void cmd_load( D_MOBILE *dMob, char *arg )
 {
    ITERATOR Iter;
@@ -266,9 +280,14 @@ void cmd_load( D_MOBILE *dMob, char *arg )
             }
             DetachIterator( &Iter );
             text_to_mobile_j( dMob, "text", "You load %s with %u rounds of %s from %s.", gun->sdesc, count, ammo_caliber[gun->ivar1], ammo->sdesc );
-            echo_around( dMob, "text", "%s loads %s fromm %s.", MOBNAME( dMob ), gun->sdesc, ammo->sdesc );
+            echo_around( dMob, "text", "%s loads %s from %s.", MOBNAME( dMob ), gun->sdesc, ammo->sdesc );
             return;
          }
+      }
+      else if( ammo->type != ITEM_BULLET )
+      {
+         text_to_mobile_j( dMob, "error", "You can't load %s into %s.", ammo->sdesc, gun->sdesc );
+         return;
       }
       else if( gun->ivar1 != ammo->ivar1 )
       {

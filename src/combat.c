@@ -1,4 +1,9 @@
 /**
+ * @file combat.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * Functions supporting MUD combat
  */
 #include "mud.h"

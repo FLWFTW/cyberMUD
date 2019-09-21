@@ -1,4 +1,9 @@
-/*
+/**
+ * @file io.c
+ * @author Brian Graverson with mods by Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file handles input/output to files (including log)
  */
 #include <sys/types.h>
@@ -34,6 +39,7 @@ void log_string(const char *txt, ...)
   vsnprintf(buf, MAX_BUFFER, txt, args);
   va_end(args);
 
+  /* We want log files to be of format: YYYY-MM-DD.log */
   time_t rawtime;
   struct tm *timeinfo;
   time( &rawtime );
@@ -87,57 +93,3 @@ void bug(const char *txt, ...)
   communicate(NULL, buf, COMM_LOG);
 }
 
-/*
- * This function will return the time of
- * the last modification made to helpfile.
- */
-time_t last_modified(char *helpfile)
-{
-  char fHelp[MAX_BUFFER];
-  struct stat sBuf;
-  time_t mTime = 0;
-
-  snprintf(fHelp, MAX_BUFFER, "../help/%s", helpfile);
-  if (stat(fHelp, &sBuf) >= 0)
-    mTime = sBuf.st_mtime;
-
-  return mTime;
-}
-
-char *read_help_entry(const char *helpfile)
-{
-  FILE *fp;
-  static char entry[MAX_HELP_ENTRY];
-  char fHelp[MAX_BUFFER];
-  int c, ptr = 0;
-
-  /* location of the help file */
-  snprintf(fHelp, MAX_BUFFER, "../help/%s", helpfile);
-
-  /* if there is no help file, return NULL */
-  if ((fp = fopen(fHelp, "r")) == NULL)
-    return NULL;
-
-  /* just to have something to work with */
-  c = getc(fp);
-
-  /* read the file in the buffer */
-  while (c != EOF)
-  {
-    if (c == '\n')
-      entry[ptr++] = '\r';
-    entry[ptr] = c;
-    if (++ptr > MAX_HELP_ENTRY - 2)
-    {
-      bug("Read_help_entry: String to long.");
-      abort();
-    }
-    c = getc(fp);
-  }
-  entry[ptr] = '\0';
-
-  fclose(fp);
-
-  /* return a pointer to the static buffer */
-  return entry;
-}

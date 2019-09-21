@@ -1,4 +1,9 @@
-/*
+/**
+ * @file socket.c
+ * @author Brian Graverson with modifications by Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file contains the socket code, used for accepting
  * new connections as well as reading and writing to
  * sockets, and closing down unused sockets.

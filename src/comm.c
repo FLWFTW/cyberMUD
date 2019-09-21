@@ -1,6 +1,12 @@
-/******************************************************************************
- *  communication functions                                                   *
- *****************************************************************************/
+/**
+ * @file comm.c
+ * @author Brian Gaverson and Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ *  communication functions, file original to SocketMUD, modifications by
+ *  Will Sayin.
+ */
 #include "mud.h"
 
 /*

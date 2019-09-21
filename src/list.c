@@ -1,5 +1,9 @@
-/* file: list.c
+/**
+ * @file build.c
+ * @author Brian Graverson with mods by Will Sayin
+ * @version 1.0
  *
+ * @section DESCRIPTION
  * The implementation of a basic double-linked list
  */
 

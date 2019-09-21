@@ -1,6 +1,6 @@
-/*
- * mccp.c - support functions for the Mud Client Compression Protocol
- *
+/**
+ * @file mccp.c - support functions for the Mud Client Compression Protocol
+ * @author Oliver Jowett <oliver@randomly.org>
  * see http://www.randomly.org/projects/MCCP/
  *
  * Copyright (c) 1999, Oliver Jowett <oliver@randomly.org>

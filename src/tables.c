@@ -1,3 +1,11 @@
+/**
+ * @file tables.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Tables and table conversions.
+ */
 #include "mud.h"
 
 const char *item_type[] = {    [ITEM_CLOTHING]    = "clothing",

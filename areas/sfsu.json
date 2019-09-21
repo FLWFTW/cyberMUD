@@ -4,8 +4,57 @@
          "name": "The Center of Malcolm X Plaza",
          "description": "The student center rises steeply above the plaza to the west, its stadium seating providing an amphitheater effect. The main campus extends east of here across a grassy park. The library is to the southeast, the science and engineering colleges are to the east and north, and the fine arts, theater, and liberal arts colleges are to the south and west.",
          "vnum": 200,
-         "exits": [],
+         "exits": [
+            {
+               "lock_state": 0,
+               "to_vnum": 201,
+               "lock_level": 0,
+               "exit_state": 0,
+               "name": "up",
+               "farside_name": "down"
+            },
+            {
+               "lock_state": 0,
+               "to_vnum": 202,
+               "lock_level": 0,
+               "exit_state": 0,
+               "name": "east",
+               "farside_name": "west"
+            }
+         ],
          "sector": "inside"
+      },
+      {
+         "name": "Student Center Stadium Roof",
+         "description": "There's bleacher sitting overlooking the amphitheater below.",
+         "vnum": 201,
+         "exits": [
+            {
+               "lock_state": 0,
+               "to_vnum": 200,
+               "lock_level": 0,
+               "exit_state": 0,
+               "name": "down",
+               "farside_name": "up"
+            }
+         ],
+         "sector": "inside"
+      },
+      {
+         "name": "The Student Lawn",
+         "description": "There's a fairly well kept lawn with plans and flowers and trees and benches all around. To the west is Malcolm X Plaza and the student center beyond it. To the north and east are the engineering and science colleges. To the south is the library.",
+         "vnum": 202,
+         "exits": [
+            {
+               "lock_state": 0,
+               "to_vnum": 200,
+               "lock_level": 0,
+               "exit_state": 0,
+               "name": "west",
+               "farside_name": "east"
+            }
+         ],
+         "sector": "grass"
       }
    ],
    "objects": [],

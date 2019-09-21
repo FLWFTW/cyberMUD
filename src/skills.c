@@ -1,3 +1,11 @@
+/**
+ * @file skills.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Skills support functions.
+ */
 #include "mud.h"
 
 void save_skill_list()

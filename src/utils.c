@@ -1,4 +1,9 @@
-/*
+/**
+ * @file action_safe.c
+ * @author Will Sayin and Brian Graverson
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file contains all sorts of utility functions used
  * all sorts of places in the code.
  */

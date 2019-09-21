@@ -53,5 +53,35 @@
       "keyword": "aset",
       "text": "Usage:\r\n    aset <filename.json> <action> <arg>\r\n\r\n    Actions          Arguments\r\n    -------          ---------\r\n    name             The name of the area\r\n    author           The author of the area\r\n    reset_interval   How long between area repops. Must be between 5 and 60 minutes\r\n    o_low            The lower bound of object vnums.\r\n    m_low            The lower bound of mobile vnums.\r\n    r_low            The lower bound of room vnums.\r\n    o_hi             The upper bound of object vnums.\r\n    m_hi             The upper bound of mobile vnums.\r\n    r_hi             The upper bound of room vnums.\r\n",
       "level": 0
+   },
+   {
+      "keyword": "ammo",
+      "text": "Ammunition Codes are as follows. Set a firearm, bullet, or magazine's ivar1\nto the specified round below:\n 0 - 38 Special\n 1 - 9mm Luger\n 2 - .357 Magnum\n 3 - .45 APC\n 4 - 10mm Auto\n 5 - .44 Magnum\n 6 - .50 AE\n 7 - 5.56mm NATO\n 8 - 7.62mm Kalashnikov\n 9 - 7.62mm NATO\n10 - 7.62mm Nagant\n11 - 12.7x108mm\n12 - 14.5x114mm\n13 - 10 Gauge\n14 - 12 Gauge\n15 - 20 Gauge\n",
+      "level": 0
+   },
+   {
+      "keyword": "oset",
+      "text": "Usage:\r\n    oset <object name or vnum> <action> <arguments>\r\n    Actions          Arguments\r\n     short            Short description. Include a/an\r\n     long             Long description. Include final '.'\r\n     name             Keywords used to interact with object\r\n     type             Object type. See help objecttypes\r\n     wear             Where the object can be worn. See help wearlocations\r\n     capacity         How much, in cubic centimeters, the object can hold\r\n     volume           The volume, in cubic centimeters, of the object\r\n     weight           The weight, in kilograms, of the object\r\n     get              true or false. Can the object be picked up?\r\n     ivar1-6          See help ivar.\r\n     svar1-6          See help svar.",
+      "level": 4
+   },
+   {
+      "keyword": "objecttypes otypes object_types o_types",
+      "text": "Objects can have the following types:\r\n \r\n1. Clothing\r\n2. Armor\r\n3. Firearm\r\n4. Blade\r\n5. Bludgeon\r\n6. Electronics\r\n7. Computer\r\n8. Machine\r\n9. Scrap\r\n10. Furniture\r\n11. Lockpick\r\n12. Sheath\r\n13. Holster\r\n14. Container\r\n15. Beverage\r\n16. Magazine (For ammunition)\r\n17. Bandolier (For magazines)\r\n18. Bullet\r\n19. Book\r\n20. Memory (For computers/electronics)\r\n21. Chip\r\n22. Key\r\n23. Corpse\r\n24. Drugs\r\n25. Unknown",
+      "level": 4
+   },
+   {
+      "keyword": "wearlocations wear_locations wearlocs wear_locs",
+      "text": "Objects can be worn in the following locations:\r\n  1.  Head\r\n  2.  Eyes\r\n  3.  Face\r\n  4.  Neck\r\n  5.  Body\r\n  6.  Shoulders\r\n  7.  Arms\r\n  8.  Hands\r\n  9.  Waist\r\n  10. Legs\r\n  11. Feet\r\n  12. Slung\r\n  13. None",
+      "level": 4
+   },
+   {
+      "keyword": "bodyparts",
+      "text": "Humanoid bodies have the following body parts:\r\n  \r\n  1.  Head\r\n  2.  Eyes\r\n  3.  Face\r\n  4.  Neck\r\n  5.  Left Arm\r\n  6.  Right Arm\r\n  7.  Left Hand\r\n  8.  Right Hand\r\n  9.  Torso\r\n  10. Groin\r\n  11. Left Leg\r\n  12. Right Leg\r\n  13. Left Foot\r\n  14. Right Foot",
+      "level": 4
+   },
+   {
+      "keyword": "ivars",
+      "text": "+--------------+---------+---------+---------+---------+---------+---------+\r\n|  Item Type   |  ivar1  |  ivar2  |  ivar3  |  ivar4  |  ivar5  |  ivar6  |\r\n+--------------+---------+---------+---------+---------+---------+---------+\r\n| armor        |Stop Pwr |Material |         |         |         |         |\r\n| bandolier    |Capacity |         |         |         |         |         |\r\n| bullet       |Caliber  |Type     |         |         |         |         |\r\n| firearm      |Caliber  |Fire Rate|Feed Mech| # hands |         |         |\r\n| key          |pins     |lock #   |         |         |         |         |\r\n| magazine     |Caliber  |Capacity |         |         |         |         |\r\n+--------------+---------+---------+---------+---------+---------+---------+",
+      "level": 4
    }
 ]

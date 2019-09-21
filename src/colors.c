@@ -1,3 +1,11 @@
+/**
+ * @file colors.c
+ * @author Brian Graverson
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * File original to SocketMUD. Strips color codes from text.
+ */
 #include "mud.h"
 
 char *strip_color_codes( char *msg )

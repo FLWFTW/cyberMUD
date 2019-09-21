@@ -1,5 +1,10 @@
-/*
- * This file handles non-fighting player actions.
+/**
+ * @file action_objects.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * This file handles object-player interaction commants
  */
 #include <sys/types.h>
 #include <stdio.h>

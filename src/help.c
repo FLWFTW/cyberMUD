@@ -1,9 +1,12 @@
-/*
- * This file contains the dynamic help system.
- * If you wish to update a help file, simply edit
- * the entry in ../help/ and the mud will load the
- * new version next time someone tries to access
- * that help file.
+/**
+ * @file help.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * This file contains the dynamic help system. Use in-game commands to
+ * edit help files. All help files are located in the ../help/help_files.json
+ * file.
  */
 #include <sys/types.h>
 #include <stdlib.h>
@@ -31,6 +34,22 @@ HELP_DATA *new_help()
       exit( 1 );
    }
    return help;
+}
+
+HELP_DATA *get_help( char *keyword )
+{
+   HELP_DATA *pHelp;
+   ITERATOR Iter;
+
+   AttachIterator( &Iter, help_list );
+   while( ( pHelp = (HELP_DATA *)NextInList( &Iter ) ) != NULL )
+   {
+      if( is_name( keyword, pHelp->keyword ) )
+         break;
+   }
+   DetachIterator( &Iter );
+
+   return pHelp;
 }
 
 /* checks the help_list for the appropriate help file */

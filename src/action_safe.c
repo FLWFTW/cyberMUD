@@ -1,4 +1,9 @@
-/*
+/**
+ * @file action_safe.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file handles non-fighting player actions.
  */
 #include <sys/types.h>
@@ -755,33 +760,38 @@ void cmd_who(D_MOBILE *dMob, char *arg)
 
 void cmd_help(D_MOBILE *dMob, char *arg)
 {
-  if (arg[0] == '\0')
-  {
-    HELP_DATA *pHelp;
-    ITERATOR Iter;
-    BUFFER *buf = buffer_new(MAX_BUFFER);
-    int col = 0;
+   HELP_DATA *pHelp;
+   if (arg[0] == '\0')
+   {
+      ITERATOR Iter;
+      BUFFER *buf = buffer_new(MAX_BUFFER);
+      int col = 0;
 
-    bprintf(buf, "      - - - - - ----====//// HELP FILES  \\\\\\\\====---- - - - - -\n\n\r");
+      bprintf(buf, "      - - - - - ----====//// HELP FILES  \\\\\\\\====---- - - - - -\n\n\r");
 
-    AttachIterator(&Iter, help_list);
-    while ((pHelp = (HELP_DATA *) NextInList(&Iter)) != NULL)
-    {
+      AttachIterator(&Iter, help_list);
+      while ((pHelp = (HELP_DATA *) NextInList(&Iter)) != NULL)
+      {
       bprintf(buf, " %-19.18s", pHelp->keyword);
       if (!(++col % 4)) bprintf(buf, "\n\r");
-    }
-    DetachIterator(&Iter);
+      }
+      DetachIterator(&Iter);
 
-    if (col % 4) bprintf(buf, "\n\r");
-    bprintf(buf, "\n\r Syntax: help <topic>\n\r");
-    text_to_mobile(dMob, buf->data);
-    buffer_free(buf);
+      if (col % 4) bprintf(buf, "\n\r");
+      bprintf(buf, "\n\r Syntax: help <topic>\n\r");
+      text_to_mobile(dMob, buf->data);
+      buffer_free(buf);
 
-    return;
+      return;
+   }
+
+  if( ( pHelp = get_help( arg ) ) == NULL || pHelp->level > dMob->level )
+  {
+     text_to_mobile_j( dMob, "error", "No manual entry for %s.", arg );
+     return;
   }
-
-  if (!check_help(dMob, arg))
-    text_to_mobile_j(dMob, "error", "Sorry, no such helpfile.\n\r");
+  text_to_mobile_j(dMob, "help", "[%i] %s\r\n\r\n%s", pHelp->level, pHelp->keyword, pHelp->text );
+  return;
 }
 
 void cmd_compress(D_MOBILE *dMob, char *arg)

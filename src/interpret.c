@@ -1,4 +1,9 @@
-/*
+/**
+ * @file interpret.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
  * This file handles command interpreting
  */
 #include <sys/types.h>

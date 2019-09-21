@@ -1,3 +1,11 @@
+/**
+ * @file save.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Loads and saves player files.
+ */
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>

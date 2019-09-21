@@ -25,7 +25,7 @@ O_FILES = socket.o io.o strings.o utils.o interpret.o help.o  \
 	  list.o stack.o handler_connections.o accounts.o \
 	  handler_json.o comm.o colors.o world.o objects.o \
 	  tables.o action_objects.c action_combat.c handler_lua.o \
-	  reset.o action_wiz.o combat.o build.o
+	  reset.o action_wiz.o combat.o build.o skills.o
 
 all: $(O_FILES)
 	rm -f $(NAME)

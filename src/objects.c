@@ -1,3 +1,11 @@
+/**
+ * @file objects.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * object support functions
+ */
 #include "mud.h"
 
 D_OBJECT *new_object()

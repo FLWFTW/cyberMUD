@@ -1,3 +1,12 @@
+/**
+ * @file handler_connections.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * Handles incoming connections, character creation, and connection
+ * menu.
+ */
 #include "mud.h"
 
 const char *mainMenu = "\r\nMain Menu\r\n"

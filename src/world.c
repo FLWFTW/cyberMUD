@@ -1,3 +1,11 @@
+/**
+ * @file world.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @section DESCRIPTION
+ * World loading and loading.
+ */
 #include "mud.h"
 
 

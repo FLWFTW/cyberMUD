@@ -1,3 +1,12 @@
+/**
+ * @file accounts.c
+ * @author Will Sayin
+ * @version 1.0
+ *
+ * @sectiion DESCRIPTION
+ * Contains code for loading and saving player accounts.
+ *
+ */
 #include "mud.h"
 
 D_ACCOUNT *load_account( const char *name, const char *password )

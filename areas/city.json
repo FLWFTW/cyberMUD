@@ -1,210 +1,224 @@
 {
    "rooms": [
       {
+         "vnum": 1,
          "name": "The entrance to a derelict Gravbus Station",
          "description": "The terminal is grungy and unkempt. Worn, vandalized benches line the walls to your east and west. An antique payphone sits in a grimy booth by the entrance to your south. The terminal continues to the north with a ticketing kiosk, more seating areas, a few vending machines, and an exit to the buses. A door on the southern wall leads to the immigrations facility, but it is set to allow only one way traffic into the Gravbus station.",
+         "sector": "inside",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 2,
-               "lock_level": 0,
+               "farside_name": "south",
                "exit_state": 0,
-               "name": "north",
-               "farside_name": "south"
+               "lock_level": 0,
+               "name": "north"
             }
-         ],
-         "vnum": 1,
-         "sector": "inside"
+         ]
       },
       {
+         "vnum": 2,
          "name": "The Gravbus ticketing kiosk",
          "description": "A large holoscreen has been mounted to the wall to the north projecting a pleasant looking AI attendant in a clean, happy looking terminal scene. Whoever programmed the kiosk has definitely not been to this Gravbus station. East of here are a few vending machines. West of here are more broken benches and the exit to the Gravbus boarding area.",
+         "sector": "inside",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 3,
-               "lock_level": 0,
+               "farside_name": "west",
                "exit_state": 0,
-               "name": "east",
-               "farside_name": "west"
+               "lock_level": 0,
+               "name": "east"
             },
             {
                "lock_state": 0,
                "to_vnum": 1,
-               "lock_level": 0,
+               "farside_name": "north",
                "exit_state": 0,
-               "name": "south",
-               "farside_name": "north"
+               "lock_level": 0,
+               "name": "south"
             },
             {
                "lock_state": 0,
                "to_vnum": 4,
-               "lock_level": 0,
+               "farside_name": "east",
                "exit_state": 0,
-               "name": "west",
-               "farside_name": "east"
+               "lock_level": 0,
+               "name": "west"
             }
-         ],
-         "vnum": 2,
-         "sector": "inside"
+         ]
       },
       {
+         "vnum": 3,
          "name": "By the vending machines and water fountain",
          "description": "A few old-time coin operated vending machines are lined up against the wall to the east, most are empty, all of them have been kicked, punched, shaken, and otherwise abused by wastoids trying to get their sugar fix. A water fountain is mounted to the wall adjacent to the vending machines. It's filled with spit and phlegm and other substances. West of here is the ticketing kiosk, a few Gravbus(TM) buses can be seen through the windows to the north.",
+         "sector": "inside",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 2,
-               "lock_level": 0,
+               "farside_name": "east",
                "exit_state": 0,
-               "name": "west",
-               "farside_name": "east"
+               "lock_level": 0,
+               "name": "west"
             }
-         ],
-         "vnum": 3,
-         "sector": "inside"
+         ]
       },
       {
+         "vnum": 4,
          "name": "Seating area and exit to Gravbus boarding area",
          "description": "There are several rows of uncomfortable looking benches. Unidentifiable stains cover the seats, graffiti has been carved into the handles, and bits of trash lay underneath most seats. Gravbus buses can be seen through the windows north of here. A glass push door to the north exits to the boarding area. A door to the south, labeled \"EMERGENCY\" is propped open, it looks like it leads out of the Gravbus station.",
+         "sector": "inside",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 2,
-               "lock_level": 0,
+               "farside_name": "west",
                "exit_state": 0,
-               "name": "east",
-               "farside_name": "west"
+               "lock_level": 0,
+               "name": "east"
             },
             {
                "lock_state": 0,
                "to_vnum": 5,
-               "lock_level": 0,
+               "farside_name": "north",
                "exit_state": 3,
-               "name": "south",
-               "farside_name": "north"
+               "lock_level": 0,
+               "name": "south"
             }
-         ],
-         "vnum": 4,
-         "sector": "inside"
+         ]
       },
       {
+         "vnum": 5,
          "name": "A dim alley behind the Gravbus Terminal",
          "description": "The alley is littered with garbage and stinks of piss and god knows what else. The waiting area for the Gravbus terminal sits through a door to the north. The alley continues off to the west. A few dumpsters are lined up to the east, covered in graffiti and full of trash.",
+         "sector": "street",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 4,
-               "lock_level": 0,
+               "farside_name": "south",
                "exit_state": 3,
-               "name": "north",
-               "farside_name": "south"
+               "lock_level": 0,
+               "name": "north"
             },
             {
                "lock_state": 0,
                "to_vnum": 6,
-               "lock_level": 0,
+               "farside_name": "east",
                "exit_state": 0,
-               "name": "west",
-               "farside_name": "east"
+               "lock_level": 0,
+               "name": "west"
             }
-         ],
-         "vnum": 5,
-         "sector": "street"
+         ]
       },
       {
+         "vnum": 6,
          "name": "A dirty alleyway",
          "description": "The walls of the alley are covered in graffiti, tattered posters, and filth. Garbage, broken glass, and used hypodermic needles are scattered about and the smell of piss and shit is almost overwhelming. The alley continues east and opens up to a main street to the north.",
+         "sector": "street",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 5,
-               "lock_level": 0,
+               "farside_name": "west",
                "exit_state": 0,
-               "name": "east",
-               "farside_name": "west"
+               "lock_level": 0,
+               "name": "east"
             },
             {
                "lock_state": 0,
                "to_vnum": 7,
-               "lock_level": 0,
+               "farside_name": "south",
                "exit_state": 0,
-               "name": "north",
-               "farside_name": "south"
+               "lock_level": 0,
+               "name": "north"
             }
-         ],
-         "vnum": 6,
-         "sector": "street"
+         ]
       },
       {
+         "vnum": 7,
          "name": "Mission Street - Near the Gravbus Station",
          "description": "Mission street runs east-west across most of downtown San Francisco. Tall buildings tower on either side of the street and the sidewalk is packed with people at all times of the day and night. A dingy looking alleyway is open to the south, alongside the Gravbus terminal. East of here is the main entrance and bus embarkation area.",
+         "sector": "street",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 6,
-               "lock_level": 0,
+               "farside_name": "north",
                "exit_state": 0,
-               "name": "south",
-               "farside_name": "north"
+               "lock_level": 0,
+               "name": "south"
             },
             {
                "lock_state": 0,
                "to_vnum": 8,
-               "lock_level": 0,
+               "farside_name": "west",
                "exit_state": 0,
-               "name": "east",
-               "farside_name": "west"
+               "lock_level": 0,
+               "name": "east"
             }
-         ],
-         "vnum": 7,
-         "sector": "street"
+         ]
       },
       {
+         "vnum": 8,
          "name": "Mission Street - By the Gravbus Terminal",
          "description": "Mission Street continues east and west, one of the main thoroughfares of the city. South of here is the Gravbus terminal, several buses -- in various states of repair -- are lined up ready to accept passengers. Towering buildings line either side of the road and garbage litters the street.",
+         "sector": "street",
          "exits": [
             {
                "lock_state": 0,
                "to_vnum": 7,
-               "lock_level": 0,
+               "farside_name": "east",
                "exit_state": 0,
-               "name": "west",
-               "farside_name": "east"
+               "lock_level": 0,
+               "name": "west"
             },
             {
                "lock_state": 0,
                "to_vnum": 100,
-               "lock_level": 0,
+               "farside_name": "south",
                "exit_state": 0,
-               "name": "north",
-               "farside_name": "south"
+               "lock_level": 0,
+               "name": "north"
             }
-         ],
-         "vnum": 8,
-         "sector": "street"
+         ]
+      },
+      {
+         "vnum": 9,
+         "name": "A newly created room",
+         "description": "A newly created room fresh from /dev/null",
+         "sector": "inside",
+         "exits": []
+      },
+      {
+         "vnum": 10,
+         "name": "A newly created room",
+         "description": "A newly created room fresh from /dev/null",
+         "sector": "inside",
+         "exits": []
       }
    ],
    "resets": [
       {
          "type": 2,
-         "location": 5,
          "data": {
             "vnum": 20
-         }
+         },
+         "location": 5
       },
       {
          "type": 1,
-         "location": 5,
          "data": {
-            "equipment": {},
-            "vnum": 3
-         }
+            "vnum": 3,
+            "equipment": {}
+         },
+         "location": 5
       },
       {
          "type": 2,
-         "location": 3,
          "data": {
+            "vnum": 21,
             "contents": [
                {
                   "vnum": 23
@@ -215,18 +229,54 @@
                {
                   "vnum": 24
                }
-            ],
-            "vnum": 21
-         }
+            ]
+         },
+         "location": 3
       },
       {
          "type": 1,
-         "location": 3,
          "data": {
+            "vnum": 2,
             "equipment": {
-               "face": {
+               "eyes": {
                   "worn0": {
-                     "vnum": 19
+                     "vnum": 2
+                  }
+               },
+               "body": {
+                  "worn1": {
+                     "vnum": 3
+                  },
+                  "worn0": {
+                     "vnum": 11
+                  }
+               },
+               "waist": {
+                  "worn1": {
+                     "vnum": 17,
+                     "contents": [
+                        {
+                           "vnum": 18
+                        }
+                     ]
+                  },
+                  "worn0": {
+                     "vnum": 16
+                  }
+               },
+               "slung": {
+                  "worn0": {
+                     "vnum": 13
+                  }
+               },
+               "shoulders": {
+                  "worn0": {
+                     "vnum": 9,
+                     "contents": [
+                        {
+                           "vnum": 8
+                        }
+                     ]
                   }
                },
                "head": {
@@ -234,27 +284,9 @@
                      "vnum": 6
                   }
                },
-               "shoulders": {
+               "face": {
                   "worn0": {
-                     "contents": [
-                        {
-                           "vnum": 8
-                        }
-                     ],
-                     "vnum": 9
-                  }
-               },
-               "waist": {
-                  "worn0": {
-                     "vnum": 16
-                  },
-                  "worn1": {
-                     "contents": [
-                        {
-                           "vnum": 18
-                        }
-                     ],
-                     "vnum": 17
+                     "vnum": 19
                   }
                },
                "legs": {
@@ -263,47 +295,29 @@
                   }
                },
                "feet": {
-                  "worn0": {
-                     "vnum": 14
-                  },
                   "worn1": {
                      "vnum": 15
-                  }
-               },
-               "body": {
-                  "worn0": {
-                     "vnum": 11
                   },
-                  "worn1": {
-                     "vnum": 3
-                  }
-               },
-               "slung": {
                   "worn0": {
-                     "vnum": 13
-                  }
-               },
-               "eyes": {
-                  "worn0": {
-                     "vnum": 2
+                     "vnum": 14
                   }
                }
-            },
-            "vnum": 2
-         }
+            }
+         },
+         "location": 3
       },
       {
          "type": 1,
-         "location": 2,
          "data": {
-            "equipment": {},
-            "vnum": 1
-         }
+            "vnum": 1,
+            "equipment": {}
+         },
+         "location": 2
       },
       {
          "type": 2,
-         "location": 1,
          "data": {
+            "vnum": 10,
             "contents": [
                {
                   "vnum": 5
@@ -314,891 +328,1325 @@
                {
                   "vnum": 12
                }
-            ],
-            "vnum": 10
-         }
+            ]
+         },
+         "location": 1
       }
    ],
    "objects": [
       {
-         "ivar3": -1,
-         "sdesc": "10mm handgun",
-         "ldesc": "A 10mm handgun has been set on the ground",
-         "ivar4": 1,
+         "ivar5": 0,
          "name": "gun pistol 10mm handgun",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 4,
-         "wear_pos": "none",
-         "guid": "QoMNUckLhytCmvXUDI8B1f8N9o86ZdvQBiDwuYi",
-         "type": "firearm",
          "vnum": 1,
-         "capacity": 0,
-         "ivar2": 2,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "pair of aviators",
-         "ldesc": "a pair of mirror-polished aviators has been set on the ground",
-         "ivar4": 0,
-         "name": "aviators shades sunglasses",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "eyes",
-         "guid": "LwLoThlOU4Ww5bFTl31s3eYTQgxnLvFw2rVVIhJ",
-         "type": "clothing",
-         "vnum": 2,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "Pickle Rick t-shirt",
-         "ldesc": "a t-shirt with a cartoon pickle shouting \"PICKLE RICK\" sits crumpled on the ground",
-         "ivar4": 0,
-         "name": "pickle rick tshirt shirt",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "body",
-         "guid": "DlGarSPkeTlGXAERrVoOGUtdWV9SDqChMjrebhy",
-         "type": "clothing",
-         "vnum": 3,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "pair of baggy jeans",
-         "ldesc": "a pair of baggy blue jeans lay piled on the ground",
-         "ivar4": 0,
-         "name": "baggy blue jeans",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "legs",
-         "guid": "paU67uLZVGnKmieAf9J7NaK4W3waeNJEXDL58w4",
-         "type": "clothing",
-         "vnum": 4,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "pair of flip-flops",
-         "ldesc": "a pair of flip flops have been left on the ground",
-         "ivar4": 0,
-         "name": "flipflop sandals",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "feet",
-         "guid": "4csOzK39ZcT7Z3R40VAbaoUOmyzsG6wKiZzSKC2",
-         "type": "clothing",
-         "vnum": 5,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "battered black ballcap",
-         "ldesc": "a battered black ballcap has been left on the ground",
-         "ivar4": 0,
-         "name": "black battered ballcap",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "head",
-         "guid": "KPVSPYKUYFuaPT4EfDeHjke4DdEvYhxI7tAWrkQ",
-         "type": "clothing",
-         "vnum": 6,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": -1,
-         "sdesc": "M66 Infantry Carbine",
-         "ldesc": "An M66 Infantry Carbine sits on the ground",
-         "ivar4": 2,
-         "name": "rifle infantry carbine M66 m66",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 9,
-         "wear_pos": "slung",
-         "guid": "q0lBPeFttiIbC2pHFDlbBCJkJcVGEfx5gSG56mz",
-         "type": "firearm",
-         "vnum": 7,
-         "capacity": 0,
-         "ivar2": 2,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "brown leather belt",
-         "ldesc": "A brown leather belt lies on the ground",
-         "ivar4": 0,
-         "name": "brown leather belt",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "waist",
-         "guid": "AFhMhkbZ0PkbrXULH7GnMWURcNxiUUSuzagRusQ",
-         "type": "clothing",
-         "vnum": 8,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "small leather satchel",
-         "ldesc": "a small leather satchel has been left here",
-         "ivar4": 0,
-         "name": "small backpack satchel rucksack",
-         "repair": 0,
-         "volume": 2500,
-         "ivar1": 0,
-         "wear_pos": "shoulders",
-         "guid": "uibGJ8BuPIbdu78mkVUCPOukoEBg946Emhk5qVA",
-         "type": "clothing",
-         "vnum": 9,
-         "capacity": 31250,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "a battered steel locker",
-         "ldesc": "a battered steel locker sits here, tilted slightly on uneven legs",
-         "ivar4": 0,
-         "name": "battered steel locker",
-         "repair": 0,
-         "volume": 2500,
-         "ivar1": 0,
+         "sdesc": "10mm handgun",
+         "ivar4": 1,
+         "ldesc": "A 10mm handgun has been set on the ground",
          "wear_pos": "none",
-         "guid": "gELu9SCwcyqPofkJDZkT8p0MMi7RI3rZHdtR56n",
-         "type": "furniture",
-         "vnum": 10,
-         "capacity": 31250,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "kevlar bodyarmor",
-         "ldesc": "some kevlar bodyarmor has been set on the ground",
-         "ivar4": 0,
-         "name": "kevlar body armor bodyarmor armour bodyarmour",
-         "repair": 0,
-         "volume": 9177,
-         "ivar1": 10,
-         "wear_pos": "body",
-         "guid": "iEO833sMGr7AzwAmiTtaBwCAeP46VatdPimSlOE",
-         "type": "armor",
-         "vnum": 11,
          "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": -1,
-         "sdesc": "9mm MP5 SMG",
-         "ldesc": "an MP5 9 millimeter submachinegun has been left here",
-         "ivar4": 2,
-         "name": "MP5 smg submachinegun gun machine",
+         "volume": 0,
+         "guid": "QoMNUckLhytCmvXUDI8B1f8N9o86ZdvQBiDwuYi",
+         "ivar6": 0,
          "repair": 0,
-         "volume": 8900,
-         "ivar1": 1,
-         "wear_pos": "slung",
-         "guid": "2fMCPjdcB6FMIcojqenx9y0nniJgEyVGOHjE0xQ",
          "type": "firearm",
-         "vnum": 12,
-         "capacity": 0,
-         "ivar2": 3,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": -1,
-         "sdesc": "9mm STEN SMG",
-         "ldesc": "an 9 millimeter STEN submachine gun has been left here",
-         "ivar4": 2,
-         "name": "STEN submachine gun smg machine",
-         "repair": 0,
-         "volume": 8900,
-         "ivar1": 1,
-         "wear_pos": "slung",
-         "guid": "CDwomING923GbCHz00igERblFSEjSb9vPFUboHR",
-         "type": "firearm",
-         "vnum": 13,
-         "capacity": 0,
-         "ivar2": 4,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "pair of olive green boot socks",
-         "ldesc": "a pair of olive green boot socks have been folded up and discarded here",
-         "ivar4": 0,
-         "name": "socks olive green",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "feet",
-         "guid": "xJVeVyVuyWNOAEZWkSADLMNgBtaNRSFpBBEx9z2",
-         "type": "clothing",
-         "vnum": 14,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "pair of scuffed black combat boots",
-         "ldesc": "a pair of well worn black combat boots sit here",
-         "ivar4": 0,
-         "name": "combat boots",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 2,
-         "wear_pos": "feet",
-         "guid": "HwPv6uv3OnDs8pfp1IzOArtZ34DBddDVJsrQXWT",
-         "type": "armor",
-         "vnum": 15,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "black kydex pistol holster",
-         "ldesc": "a black kydex pistol holster has been left here",
-         "ivar4": 0,
-         "name": "pistol holster",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "waist",
-         "guid": "LkxdtWsSXbsMLUfLXkoyyCbtmEUdBR6ncEAFA3y",
-         "type": "holster",
-         "vnum": 16,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "brown leather sheath",
-         "ldesc": "a brown leather sheath",
-         "ivar4": 0,
-         "name": "leather sheath",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "waist",
-         "guid": "yf1l0VBLTVaruNDX9iSmTKtgW7RCIVbhacCa7eW",
-         "type": "sheath",
-         "vnum": 17,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "a cruel looking combat knife",
-         "ldesc": "a cruel looking combat knife, its sharp edge glimmering, has been abandoned here",
-         "ivar4": 0,
-         "name": "combat knife",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "097sEU6C4ourifUzb2qOKmZ2wcFHkTEl3LNHGUj",
-         "type": "blade",
-         "vnum": 18,
-         "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "bright red Oni mask",
-         "ldesc": "a bright red Oni mask sits abandoned here, collecting dust",
-         "ivar4": 0,
-         "name": "oni mask",
-         "repair": 0,
-         "volume": 0,
          "ivar1": 4,
-         "wear_pos": "face",
-         "guid": "KiObA369f8A3TW3VtfAaAtOVwAJdgDx1VlcwojG",
-         "type": "armor",
-         "vnum": 19,
+         "ivar2": 2,
+         "ivar3": -1
+      },
+      {
+         "ivar5": 0,
+         "name": "aviators shades sunglasses",
+         "vnum": 2,
+         "sdesc": "pair of aviators",
+         "ivar4": 0,
+         "ldesc": "a pair of mirror-polished aviators has been set on the ground",
+         "wear_pos": "eyes",
          "capacity": 0,
+         "volume": 0,
+         "guid": "LwLoThlOU4Ww5bFTl31s3eYTQgxnLvFw2rVVIhJ",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
          "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
+         "ivar3": 0
       },
       {
-         "ivar3": 0,
-         "sdesc": "an empty bottle of whiskey",
-         "ldesc": "an empty bottle of whiskey has been abandoned here",
+         "ivar5": 0,
+         "name": "pickle rick tshirt shirt",
+         "vnum": 3,
+         "sdesc": "Pickle Rick t-shirt",
          "ivar4": 0,
-         "name": "whiskey bottle",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "DrgHkdLgG1QQBjFwQff4vTBwOXJlm210uiHOvs4",
-         "type": "bludgeon",
-         "vnum": 20,
+         "ldesc": "a t-shirt with a cartoon pickle shouting \"PICKLE RICK\" sits crumpled on the ground",
+         "wear_pos": "body",
          "capacity": 0,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "a vending machine",
-         "ldesc": "A battered looking vending machine sits in the corner",
-         "ivar4": 0,
-         "name": "vending machine",
-         "repair": 0,
-         "volume": 1000000,
-         "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "btV25fIB5XRatKM0zJKV5MW6heO5KhaWL5YQlGs",
-         "type": "container",
-         "vnum": 21,
-         "capacity": 100000,
-         "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
-      },
-      {
-         "ivar3": 0,
-         "sdesc": "a can of Bolt Cola",
-         "ldesc": "a can of Bolt Cola sits here",
-         "ivar4": 0,
-         "name": "can bolt cola soda",
-         "repair": 0,
          "volume": 0,
+         "guid": "DlGarSPkeTlGXAERrVoOGUtdWV9SDqChMjrebhy",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
          "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "qEkB85n8E7SAdFwjWL72vods9jq0E7s5MMGUR32",
-         "type": "unknown",
-         "vnum": 22,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "baggy blue jeans",
+         "vnum": 4,
+         "sdesc": "pair of baggy jeans",
+         "ivar4": 0,
+         "ldesc": "a pair of baggy blue jeans lay piled on the ground",
+         "wear_pos": "legs",
          "capacity": 0,
+         "volume": 0,
+         "guid": "paU67uLZVGnKmieAf9J7NaK4W3waeNJEXDL58w4",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
          "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
+         "ivar3": 0
       },
       {
-         "ivar3": 0,
-         "sdesc": "a Du-Good brand condom",
-         "ldesc": "a Du-Good brand condom, still in its wrapper, has been discarded here",
+         "ivar5": 0,
+         "name": "flipflop sandals",
+         "vnum": 5,
+         "sdesc": "pair of flip-flops",
          "ivar4": 0,
-         "name": "dugood good condom",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "waV6oADHxpOzVdMnn6OoKVQPIDwCvzF1KB88cMQ",
-         "type": "unknown",
-         "vnum": 23,
+         "ldesc": "a pair of flip flops have been left on the ground",
+         "wear_pos": "feet",
          "capacity": 0,
+         "volume": 0,
+         "guid": "4csOzK39ZcT7Z3R40VAbaoUOmyzsG6wKiZzSKC2",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
          "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
+         "ivar3": 0
       },
       {
-         "ivar3": 0,
-         "sdesc": "a pack of NicoRite cigarettes",
-         "ldesc": "a pack of NicoRite cigarettes has been left here",
+         "ivar5": 0,
+         "name": "black battered ballcap",
+         "vnum": 6,
+         "sdesc": "battered black ballcap",
          "ivar4": 0,
-         "name": "NicoRite cigarettes pack",
-         "repair": 0,
-         "volume": 0,
-         "ivar1": 0,
-         "wear_pos": "none",
-         "guid": "JbFj6T6tgchEWdvMW8iyDSeFDPOL1ACLMh4Sabm",
-         "type": "drugs",
-         "vnum": 24,
+         "ldesc": "a battered black ballcap has been left on the ground",
+         "wear_pos": "head",
          "capacity": 0,
+         "volume": 0,
+         "guid": "KPVSPYKUYFuaPT4EfDeHjke4DdEvYhxI7tAWrkQ",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
          "ivar2": 0,
-         "ivar5": 0,
-         "ivar6": 0
+         "ivar3": 0
       },
       {
-         "ivar3": 0,
-         "sdesc": "an uncomfortable bench",
-         "ldesc": "Rows of uncomfortable looking benches have been bolted to the ground",
-         "ivar4": 0,
-         "name": "uncomfortable bench",
-         "repair": 0,
+         "ivar5": 0,
+         "name": "rifle infantry carbine M66 m66",
+         "vnum": 7,
+         "sdesc": "an M66 Infantry Carbine",
+         "ivar4": 2,
+         "ldesc": "An M66 Infantry Carbine sits on the ground",
+         "wear_pos": "slung",
+         "capacity": 0,
          "volume": 0,
+         "guid": "q0lBPeFttiIbC2pHFDlbBCJkJcVGEfx5gSG56mz",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "firearm",
+         "ivar1": 9,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "brown leather belt",
+         "vnum": 8,
+         "sdesc": "brown leather belt",
+         "ivar4": 0,
+         "ldesc": "A brown leather belt lies on the ground",
+         "wear_pos": "waist",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "AFhMhkbZ0PkbrXULH7GnMWURcNxiUUSuzagRusQ",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
          "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "small backpack satchel rucksack",
+         "vnum": 9,
+         "sdesc": "small leather satchel",
+         "ivar4": 0,
+         "ldesc": "a small leather satchel has been left here",
+         "wear_pos": "shoulders",
+         "capacity": 31250,
+         "volume": 2500,
+         "guid": "uibGJ8BuPIbdu78mkVUCPOukoEBg946Emhk5qVA",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "battered steel locker",
+         "vnum": 10,
+         "sdesc": "a battered steel locker",
+         "ivar4": 0,
+         "ldesc": "a battered steel locker sits here, tilted slightly on uneven legs",
          "wear_pos": "none",
-         "guid": "rnE6kRB6NKomogB4TqSFstidfzi7KtubR8ib0Th",
+         "capacity": 31250,
+         "volume": 2500,
+         "guid": "gELu9SCwcyqPofkJDZkT8p0MMi7RI3rZHdtR56n",
+         "ivar6": 0,
+         "repair": 0,
          "type": "furniture",
-         "vnum": 25,
-         "capacity": 0,
+         "ivar1": 0,
          "ivar2": 0,
+         "ivar3": 0
+      },
+      {
          "ivar5": 0,
-         "ivar6": 0
+         "name": "kevlar body armor bodyarmor armour bodyarmour",
+         "vnum": 11,
+         "sdesc": "kevlar bodyarmor",
+         "ivar4": 0,
+         "ldesc": "some kevlar bodyarmor has been set on the ground",
+         "wear_pos": "body",
+         "capacity": 0,
+         "volume": 9177,
+         "guid": "iEO833sMGr7AzwAmiTtaBwCAeP46VatdPimSlOE",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "armor",
+         "ivar1": 10,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "MP5 smg submachinegun gun machine",
+         "vnum": 12,
+         "sdesc": "9mm MP5 SMG",
+         "ivar4": 2,
+         "ldesc": "an MP5 9 millimeter submachinegun has been left here",
+         "wear_pos": "slung",
+         "capacity": 0,
+         "volume": 8900,
+         "guid": "2fMCPjdcB6FMIcojqenx9y0nniJgEyVGOHjE0xQ",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "firearm",
+         "ivar1": 1,
+         "ivar2": 3,
+         "ivar3": -1
+      },
+      {
+         "ivar5": 0,
+         "name": "STEN submachine gun smg machine",
+         "vnum": 13,
+         "sdesc": "9mm STEN SMG",
+         "ivar4": 2,
+         "ldesc": "an 9 millimeter STEN submachine gun has been left here",
+         "wear_pos": "slung",
+         "capacity": 0,
+         "volume": 8900,
+         "guid": "CDwomING923GbCHz00igERblFSEjSb9vPFUboHR",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "firearm",
+         "ivar1": 1,
+         "ivar2": 4,
+         "ivar3": -1
+      },
+      {
+         "ivar5": 0,
+         "name": "socks olive green",
+         "vnum": 14,
+         "sdesc": "pair of olive green boot socks",
+         "ivar4": 0,
+         "ldesc": "a pair of olive green boot socks have been folded up and discarded here",
+         "wear_pos": "feet",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "xJVeVyVuyWNOAEZWkSADLMNgBtaNRSFpBBEx9z2",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "clothing",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "combat boots",
+         "vnum": 15,
+         "sdesc": "pair of scuffed black combat boots",
+         "ivar4": 0,
+         "ldesc": "a pair of well worn black combat boots sit here",
+         "wear_pos": "feet",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "HwPv6uv3OnDs8pfp1IzOArtZ34DBddDVJsrQXWT",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "armor",
+         "ivar1": 2,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "pistol holster",
+         "vnum": 16,
+         "sdesc": "black kydex pistol holster",
+         "ivar4": 0,
+         "ldesc": "a black kydex pistol holster has been left here",
+         "wear_pos": "waist",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "LkxdtWsSXbsMLUfLXkoyyCbtmEUdBR6ncEAFA3y",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "holster",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "leather sheath",
+         "vnum": 17,
+         "sdesc": "brown leather sheath",
+         "ivar4": 0,
+         "ldesc": "a brown leather sheath",
+         "wear_pos": "waist",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "yf1l0VBLTVaruNDX9iSmTKtgW7RCIVbhacCa7eW",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "sheath",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "combat knife",
+         "vnum": 18,
+         "sdesc": "a cruel looking combat knife",
+         "ivar4": 0,
+         "ldesc": "a cruel looking combat knife, its sharp edge glimmering, has been abandoned here",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "097sEU6C4ourifUzb2qOKmZ2wcFHkTEl3LNHGUj",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "blade",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "oni mask",
+         "vnum": 19,
+         "sdesc": "bright red Oni mask",
+         "ivar4": 0,
+         "ldesc": "a bright red Oni mask sits abandoned here, collecting dust",
+         "wear_pos": "face",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "KiObA369f8A3TW3VtfAaAtOVwAJdgDx1VlcwojG",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "armor",
+         "ivar1": 4,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "whiskey bottle",
+         "vnum": 20,
+         "sdesc": "an empty bottle of whiskey",
+         "ivar4": 0,
+         "ldesc": "an empty bottle of whiskey has been abandoned here",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "DrgHkdLgG1QQBjFwQff4vTBwOXJlm210uiHOvs4",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "bludgeon",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "vending machine",
+         "vnum": 21,
+         "sdesc": "a vending machine",
+         "ivar4": 0,
+         "ldesc": "A battered looking vending machine sits in the corner",
+         "wear_pos": "none",
+         "capacity": 100000,
+         "volume": 1000000,
+         "guid": "btV25fIB5XRatKM0zJKV5MW6heO5KhaWL5YQlGs",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "container",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "can bolt cola soda",
+         "vnum": 22,
+         "sdesc": "a can of Bolt Cola",
+         "ivar4": 0,
+         "ldesc": "a can of Bolt Cola sits here",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "qEkB85n8E7SAdFwjWL72vods9jq0E7s5MMGUR32",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "unknown",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "dugood good condom",
+         "vnum": 23,
+         "sdesc": "a Du-Good brand condom",
+         "ivar4": 0,
+         "ldesc": "a Du-Good brand condom, still in its wrapper, has been discarded here",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "waV6oADHxpOzVdMnn6OoKVQPIDwCvzF1KB88cMQ",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "unknown",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "NicoRite cigarettes pack",
+         "vnum": 24,
+         "sdesc": "a pack of NicoRite cigarettes",
+         "ivar4": 0,
+         "ldesc": "a pack of NicoRite cigarettes has been left here",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "JbFj6T6tgchEWdvMW8iyDSeFDPOL1ACLMh4Sabm",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "drugs",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "uncomfortable bench",
+         "vnum": 25,
+         "sdesc": "an uncomfortable bench",
+         "ivar4": 0,
+         "ldesc": "Rows of uncomfortable looking benches have been bolted to the ground",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "rnE6kRB6NKomogB4TqSFstidfzi7KtubR8ib0Th",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "furniture",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "9mm luger round bullet cartridge",
+         "vnum": 26,
+         "sdesc": "a 9mm luger round",
+         "ivar4": 0,
+         "ldesc": "a 9mm luger round has been left on the gorund",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "OEGa2XM7RcZxFsPTIpbP9FklxsDIsx0gbGreEdl",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "bullet",
+         "ivar1": 1,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "9mm magazine",
+         "vnum": 27,
+         "sdesc": "a 9mm magazine",
+         "ivar4": 0,
+         "ldesc": "a 9mm magazine has been left here.",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "vql35OSZwhbmrQGMn8q6BX6R9NjosxKYX513TT2",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "magazine",
+         "ivar1": 1,
+         "ivar2": 30,
+         "ivar3": 0
+      },
+      {
+         "vnum": 28,
+         "name": "NATO magazine",
+         "ivar5": 0,
+         "sdesc": "a 20 round 7.62 NATO magazine",
+         "ldesc": "a 20 round 7.62 NATO magazine has been left here.",
+         "ivar4": 0,
+         "wear_pos": "none",
+         "capacity": 0,
+         "guid": "pbdMC4spsBPycNF4XtnmVU6TSbVV5OYv0bhCgK2",
+         "volume": 0,
+         "ivar6": 0,
+         "type": "magazine",
+         "repair": 0,
+         "ivar1": 9,
+         "ivar2": 20,
+         "ivar3": 0,
+         "contents": [
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "IlShyFXCDq0ZmV6gNibJn0HT0SaD9VFRhx9Pd7s",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "RxsRUnXabfmUCmCwnvH1ECHwTeFIsMakkDbf18p",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "dnM808KwwfdxTQepJt5sWSDgdhrsiASvYEDZNov",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "jDJRxA6Wkz2MwVqM8HeB0OtwN7aMVyifc16JCdG",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "WMIJiE95MRknR8QoVYyHU709j1g2EtIAgqjz4tF",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "RkZfc76A358LZfL8yNpBrTj29KlJPOoG9nWlv2V",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "z74k6k6fTUFumyNoIxJrnyQ4Hd02J2Yia2DhmJx",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "fEcJ0Lxot58VsGLwoZxrIzp0KrE1Noz32MN2xkq",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "1pyWSfIoEHV5qvurgW5iKtRNvDBxaVYclx8dNRC",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "rzxwZ31qjYwCIZtwv672h31toyCBludN3Lk2Omt",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "8kZK3ZezulHxCKy687JKtdXggIAjxWNGhNrkMFU",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "h0BODmnJvvsfYGdeWWPguL3b3QCnDihUjTJXf6H",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "LBa0zQeOMaD2Ep6PsWsQzL7t50d2gjJ1VT2vKgk",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "xqYz5nGVQCnGc9NGeOTg5d079U9EEqZbRXLXkrS",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "b3gRfpFWEuPUz2VHbPRQthPE9Mp67QZiUf9aFP6",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "jjVeTY9AaYs0rKQ6TDvZKmY2gecqU1wdlssfrBQ",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            },
+            {
+               "ivar5": 0,
+               "name": "7.62 NATO round",
+               "vnum": 29,
+               "sdesc": "a 7.62 NATO round",
+               "ivar4": 0,
+               "ldesc": "a single 7.62 NATO round has been left here.",
+               "wear_pos": "none",
+               "capacity": 0,
+               "volume": 0,
+               "guid": "BAiC22s8V5DVQZUSg85G37dgsGJI7lyIVQkXSN5",
+               "ivar6": 0,
+               "repair": 0,
+               "type": "bullet",
+               "ivar1": 9,
+               "ivar2": 4,
+               "ivar3": 0
+            }
+         ]
+      },
+      {
+         "ivar5": 0,
+         "name": "7.62 NATO round",
+         "vnum": 29,
+         "sdesc": "a 7.62 NATO round",
+         "ivar4": 0,
+         "ldesc": "a single 7.62 NATO round has been left here.",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "OSJKJJECZNHGQPT7izQ0Gbyp7oJ4hwa6pUQ8DuL",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "bullet",
+         "ivar1": 9,
+         "ivar2": 4,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "box ammunition 7.62 NATO ammo",
+         "vnum": 30,
+         "sdesc": "a box of 7.62mm NATO ammunition",
+         "ivar4": 0,
+         "ldesc": "a box of ammunition has been left here.",
+         "wear_pos": "none",
+         "capacity": 250,
+         "volume": 250,
+         "guid": "Cisi8hcfzL6zsh8RoxBtO8EUxyLGbfrOyU7GcjW",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "container",
+         "ivar1": 0,
+         "ivar2": 0,
+         "ivar3": 0
+      },
+      {
+         "ivar5": 0,
+         "name": "double barreled 12 gauge twelve shotgun",
+         "vnum": 31,
+         "sdesc": "a double barreled 12 gauge shotgun",
+         "ivar4": 2,
+         "ldesc": "a double-barreled 12 gauge shotgun has been left here.",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "L52lykupJ11cP9QKGownAMPpkKw0WQXIW03ukyU",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "firearm",
+         "ivar1": 15,
+         "ivar2": 0,
+         "ivar3": 2
+      },
+      {
+         "ivar5": 0,
+         "name": "12 gauge buckshot round",
+         "vnum": 32,
+         "sdesc": "a 12 gauge buckshot round",
+         "ivar4": 0,
+         "ldesc": "a 12 gauge buckshot round has been discarded here.",
+         "wear_pos": "none",
+         "capacity": 0,
+         "volume": 0,
+         "guid": "PLtGnKIMrFRInbn5QnrZA5GJ1SwkZsnPeQvBAeo",
+         "ivar6": 0,
+         "repair": 0,
+         "type": "bullet",
+         "ivar1": 15,
+         "ivar2": 0,
+         "ivar3": 0
       }
    ],
    "mobiles": [
       {
          "name": "shimmering AI attendant",
+         "stamina": 0,
+         "vnum": 1,
+         "gender": "female",
+         "citizenship": "None",
+         "senses": 10,
+         "race": "hologram",
+         "association": "GravBus Industries",
+         "level": 2,
+         "coordination": 0,
+         "cur_hp": 100,
          "skills": {
+            "medicine": 0,
+            "subterfuge": 0,
             "combat": 0,
             "engineering": 0,
-            "subterfuge": 0,
-            "medicine": 0,
             "personality": 0
          },
-         "max_bandwidth": 0,
-         "ldesc": "An AI attendant is projected in front of the kiosk.",
+         "brawn": 0,
          "sdesc": "an AI attendant",
-         "citizenship": "None",
-         "vnum": 1,
+         "position_string": "standing",
+         "eyecolor": "blue",
+         "ldesc": "An AI attendant is projected in front of the kiosk.",
+         "cur_bandwidth": 0,
+         "guid": "3zVgp47aLwG96sZvMJ2NFTKnPLrk5Ze9zaqYfx8",
+         "position": 7,
+         "brains": 10,
+         "luck": 0,
+         "hairstyle": "short",
+         "cool": 10,
+         "build": "average",
+         "max_hp": 100,
+         "height": "short",
+         "btc": 0.0,
+         "age": 18,
+         "eyeshape": "round",
+         "haircolor": "brown",
+         "skincolor": "ebony",
+         "signal": 0,
+         "max_bandwidth": 0,
+         "encumberance": 0,
          "body": {
-            "eyes": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
             "left arm": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right hand": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "head": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 15,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "face": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left leg": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "groin": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "neck": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right arm": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left hand": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "torso": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "right leg": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
-            "left foot": {
-               "burn_trauma": 0,
+            "eyes": {
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 2,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "face": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "neck": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right arm": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
             "right foot": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 3,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "torso": {
+               "cur_hp": 0,
+               "max_hp": 50,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left leg": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "groin": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left foot": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             }
-         },
-         "race": "hologram",
-         "stamina": 0,
-         "level": 2,
-         "max_hp": 0,
-         "age": 18,
-         "association": "GravBus Industries",
-         "gender": "female",
-         "position_string": "standing",
-         "brains": 10,
-         "skincolor": "ebony",
-         "position": 7,
-         "btc": 0.0,
-         "guid": "OEGa2XM7RcZxFsPTIpbP9FklxsDIsx0gbGreEdl",
-         "brawn": 0,
-         "coordination": 0,
-         "signal": 0,
-         "cool": 10,
-         "senses": 10,
-         "luck": 0,
-         "cur_hp": 0,
-         "height": "short",
-         "eyeshape": "round",
-         "build": "average",
-         "eyecolor": "blue",
-         "haircolor": "brown",
-         "hairstyle": "short",
-         "cur_bandwidth": 0,
-         "encumberance": 0
+         }
       },
       {
          "name": "rainbow punk bot punkbot synthetic chick",
+         "stamina": 6,
+         "vnum": 2,
+         "gender": "female",
+         "citizenship": "None",
+         "senses": 7,
+         "race": "synthetic",
+         "association": "Electric Scorpions",
+         "level": 2,
+         "coordination": 8,
+         "cur_hp": 100,
          "skills": {
+            "medicine": 0,
+            "subterfuge": 0,
             "combat": 0,
             "engineering": 0,
-            "subterfuge": 0,
-            "medicine": 0,
             "personality": 0
          },
-         "max_bandwidth": 0,
-         "ldesc": "A rainbow haired synthetic punkbot chick chills by the vending machines.",
+         "brawn": 4,
          "sdesc": "a rainbow haired punkbot chick",
-         "citizenship": "None",
-         "vnum": 2,
+         "position_string": "standing",
+         "eyecolor": "blue",
+         "ldesc": "A rainbow haired synthetic punkbot chick chills by the vending machines.",
+         "cur_bandwidth": 0,
+         "guid": "13OaagaG3TJQzCBWrmoLso0CXb2VqA4rESCP9Mv",
+         "position": 7,
+         "brains": 5,
+         "luck": 5,
+         "hairstyle": "mohawk",
+         "cool": 10,
+         "build": "thin",
+         "max_hp": 100,
+         "height": "short",
+         "btc": 0.0,
+         "age": 18,
+         "eyeshape": "almond",
+         "haircolor": "rainbow",
+         "skincolor": "teal",
+         "signal": 0,
+         "max_bandwidth": 0,
+         "encumberance": 0,
          "body": {
-            "eyes": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
             "left arm": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right hand": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "head": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 15,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "face": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left leg": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "groin": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "neck": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right arm": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left hand": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "torso": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "right leg": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
-            "left foot": {
-               "burn_trauma": 0,
+            "eyes": {
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 2,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "face": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "neck": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right arm": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
             "right foot": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 3,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "torso": {
+               "cur_hp": 0,
+               "max_hp": 50,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left leg": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "groin": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left foot": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             }
-         },
-         "race": "synthetic",
-         "stamina": 6,
-         "level": 2,
-         "max_hp": 0,
-         "age": 18,
-         "association": "Electric Scorpions",
-         "gender": "female",
-         "position_string": "standing",
-         "brains": 5,
-         "skincolor": "teal",
-         "position": 7,
-         "btc": 0.0,
-         "guid": "vql35OSZwhbmrQGMn8q6BX6R9NjosxKYX513TT2",
-         "brawn": 4,
-         "coordination": 8,
-         "signal": 0,
-         "cool": 10,
-         "senses": 7,
-         "luck": 5,
-         "cur_hp": 0,
-         "height": "short",
-         "eyeshape": "almond",
-         "build": "thin",
-         "eyecolor": "blue",
-         "haircolor": "rainbow",
-         "hairstyle": "mohawk",
-         "cur_bandwidth": 0,
-         "encumberance": 0
+         }
       },
       {
-         "ldesc": "A drunken whino lies passed out by the dumpster",
-         "max_bandwidth": 0,
-         "citizenship": "",
-         "sdesc": "a drunken whino",
          "name": "drunk whino bum",
+         "stamina": 6,
+         "vnum": 3,
+         "gender": "male",
+         "max_bandwidth": 0,
+         "senses": 6,
+         "citizenship": "",
+         "race": "human",
+         "level": 2,
+         "coordination": 6,
+         "cur_hp": 100,
          "skills": {
+            "medicine": 0,
+            "subterfuge": 0,
             "combat": 0,
             "engineering": 0,
-            "subterfuge": 0,
-            "medicine": 0,
             "personality": 0
          },
-         "vnum": 3,
+         "brawn": 6,
+         "sdesc": "a drunken whino",
+         "position_string": "standing",
+         "eyecolor": "grey",
+         "ldesc": "A drunken whino lies passed out by the dumpster",
+         "cur_bandwidth": 0,
+         "guid": "cFe3fQEci1A4uZ46Xf9TGKX7oQKdZwJbcXerOTE",
+         "position": 7,
+         "brains": 6,
+         "luck": 6,
+         "hairstyle": "short",
+         "cool": 6,
+         "build": "emaciated",
+         "max_hp": 100,
+         "height": "average height",
+         "btc": 0.0,
+         "age": 18,
+         "eyeshape": "round",
+         "haircolor": "brown",
+         "skincolor": "pale",
+         "signal": 0,
+         "encumberance": 0,
          "body": {
-            "eyes": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
             "left arm": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right hand": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "head": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 15,
                "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "face": {
                "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left leg": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "groin": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "neck": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "right arm": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "left hand": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
-               "blunt_trauma": 0
-            },
-            "torso": {
-               "burn_trauma": 0,
-               "cur_hp": 0,
-               "max_hp": 0,
-               "wound_trauma": 0,
                "blunt_trauma": 0
             },
             "right leg": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 25,
                "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
-            "left foot": {
-               "burn_trauma": 0,
+            "eyes": {
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 2,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "face": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "neck": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right arm": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "right hand": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             },
             "right foot": {
-               "burn_trauma": 0,
                "cur_hp": 0,
-               "max_hp": 0,
+               "max_hp": 3,
                "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "torso": {
+               "cur_hp": 0,
+               "max_hp": 50,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left leg": {
+               "cur_hp": 0,
+               "max_hp": 25,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "groin": {
+               "cur_hp": 0,
+               "max_hp": 10,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
+               "blunt_trauma": 0
+            },
+            "left foot": {
+               "cur_hp": 0,
+               "max_hp": 3,
+               "wound_trauma": 0,
+               "burn_trauma": 0,
                "blunt_trauma": 0
             }
-         },
-         "race": "human",
-         "stamina": 6,
-         "level": 2,
-         "gender": "male",
-         "position_string": "standing",
-         "brains": 6,
-         "skincolor": "pale",
-         "position": 7,
-         "btc": 0.0,
-         "guid": "pbdMC4spsBPycNF4XtnmVU6TSbVV5OYv0bhCgK2",
-         "brawn": 6,
-         "coordination": 6,
-         "signal": 0,
-         "cool": 6,
-         "senses": 6,
-         "luck": 6,
-         "cur_hp": 0,
-         "max_hp": 0,
-         "age": 18,
-         "height": "average height",
-         "eyeshape": "round",
-         "build": "emaciated",
-         "eyecolor": "grey",
-         "haircolor": "brown",
-         "hairstyle": "short",
-         "cur_bandwidth": 0,
-         "encumberance": 0
+         }
       }
    ]
 }

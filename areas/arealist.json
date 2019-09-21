@@ -1,39 +1,39 @@
 [
    {
-      "name": "San Francisco State University",
-      "filename": "sfsu.json",
+      "name": "The City",
       "reset_interval": 15,
-      "m_low": 200,
+      "filename": "city.json",
+      "reset_script": "lplogstring(\"Resetting The City!\");",
       "author": "Raze",
-      "o_hi": 300,
-      "o_low": 200,
-      "m_hi": 300,
-      "r_low": 200,
-      "r_hi": 300
+      "m_low": 1,
+      "o_low": 1,
+      "o_hi": 40,
+      "m_hi": 10,
+      "r_low": 1,
+      "r_hi": 10
    },
    {
       "name": "San Francisco General Hospital",
-      "filename": "sfgeneral.json",
       "reset_interval": 15,
-      "m_low": 100,
+      "filename": "sfgeneral.json",
       "author": "Raze",
-      "o_hi": 150,
+      "m_low": 100,
       "o_low": 100,
+      "o_hi": 150,
       "m_hi": 150,
       "r_low": 100,
       "r_hi": 150
    },
    {
-      "name": "The City",
-      "filename": "city.json",
+      "name": "San Francisco State University",
       "reset_interval": 15,
-      "m_low": 1,
+      "filename": "sfsu.json",
       "author": "Raze",
-      "reset_script": "lplogstring(\"Resetting The City!\");",
-      "o_hi": 30,
-      "o_low": 1,
-      "m_hi": 10,
-      "r_low": 1,
-      "r_hi": 10
+      "m_low": 200,
+      "o_low": 200,
+      "o_hi": 300,
+      "m_hi": 300,
+      "r_low": 200,
+      "r_hi": 300
    }
 ]
