@@ -119,7 +119,7 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
       {
          if( dMob->equipment[i]->worn[1] != NULL )
          {
-            text_to_mobile_j( dMob, "error", "You have to remove your %s first.", dMob->equipment[i]->worn[1]->sdesc );
+            text_to_mobile_j( dMob, "error", "You have to remove your %s first.", get_odesc( dMob->equipment[i]->worn[1] ) );
             return;
          }
          obj = dMob->equipment[i]->worn[0];
@@ -143,17 +143,14 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
    {
       if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )
       {
-         text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your right hand.", obj->sdesc );
-         echo_around( dMob, "text", "%s unslings %s and readies it in %s right hand.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob ) );
+         text_to_mobile_j( dMob, "text", "You unsling %s and ready it in your right hand.", get_odesc( obj ) );
+         echo_around( dMob, "text", "%s unslings %s and readies it in %s right hand.", MOBNAME(dMob), get_odesc( obj ), POSSESSIVE(dMob ) );
       }
       else
       {
 
-         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your right hand.",
-               obj->sdesc );
-         echo_around( dMob, "text", "%s removes %s and holds it in %s right hand.",
-               MOBNAME(dMob), obj->sdesc,
-               POSSESSIVE( dMob ) );
+         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your right hand.",  get_odesc( obj ) );
+         echo_around( dMob, "text", "%s removes %s and holds it in %s right hand.", MOBNAME(dMob), get_odesc( obj ), POSSESSIVE( dMob ) );
       }
       dMob->hold_right = obj;
    }
@@ -161,17 +158,14 @@ void cmd_remove( D_MOBILE *dMob, char *arg )
    {
       if( obj->type == ITEM_FIREARM && obj->ivar4 == 2 )//ivar4 for weapons is how many hands is needed to operate it. You can sling 2 handed weapons but must sheath or holster 1 handed.
       {
-         text_to_mobile_j( dMob, "text", "You unsling your %s and ready it in your left hand.", obj->sdesc );
-         echo_around( dMob, "text", "%s unslings %s and readies it in %s left hand.", MOBNAME(dMob), obj->sdesc, POSSESSIVE(dMob ) );
+         text_to_mobile_j( dMob, "text", "You unsling %s and ready it in your left hand.", get_odesc( obj ) );
+         echo_around( dMob, "text", "%s unslings %s and readies it in %s left hand.", MOBNAME(dMob), get_odesc( obj ), POSSESSIVE(dMob ) );
       }
       else
       {
 
-         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your left hand.",
-               obj->sdesc );
-         echo_around( dMob, "text", "%s removes %s and holds it in %s left hand.",
-               MOBNAME(dMob), obj->sdesc,
-               POSSESSIVE( dMob ) );
+         text_to_mobile_j( dMob, "text", "You remove %s and hold it in your left hand.", get_odesc( obj ) );
+         echo_around( dMob, "text", "%s removes %s and holds it in %s left hand.", MOBNAME(dMob), get_odesc( obj ), POSSESSIVE( dMob ) );
       }
       dMob->hold_left = obj;
    }

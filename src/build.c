@@ -691,6 +691,82 @@ void cmd_oset( D_MOBILE *dMob, char *arg )
       text_to_mobile_j( dMob, "text", "Item ivar6 set to %d.", obj->ivar6 );
       return;
    }
+   else if( !strcasecmp( action, "adj" ) || !strcasecmp( action, "adjective" ) )
+   {
+      arg = one_arg( arg, action );
+      if( !strcasecmp( action, "quantity" ) )
+      {
+         if( obj->adjectives->quantity )
+            free( obj->adjectives->quantity );
+         obj->adjectives->quantity = strdup( arg );
+      }
+      else if( !strcasecmp( action, "opinion" ) )
+      {
+         if( obj->adjectives->opinion )
+            free( obj->adjectives->opinion );
+         obj->adjectives->opinion = strdup( arg );
+      }
+      else if( !strcasecmp( action, "size" ) )
+      {
+         if( obj->adjectives->size )
+            free( obj->adjectives->size );
+         obj->adjectives->size = strdup( arg );
+      }
+      else if( !strcasecmp( action, "quality" ) )
+      {
+         if( obj->adjectives->quality )
+            free( obj->adjectives->quality );
+         obj->adjectives->quality = strdup( arg );
+      }
+      else if( !strcasecmp( action, "age" ) )
+      {
+         if( obj->adjectives->age )
+            free( obj->adjectives->age );
+         obj->adjectives->age = strdup( arg );
+      }
+      else if( !strcasecmp( action, "shape" ) )
+      {
+         if( obj->adjectives->shape )
+            free( obj->adjectives->shape );
+         obj->adjectives->shape = strdup( arg );
+      }
+      else if( !strcasecmp( action, "color" ) )
+      {
+         if( obj->adjectives->color )
+            free( obj->adjectives->color );
+         obj->adjectives->color = strdup( arg );
+      }
+      else if( !strcasecmp( action, "origin" ) )
+      {
+         if( obj->adjectives->origin )
+            free( obj->adjectives->origin );
+         obj->adjectives->origin = strdup( arg );
+      }
+      else if( !strcasecmp( action, "material" ) )
+      {
+         if( obj->adjectives->material )
+            free( obj->adjectives->material );
+         obj->adjectives->material = strdup( arg );
+      }
+      else if( !strcasecmp( action, "type" ) )
+      {
+         if( obj->adjectives->type )
+            free( obj->adjectives->type );
+         obj->adjectives->type = strdup( arg );
+      }
+      else if( !strcasecmp( action, "purpose" ) )
+      {
+         if( obj->adjectives->purpose )
+            free( obj->adjectives->purpose );
+         obj->adjectives->purpose = strdup( arg );
+      }
+      else
+      {
+         text_to_mobile_j( dMob, "error", "Usage: oset <object> adjective <opinion|size|quality|age|shape|color|origin|material|type|purpose> [text]" );
+         return;
+      }
+      text_to_mobile_j( dMob, "text", "Set to: %s.", get_odesc( obj ) );
+   }
    else
    {
       text_to_mobile_j( dMob, "Error", "Invalid oset command." );

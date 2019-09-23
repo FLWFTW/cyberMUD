@@ -188,22 +188,41 @@ const char *ammo_type[] = {   [AMMO_FMJ]         = "FMJ", /* Full Metal Jacket *
                               [AMMO_EXP]         = "EXP", /* Explosive */
                               [MAX_AMMOTYPE]     = 0};
 
-const char *ammo_dice[]   = { [AMMO_38SPC]       = "1d6+2", //0
-                              [AMMO_9x19]        = "2d6+1", //1
-                              [AMMO_357MAG]      = "2d6+3", //2
-                              [AMMO_45APC]       = "2d6+2", //3
-                              [AMMO_10MM]        = "2d6+4", //4
-                              [AMMO_44MAG]       = "4d6+1", //5
-                              [AMMO_50AE]        = "4d6+2", //6
-                              [AMMO_556NATO]     = "5d6",   //7
-                              [AMMO_762x39]      = "6d6+1", //8
-                              [AMMO_762x51]      = "6d6+2", //9
-                              [AMMO_762x54R]     = "6d6+3", //10
-                              [AMMO_127x108]     = "5d9",   //11
-                              [AMMO_145x114]     = "5d10",  //12
-                              [AMMO_10GAUGE]     = "5d6+3", //13
-                              [AMMO_12GAUGE]     = "4d6+2", //14
-                              [AMMO_20GAUGE]     = "3d6+1", //15
+const char *ammo_dice[]   = { [AMMO_38SPC]       = "6d2+6", //0 between 12-18
+                              [AMMO_9x19]        = "6d2+9", //1 between 15-21
+                              [AMMO_45APC]       = "8d2+8", //3 between 16-24
+                              [AMMO_357MAG]      = "8d2+10",//2 between 18-26
+                              [AMMO_10MM]        = "8d2+12",//4 between 20-26
+                              [AMMO_44MAG]       = "8d2+16",//5 between 24-28
+                              [AMMO_50AE]        = "8d2+20",//6 between 28-36
+                              [AMMO_556NATO]     = "6d2+24",//7 between 30-36
+                              [AMMO_762x39]      = "6d2+24",//8 between 30-36
+                              [AMMO_762x51]      = "6d2+28",//9 between 34-40
+                              [AMMO_762x54R]     = "6d2+30",//10 between 36-42
+                              [AMMO_127x108]     = "1d10+40",//11 between 40-50
+                              [AMMO_145x114]     = "1d10+45",//12 between 45-55
+                              [AMMO_10GAUGE]     = "2d10+40",//13 between 42-60
+                              [AMMO_12GAUGE]     = "2d10+35",//14 between 37-55
+                              [AMMO_20GAUGE]     = "2d10+30",//15 between 32-50
+                              [MAX_AMMO]         = 0};
+
+/* Effective range of each round in meters */
+const int ammo_range[]    = { [AMMO_38SPC]       = 10,
+                              [AMMO_9x19]        = 18,
+                              [AMMO_45APC]       = 20,
+                              [AMMO_357MAG]      = 12,
+                              [AMMO_10MM]        = 20,
+                              [AMMO_44MAG]       = 14,
+                              [AMMO_50AE]        = 15,
+                              [AMMO_556NATO]     = 100,
+                              [AMMO_762x39]      = 75,
+                              [AMMO_762x51]      = 150,
+                              [AMMO_762x54R]     = 125,
+                              [AMMO_127x108]     = 500,
+                              [AMMO_145x114]     = 750,
+                              [AMMO_10GAUGE]     = 8,
+                              [AMMO_12GAUGE]     = 6,
+                              [AMMO_20GAUGE]     = 4,
                               [MAX_AMMO]         = 0};
 
 const char *exit_state[]  = { [EXIT_FREE]        = "free",

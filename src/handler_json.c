@@ -9,6 +9,9 @@
  */
 #include "mud.h"
 
+json_t *adjectives_to_json( D_ADJECTIVES *a );
+D_ADJECTIVES *json_to_adjectives( json_t *json );
+
 D_ACCOUNT *json_to_account( json_t *json )
 {
    D_ACCOUNT *account = new_account();
@@ -372,6 +375,10 @@ D_OBJECT *json_to_object( json_t *json )
          obj->repair = json_integer_value( value );
          if( obj->repair > 100 ) obj->repair = 100;
       }
+      else if( !strcmp( key, "adjectives" ) )
+      {
+         obj->adjectives = json_to_adjectives( value );
+      }
       else
       {
          bug( "Unknown object JSON key \'%s\'.", key );
@@ -437,6 +444,8 @@ json_t *object_to_json( D_OBJECT *obj )
    json_object_set_new( json, "guid", json_string( obj->guid ) );
    json_object_set_new( json, "type", json_string( item_type[obj->type] ) );
    json_object_set_new( json, "repair", json_integer( obj->repair ) );
+
+   json_object_set_new( json, "adjectives", adjectives_to_json( obj->adjectives ) );
 
    json_object_set_new( json, "ivar1", json_integer( obj->ivar1 ) );
    json_object_set_new( json, "ivar2", json_integer( obj->ivar2 ) );
@@ -831,6 +840,98 @@ json_t *mobile_to_json_cli( D_MOBILE *dMob )
    json_object_del( json, "equipment" );
 
    return json;
+}
+
+json_t *adjectives_to_json( D_ADJECTIVES *a )
+{
+   json_t *json = json_object();
+   if( a->quantity )
+      json_object_set_new( json, "quantity", json_string( a->quantity ) );
+   if( a->opinion )
+      json_object_set_new( json, "opinion", json_string( a->opinion ) );
+   if( a->size )
+      json_object_set_new( json, "size", json_string( a->size ) );
+   if( a->quality )
+      json_object_set_new( json, "quality", json_string( a->quality ) );
+   if( a->age )
+      json_object_set_new( json, "age", json_string( a->age ) );
+   if( a->shape )
+      json_object_set_new( json, "shape", json_string( a->shape ) );
+   if( a->color )
+      json_object_set_new( json, "color", json_string( a->color ) );
+   if( a->origin )
+      json_object_set_new( json, "origin", json_string( a->origin ) );
+   if( a->material )
+      json_object_set_new( json, "material", json_string( a->material ) );
+   if( a->type )
+      json_object_set_new( json, "type", json_string( a->type ) );
+   if( a->purpose )
+      json_object_set_new( json, "purpose", json_string( a->purpose ) );
+
+   return json;
+}
+
+D_ADJECTIVES *json_to_adjectives( json_t *json )
+{
+   D_ADJECTIVES *a = calloc( 1, sizeof( D_ADJECTIVES ) );
+
+   const char *key;
+   json_t *value;
+
+   json_object_foreach( json, key, value )
+   {
+      if( !strcmp( key, "opinion" ) )
+      {
+         a->opinion = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "quantity" ) )
+      {
+         a->quantity = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "size" ) )
+      {
+         a->size = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "quality" ) )
+      {
+         a->quality = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "age" ) )
+      {
+         a->age = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "shape" ) )
+      {
+         a->shape = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "color" ) )
+      {
+         a->color = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "origin" ) )
+      {
+         a->origin = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "material" ) )
+      {
+         a->material = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "type" ) )
+      {
+         a->type = strdup( json_string_value( value ) );
+      }
+      else if( !strcmp( key, "purpose" ) )
+      {
+         a->purpose = strdup( json_string_value( value ) );
+      }
+      else
+      {
+         bug( "Unknown adjective type %s.", key );
+      }
+
+   }
+
+   return a;
 }
 
 json_t *mobile_to_json( D_MOBILE *dMob, bool showEquipment )

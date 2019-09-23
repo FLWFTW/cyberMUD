@@ -131,6 +131,7 @@ typedef struct  dEquipment    D_EQUIPMENT;
 typedef struct  dReset        D_RESET;
 typedef struct  command_data  D_COMMAND;
 typedef struct  mAffects      D_MAFFECT;
+typedef struct  dAdjectives   D_ADJECTIVES;
 
 /* the actual structures */
 struct dRoom
@@ -172,6 +173,21 @@ struct dExit
    enum exit_state_tb  exit;
 };
 
+struct dAdjectives
+{                                          /** EXAMPLE **/
+   char             * quantity;
+   char             * opinion;               /*comfortable*/
+   char             * size;                  /*large*/
+   char             * quality;               /*battered*/
+   char             * age;                   /*old*/
+   char             * shape;                 /*round*/
+   char             * color;                 /*green*/
+   char             * origin;                /*Norwegian*/
+   char             * material;              /*wood*/
+   char             * type;                  /*folding*/
+   char             * purpose;               /*utility*/
+};                     /* noun:                bench*/
+
 /**
  * ivar guide:
  * armor:    1- stopping power
@@ -192,6 +208,7 @@ struct dObject
    D_ROOM          * in_room;
    D_OBJECT        * in_object;
    D_MOBILE        * carried_by;
+   D_ADJECTIVES    * adjectives;
 
    unsigned int      vnum;
    char            * name;
@@ -567,6 +584,7 @@ bool object_can_fit           ( D_OBJECT *object, D_OBJECT *container );
 void check_objects            ();
 D_OBJECT *get_object_mob      ( D_MOBILE *dMob, char *name );
 bool can_lift                 ( D_MOBILE *dMob, D_OBJECT *dObj );
+char *get_odesc               ( D_OBJECT *dObj );
 
 /*
  * utils.c

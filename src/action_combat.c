@@ -45,6 +45,7 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
 {
    D_OBJECT *gun = NULL;
    D_MOBILE *target = NULL;
+   D_OBJECT *oTarget = NULL;
    char who[MAX_STRING_LENGTH];
    arg = one_arg( arg, who );
 
@@ -81,8 +82,12 @@ void cmd_fire( D_MOBILE *dMob, char *arg )
 
    if( target == NULL )
    {
-      text_to_mobile_j( dMob, "error", "You don't see that here." );
-      return;
+      oTarget = get_object_list( who, dMob->room->objects );
+      if( oTarget == NULL )
+      {
+         text_to_mobile_j( dMob, "error", "You don't see that here." );
+         return;
+      }
    }
 
    if( arg[0] == '\0' )
@@ -213,6 +218,12 @@ void cmd_load( D_MOBILE *dMob, char *arg )
          return;
       }
 
+      if( gun == mag )
+      {
+         text_to_mobile( dMob, "error", "You can't load %s into %s.", mag->sdesc, gun->sdesc );
+         return;
+      }
+
       AttachIterator( &Iter, gun->contents );
       D_OBJECT *oldMag;
       if( ( oldMag = NextInList( &Iter ) ) != NULL )
@@ -259,6 +270,13 @@ void cmd_load( D_MOBILE *dMob, char *arg )
          text_to_mobile_j( dMob, "error", "%s needs to be loaded with a magazine.", gun->sdesc );
          return;
       }
+
+      if( gun == ammo )
+      {
+         text_to_mobile( dMob, "error", "You can't load %s into %s.", ammo->sdesc, gun->sdesc );
+         return;
+      }
+
       if( ammo->type == ITEM_CONTAINER ) /* Are they loading from a box of ammo or bandolier? */
       {
          if( SizeOfList( ammo->contents ) > 0 )
@@ -309,12 +327,23 @@ void cmd_load( D_MOBILE *dMob, char *arg )
          dMob->hold_left = NULL;
          object_from_mobile( ammo, dMob );
       }
+      else
+      {
+         object_from_room( ammo, dMob->room );
+      }
       object_to_object( ammo, gun );
       text_to_mobile_j( dMob, "text", "You load %s into %s.", ammo->sdesc, gun->sdesc );
       return;
    }
    else if( mag && ammo )
    {
+
+      if( mag == ammo )
+      {
+         text_to_mobile( dMob, "error", "You can't load %s into %s.", mag->sdesc, ammo->sdesc );
+         return;
+      }
+
       if( ammo->type == ITEM_CONTAINER ) /* Are they loading from a box of ammo or bandolier? */
       {
          if( SizeOfList( ammo->contents ) > 0 )
@@ -346,6 +375,8 @@ void cmd_load( D_MOBILE *dMob, char *arg )
             echo_around( dMob, "text", "%s loads %s fromm %s.", MOBNAME( dMob ), mag->sdesc, ammo->sdesc );
             return;
          }
+         text_to_mobile_j( dMob, "text", "%s is empty.", ammo->sdesc );
+         return;
       }
       else if( mag->ivar1 != ammo->ivar1 )
       {

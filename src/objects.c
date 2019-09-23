@@ -11,6 +11,7 @@
 D_OBJECT *new_object()
 {
    D_OBJECT *obj = calloc( 1, sizeof( D_OBJECT ) );
+   obj->adjectives = calloc( 1, sizeof( D_ADJECTIVES ) );
 
    obj->name = NULL;
    obj->sdesc = NULL;
@@ -63,12 +64,148 @@ D_OBJECT *get_object_mob( D_MOBILE *dMob, char *name )
    return NULL;
 }
 
+char *get_odesc( D_OBJECT *dObj )
+{
+   char desc[MAX_STRING_LENGTH] = {0};
+   static char ret[MAX_STRING_LENGTH] = {0};
+   int count = 0;
+   
+   ret[0] = '\0';
+   /*Count how many adjectives we have to decide if we are going to use commas or not*/
+   if( dObj->adjectives->opinion ) count++;
+   if( dObj->adjectives->size ) count++;
+   if( dObj->adjectives->quality ) count++;
+   if( dObj->adjectives->age ) count++;
+   if( dObj->adjectives->shape ) count++;
+   if( dObj->adjectives->color ) count++;
+   if( dObj->adjectives->origin ) count++;
+   if( dObj->adjectives->material ) count++;
+   if( dObj->adjectives->type ) count++;
+   if( dObj->adjectives->purpose ) count++;
+
+   /* We'll use commas for 3 or more adjectives.
+    * so we can wear stylish Italian sunglasses, or stylish, steel, Italian sunglasses.*/
+
+   if( dObj->adjectives->opinion )
+   {
+      strncat( desc, dObj->adjectives->opinion, MAX_STRING_LENGTH - strlen( desc ) -1 );
+      count++;
+   }
+   if( dObj->adjectives->size )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->size, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->quality )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->quality, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->age )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->age, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->shape )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->shape, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->color )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->color, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->origin )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->origin, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->material )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->material, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->type )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->type, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+   if( dObj->adjectives->purpose )
+   {
+      if( count > 2 )
+         strncat( desc, ", ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      else if( desc[0] != '\0' )
+         strncat( desc, " ", MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( desc, dObj->adjectives->purpose, MAX_STRING_LENGTH - strlen( desc ) -1 );
+   }
+
+   if( dObj->adjectives->quantity )
+   {
+      strncat( ret, dObj->adjectives->quantity, MAX_STRING_LENGTH - strlen( desc ) -1 );
+      strncat( ret, " ", MAX_STRING_LENGTH - strlen( ret ) -1 );
+   }
+   strncat( ret, desc, MAX_STRING_LENGTH - strlen( ret ) -1 );
+   strncat( ret,  " ", MAX_STRING_LENGTH - strlen( ret ) -1 );
+   strncat( ret,  dObj->name, MAX_STRING_LENGTH - strlen( ret ) -1 );
+
+   return ret;
+}
+
 void free_object( D_OBJECT *obj )
 {
    free( obj->name );
    free( obj->sdesc );
    free( obj->ldesc );
    free( obj->guid );
+
+   if( obj->adjectives->quantity )
+      free( obj->adjectives->quantity );
+   if( obj->adjectives->opinion )
+      free( obj->adjectives->opinion );
+   if( obj->adjectives->size )
+      free( obj->adjectives->size );
+   if( obj->adjectives->quality )
+      free( obj->adjectives->quality );
+   if( obj->adjectives->age )
+      free( obj->adjectives->age );
+   if( obj->adjectives->shape )
+      free( obj->adjectives->shape );
+   if( obj->adjectives->color )
+      free( obj->adjectives->color );
+   if( obj->adjectives->origin )
+      free( obj->adjectives->origin );
+   if( obj->adjectives->material )
+      free( obj->adjectives->material );
+   if( obj->adjectives->type )
+      free( obj->adjectives->type );
+   if( obj->adjectives->purpose )
+      free( obj->adjectives->purpose );
+   free( obj->adjectives );
 
    if( SizeOfList( obj->contents ) > 0 )
    {

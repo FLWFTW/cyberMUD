@@ -74,7 +74,8 @@ void cripple( D_MOBILE *target, enum bodyparts_tb location )
    return;
 }
 
-int bullet_damage( D_MOBILE *target, D_OBJECT *bullet, enum bodyparts_tb location )
+//critical can be either 0 (no critical damange bonus), 1 (1.5x damage), or 2 (2x damage, from natural 100 roll)
+int bullet_damage( D_MOBILE *target, D_OBJECT *bullet, enum bodyparts_tb location, int critical )
 {
    size_t dam = 0, res = 0;
    D_OBJECT *armor = get_armor_pos( target, b_to_e( location ) );
@@ -108,6 +109,17 @@ int bullet_damage( D_MOBILE *target, D_OBJECT *bullet, enum bodyparts_tb locatio
    {
       dam /= 3;
       type = DAMAGE_EXPLOSIVE;
+   }
+
+   /* Check for critical damage */
+   if( critical == 1 )
+   {
+      dam *= 15;
+      dam /= 10;
+   }
+   else if( critical == 2 )
+   {
+      dam *= 2;
    }
 
    if( armor )
@@ -244,7 +256,7 @@ D_OBJECT *next_round( D_OBJECT *firearm )
 
 void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodyparts_tb aim )
 {
-   int aimmod = 100, chance = 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, aimed = 0;
+   int aimmod = 100, difficulty= 0, dam = 0, spMod = 0, tpMod = 0, handMod = 0, aimed = 0;
    int shooting_skill = 70; //temporary until we actually look up skills
    D_OBJECT *round;
 
@@ -275,52 +287,58 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
 
    if( shooter == target ) //100% chance of success
    {
-      chance = 100;
+      difficulty = 0;
    }
    else
    {
-      chance = ( shooting_skill * aimmod ) / 100;
+      difficulty = 100-( ( shooting_skill * aimmod ) / 100 );
       //position based modifiers
       if( target->position == POS_KNEELING )
-         tpMod -=10;
-      if( target->position == POS_PRONE )
-         tpMod -= 15;
-      if( target->position < POS_RESTING )
-         tpMod = 95;
-      if( target->position == POS_RESTING )
+         tpMod +=10;
+      else if( target->position == POS_PRONE )
          tpMod += 15;
-      if( target->position == POS_SITTING )
-         tpMod += 10;
+      else if( target->position < POS_RESTING )
+         tpMod -= 95;
+      else if( target->position == POS_RESTING )
+         tpMod -= 15;
+      else if( target->position == POS_SITTING )
+         tpMod -= 10;
 
       if( shooter->position == POS_PRONE )
-         spMod += 15;
-      if( shooter->position == POS_KNEELING )
-         spMod += 10;
+         spMod -= 15;
+      else if( shooter->position == POS_KNEELING )
+         spMod -= 10;
       //Penalty for shooting one handed, greater penalty if the firearm is a
       //2 handed firearm (rifle, shotgun, etc)
       if( shooter->hold_left != NULL && shooter->hold_right != NULL ) //<-- are both their hands full?
-         handMod -= 10 * firearm->ivar4; //ivar4 is how many hands are required to fire the weapon
+         handMod += 10 * firearm->ivar4; //ivar4 is how many hands are required to fire the weapon
    }
 
-   chance = chance + tpMod + spMod + handMod;
+   difficulty = difficulty + tpMod + spMod + handMod;
 
    size_t check = roll( 1, 100 );
+   log_string( "Shot difficulty: %i. Roll: %i.", difficulty, check );
 
-   if( check <= chance ) //hit!
+   if( check > difficulty ) //hit!
    {
-      dam = bullet_damage( target, round, aim ); //return the actual amount of damage done after checking for armor resistance
+      int critical = 0;
+      if( check == 100 ) /* 2x damage on natural 100 */
+         critical = 2;
+      else if( check > ( 100 - shooter->luck ) ) /* 1.5x damage */
+         critical = 1;
+      dam = bullet_damage( target, round, aim, critical ); //return the actual amount of damage done after checking for armor resistance
       if( dam > 0 ) /* Armor didn't absorb it all */
       {
          if( aimed == 0 )
          {
-            text_to_mobile_j( shooter, "combat", "You fire %s at %s, hitting %s in the %s for %u damage!", firearm->sdesc, MOBNAME(target), OBJECTIVE( target ), body_parts[aim], dam );
-            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam );
+            text_to_mobile_j( shooter, "combat", "You fire %s at %s, hitting %s in the %s for %u damage! %s", firearm->sdesc, MOBNAME(target), OBJECTIVE( target ), body_parts[aim], dam, ( critical == 1 ) ? "Critical!" : ( critical == 2 ) ? "***CRITICAL***" : "" );
+            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage! %s", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam, ( critical == 1 ) ? "Critical!" : ( critical == 2 ) ? "***CRITICAL***" : "" );
             echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim] );
          }
          else
          {
-            text_to_mobile_j( shooter, "combat", "You aim %s at %s's %s, hitting %s for %u damage!", firearm->sdesc, MOBNAME(target), body_parts[aim], OBJECTIVE( target ), dam );
-            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam );
+            text_to_mobile_j( shooter, "combat", "You aim %s at %s's %s, hitting %s for %u damage! %s", firearm->sdesc, MOBNAME(target), body_parts[aim], OBJECTIVE( target ), dam, critical == 1 ? "Critical!" : critical == 2 ? "***CRITICAL***" : "" );
+            text_to_mobile_j( target, "combat", "%s fires %s %s at you, striking you in the %s for %u damage! %s", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, body_parts[aim], dam, critical == 1 ? "Critical!" : critical == 2 ? "***CRITICAL***" : "" );
             echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s!", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim] );
          }
       }
@@ -331,6 +349,9 @@ void fire( D_MOBILE *shooter, D_MOBILE *target, D_OBJECT *firearm, enum bodypart
          echo_around_two( shooter, target, "combat", "%s fires %s %s at %s, striking %s in the %s.", MOBNAME( shooter ), POSSESSIVE( shooter ), firearm->sdesc, MOBNAME( target ), OBJECTIVE( target ), body_parts[aim]  );
       }
 
+   }
+   else if( check < ( 10 - shooter->luck ) ) //Critical miss
+   {
    }
    else
    {
